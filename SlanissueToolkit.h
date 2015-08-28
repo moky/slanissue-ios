@@ -14,6 +14,8 @@
  *      <CoreGraphics.framework>
  *      <UIKit.framework>
  *
+ *      "IdentifierAddition"
+ *
  */
 
 /* debug */
@@ -77,6 +79,7 @@
 //
 //  UIKit
 //
+#import "S9Device.h"
 #import "S9Image.h"
 #import "S9View.h"
 

@@ -8,10 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#include <sys/sysctl.h>
-
-//#import "scMacros.h"
-//#import "SCDevice.h"
+#import "S9Device.h"
 #import "S9Object.h"
 #import "S9Client.h"
 
@@ -115,12 +112,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) hardware
 {
 	if (!_hardware) {
-		size_t size;
-		sysctlbyname("hw.machine", NULL, &size, NULL, 0);
-		char * machine = malloc(size);
-		sysctlbyname("hw.machine", machine, &size, NULL, 0);
-		self.hardware = [[NSString alloc] initWithCString:machine encoding:NSUTF8StringEncoding];
-		free(machine);
+		self.hardware = [[UIDevice currentDevice] machine];
 	}
 	return _hardware;
 }
@@ -128,7 +120,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) deviceIdentifier
 {
 	if (!_deviceIdentifier) {
-//		self.deviceIdentifier = [[UIDevice currentDevice] globalIdentifier];
+		self.deviceIdentifier = [[UIDevice currentDevice] globalIdentifier];
 	}
 	return _deviceIdentifier;
 }
