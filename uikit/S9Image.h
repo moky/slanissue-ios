@@ -10,7 +10,7 @@
 
 UIKIT_EXTERN UIImage * UIImageWithName(NSString * name);
 
-@interface UIImage (IO)
+@interface UIImage (SlanissueToolkit)
 
 - (BOOL) writeToFile:(NSString *)path atomically:(BOOL)useAuxiliaryFile;
 

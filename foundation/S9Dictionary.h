@@ -8,6 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSDictionary (SlanissueToolkit)
+
+//
+//  key-value (css) format string
+//
++ (NSDictionary *) dictionaryWithString:(NSString *)mapString;
+
+@end
+
 //--------------------------------------------------------------------- for each
 #define S9_FOR_EACH_KEY_VALUE(key, value, dict)                                \
     for (NSEnumerator * __e = [(dict) keyEnumerator];                          \

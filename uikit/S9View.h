@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UIView (Snapshot)
+@interface UIView (SlanissueToolkit)
+
+// remove all subviews
+- (void) removeSubviews;
 
 // take snapshot of current view
 - (UIImage *) snapshot;
@@ -17,3 +20,10 @@
 - (UIImage *) snapshot:(NSString *)filename;
 
 @end
+
+#pragma mark - Siblings
+
+UIKIT_EXTERN NSArray * S9SiblingsOfNode(id node);
+
+UIKIT_EXTERN id S9PreviousSiblingOfNode(id node);
+UIKIT_EXTERN id S9NextSiblingOfNode(id node);

@@ -8,6 +8,27 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSObject (SlanissueToolkit)
+
+//
+//  JSON
+//
++ (NSObject *) objectWithJSONData:(NSData *)data options:(NSJSONReadingOptions)opt;
++ (NSObject *) objectWithJSONData:(NSData *)data;
+
++ (NSObject *) objectWithJSONString:(NSString *)string encoding:(NSStringEncoding)encoding;
++ (NSObject *) objectWithJSONString:(NSString *)string;
+
+- (NSString *) JSONStringWithEncoding:(NSStringEncoding)encoding options:(NSJSONWritingOptions)opt;
+- (NSString *) JSONStringWithEncoding:(NSStringEncoding)encoding;
+- (NSString *) JSONString;
+
+@end
+
+#define NSObjectFromJSONData(data)     [NSObject objectWithJSONData:(data)]
+#define NSObjectFromJSONString(string) [NSObject objectWithJSONString:(string)]
+#define JSONStringFromNSObject(object) [(object) JSONString]
+
 //-------------------------------------------------------------------- singleton
 #define S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)                          \
     static id s_singleton_instance = nil;                                      \

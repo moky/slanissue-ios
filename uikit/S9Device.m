@@ -15,6 +15,7 @@
 // 'libs/IdentifierAddition'
 #import "UIDevice+IdentifierAddition.h"
 
+#import "s9Macros.h"
 #import "S9Device.h"
 
 @implementation UIDevice (SlanissueToolkit)
@@ -43,6 +44,26 @@ static NSString * s_uniqueGlobalDeviceIdentifier = nil;
 		}
 	}
 	return s_uniqueGlobalDeviceIdentifier;
+}
+
+- (BOOL) rotateForSupportedInterfaceOrientationsOfViewController:(UIViewController *)viewController
+{
+	NSUInteger supportedInterfaceOrientations = [viewController supportedInterfaceOrientations];
+	UIDeviceOrientation currentOrientation = [self orientation];
+	if (supportedInterfaceOrientations & (1 << currentOrientation)) {
+		// current orientation is supported by the view controller
+		return NO;
+	}
+	
+	UIInterfaceOrientation orientation = [viewController preferredInterfaceOrientationForPresentation];
+	S9Log(@"force device orientation from %d to %d", (int)currentOrientation, (int)orientation);
+	
+	// try to present the preferred interface orientation
+	if ([self respondsToSelector:@selector(setOrientation:)]) {
+		[self performSelector:@selector(setOrientation:) withObject:(id)orientation];
+	}
+	
+	return YES;
 }
 
 @end

@@ -16,4 +16,8 @@
 // generates a hash from the MAC-address
 - (NSString *) globalIdentifier;
 
+// rotate the current device for supported interface orientations
+// return YES if rotated
+- (BOOL) rotateForSupportedInterfaceOrientationsOfViewController:(UIViewController *)viewController;
+
 @end

@@ -8,6 +8,34 @@
 
 #import <Foundation/Foundation.h>
 
+#import "S9Math.h"
+
+@interface NSString (SlanissueToolkit)
+
+// convert object to JsON string
++ (NSString *) stringBySerializingObject:(NSObject *)object;
+
+- (NSString *) MD5String;
+
+- (NSString *) trim;
+- (NSString *) trim:(NSString *)chars;
+
+// encode/decode string for URL parameters
+- (NSString *) escape;
+- (NSString *) unescape;
+
+// "/path/to/../something" => "/path/something"
+- (NSString *) simplifyPath;
+
+//  "{{1+2, 3-4}, {5*6, 7/8}}" => "{{3,-1},{30,0.875}}"
+- (NSString *) calculate;
+
+@end
+
+#define MD5(string) [(string) MD5String]
+
+#define CGFloatFromString(string) calculate([(string) cStringUsingEncoding:NSUTF8StringEncoding])
+
 //{
 //	char * str = path;
 //	if (str) {

@@ -41,6 +41,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 
 - (void) setObject:(id)anObject forKey:(id<NSCopying>)aKey
 {
+	NSAssert(aKey, @"key cannot be nil");
 	if (!anObject) {
 		// if the object is nil, remove the old object for key
 		[self removeObjectForKey:aKey];
@@ -54,6 +55,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 
 - (id) objectForKey:(id)aKey
 {
+	NSAssert(aKey, @"key cannot be nil");
 	@synchronized(self) {
 		return [[[_dataPool objectForKey:aKey] retain] autorelease];
 	}
@@ -61,6 +63,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 
 - (id) retainObjectForKey:(id<NSCopying>)aKey
 {
+	NSAssert(aKey, @"key cannot be nil");
 	@synchronized(self) {
 		return [[_dataPool objectForKey:aKey] retain];
 	}
@@ -68,6 +71,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 
 - (void) releaseObjectForKey:(id<NSCopying>)aKey
 {
+	NSAssert(aKey, @"key cannot be nil");
 	@synchronized(self) {
 		[[_dataPool objectForKey:aKey] release];
 	}
@@ -75,6 +79,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 
 - (void) removeObjectForKey:(id)aKey
 {
+	NSAssert(aKey, @"key cannot be nil");
 	@synchronized(self) {
 		[_dataPool removeObjectForKey:aKey];
 	}
@@ -106,6 +111,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 //
 - (NSArray *) _allKeysForObject:(id)anObject
 {
+	NSAssert(anObject, @"object cannot be nil");
 	NSMutableArray * mArray = [[NSMutableArray alloc] initWithCapacity:2];
 	
 	id<NSCopying> key;

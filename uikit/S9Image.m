@@ -34,7 +34,7 @@ UIImage * UIImageWithName(NSString * name)
 	return image;
 }
 
-@implementation UIImage (IO)
+@implementation UIImage (SlanissueToolkit)
 
 - (BOOL) writeToFile:(NSString *)path atomically:(BOOL)useAuxiliaryFile
 {
