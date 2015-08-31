@@ -21,7 +21,7 @@
 
 + (NSString *) stringBySerializingObject:(NSObject *)object
 {
-	return [object JSONStringWithEncoding:NSUTF8StringEncoding options:0];
+	return JSONStringFromNSObject(object);
 }
 
 - (NSString *) MD5String

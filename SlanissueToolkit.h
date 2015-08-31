@@ -89,6 +89,7 @@
 //
 //  QuartzCore
 //
+#import "S9Layer.h"
 #import "S9AffineTransform.h"
 #import "S9View+Transform.h"
 #import "S9View+Reflection.h"
@@ -100,6 +101,7 @@
 #import "S9Application.h"
 #import "S9Image.h"
 #import "S9Control.h"
+#import "S9ViewController.h"
 #import "S9View.h"
 #import "S9WebView.h"
 #import "S9ActionSheet.h"
@@ -107,9 +109,13 @@
 //
 //  UIKit Extensions
 //
+#import "S9RemoteController.h"
 #import "S9SegmentedButton.h"
 #import "S9SegmentedScrollView.h"
 #import "S9SwipeTableViewCell.h"
+#import "S9ParticleView.h"
+#import "S9WaterfallView.h"
+#import "S9WaterfallView+Layout.h"
 // uikit_ext/refresh
 #import "S9ScrollRefreshControlState.h"
 #import "S9ScrollRefreshControlStateMachine.h"

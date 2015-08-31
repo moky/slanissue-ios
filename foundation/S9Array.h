@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
+@interface NSArray (SlanissueToolkit)
+
+- (id) objectBeforeObject:(id)object;
+- (id) objectAfterObject:(id)object;
+
+@end
+
 //--------------------------------------------------------------------- for each
 #define S9_FOR_EACH(item, array)                                               \
     for (NSEnumerator * __e = [(array) objectEnumerator];                      \

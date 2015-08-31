@@ -83,11 +83,10 @@ CGRect CGRectGetBoundsFromParentOfNode(id node)
 		}
 	} else if ([node isKindOfClass:[UIViewController class]]) {
 		UIViewController * vc = (UIViewController *)node;
-		UIView * view = vc.view;
-		if (view.superview) {
-			return view.superview.bounds;
-		} else if (view.window) {
-			return view.window.bounds;
+		if (vc.parentViewController) {
+			return vc.parentViewController.view.bounds;
+		} else if (vc.view.window) {
+			return vc.view.window.bounds;
 		} else {
 			return [UIScreen mainScreen].bounds;
 		}

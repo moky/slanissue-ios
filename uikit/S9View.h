@@ -10,6 +10,9 @@
 
 @interface UIView (SlanissueToolkit)
 
+// get all children of parent, includes self
+- (NSArray *) siblings;
+
 // remove all subviews
 - (void) removeSubviews;
 
@@ -20,10 +23,3 @@
 - (UIImage *) snapshot:(NSString *)filename;
 
 @end
-
-#pragma mark - Siblings
-
-UIKIT_EXTERN NSArray * S9SiblingsOfNode(id node);
-
-UIKIT_EXTERN id S9PreviousSiblingOfNode(id node);
-UIKIT_EXTERN id S9NextSiblingOfNode(id node);

@@ -21,13 +21,12 @@
 
 - (NSString *) JSONStringWithEncoding:(NSStringEncoding)encoding options:(NSJSONWritingOptions)opt;
 - (NSString *) JSONStringWithEncoding:(NSStringEncoding)encoding;
-- (NSString *) JSONString;
 
 @end
 
-#define NSObjectFromJSONData(data)     [NSObject objectWithJSONData:(data)]
-#define NSObjectFromJSONString(string) [NSObject objectWithJSONString:(string)]
-#define JSONStringFromNSObject(object) [(object) JSONString]
+#define NSObjectFromJSONData(data)     [NSObject objectWithJSONData:(data) options:NSJSONReadingAllowFragments]
+#define NSObjectFromJSONString(string) [NSObject objectWithJSONString:(string) encoding:NSUTF8StringEncoding]
+#define JSONStringFromNSObject(object) [(object) JSONStringWithEncoding:NSUTF8StringEncoding options:0]
 
 //-------------------------------------------------------------------- singleton
 #define S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)                          \

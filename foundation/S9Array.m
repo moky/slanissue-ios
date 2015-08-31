@@ -7,3 +7,25 @@
 //
 
 #import "S9Array.h"
+
+@implementation NSArray (SlanissueToolkit)
+
+- (id) objectBeforeObject:(id)object
+{
+	NSUInteger index = [self indexOfObject:object];
+	if (index != NSNotFound && index > 0) {
+		return [self objectAtIndex:index - 1];
+	}
+	return nil;
+}
+
+- (id) objectAfterObject:(id)object
+{
+	NSUInteger index = [self indexOfObject:object];
+	if (index != NSNotFound && ++index < [self count]) {
+		return [self objectAtIndex:index];
+	}
+	return nil;
+}
+
+@end

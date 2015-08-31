@@ -53,9 +53,4 @@
 	return [self JSONStringWithEncoding:encoding options:0];
 }
 
-- (NSString *) JSONString
-{
-	return [self JSONStringWithEncoding:NSUTF8StringEncoding options:0];
-}
-
 @end
