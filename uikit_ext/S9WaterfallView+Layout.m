@@ -395,7 +395,6 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 	
 	UIView * v;
 	BOOL conflicts;
-	NSInteger i;
 	
 	CGPoint * point;
 	
@@ -407,8 +406,7 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 		frame = child.frame;
 		
 		// 2.1. trying each joining points
-		point = (CGPoint *)ds_array_at(pointPool, 0);
-		for (offset = 0; offset < pointPool->count; ++offset, ++point) {
+		DS_FOR_EACH_ARRAY_ITEM(pointPool, point, offset) {
 			// 2.1.1. place it on the joing point
 			//        if the frame outside the bounds, continue
 			if (!place_on_joining_point(&frame, *point, direction, spaceHorizontal, spaceVertical, bounds)) {
@@ -417,8 +415,7 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 			
 			// 2.1.2. check each elder sibling whether conflict
 			conflicts = NO;
-			for (i = index - 1; i >= 0; --i) {
-				v = [subviews objectAtIndex:i];
+			S9_FOR_EACH_REVERSE(v, subviews) {
 				if (CGRectIntersectsRect(frame, v.frame)) {
 					conflicts = YES;
 					// TODO: check whether the space is too small, if YES, remove it

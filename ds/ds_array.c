@@ -155,6 +155,11 @@ void ds_array_remove(ds_array * array, ds_size index)
 
 void ds_array_sort(ds_array * array)
 {
+	if (array->count <= 1) {
+		// no need to sort
+		return;
+	}
+	
 	ds_type * tmp = (ds_type *)malloc(array->item_size);
 	memset(tmp, 0, array->item_size);
 	

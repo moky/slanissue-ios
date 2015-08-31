@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreGraphics/CoreGraphics.h>
 
 @interface S9MemoryCache : NSObject
 
@@ -27,6 +26,6 @@
 - (NSData *) getFileData:(NSString *)filename;
 
 // remove all data that have no reference
-- (CGFloat) purgeDataCache;
+- (float) purgeDataCache;
 
 @end

@@ -125,7 +125,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	return [mArray autorelease];
 }
 
-- (CGFloat) purgeDataCache
+- (float) purgeDataCache
 {
 	NSUInteger count, total;
 	
@@ -159,7 +159,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 		return 1.0f;
 	} else {
 		S9Log(@"%u/%u memory item(s) has been clean.", (unsigned int)count, (unsigned int)total);
-		return (CGFloat)count / total;
+		return (float)count / total;
 	}
 }
 

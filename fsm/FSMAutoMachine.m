@@ -13,36 +13,55 @@
 	NSTimer * _timer;
 }
 
+@property(nonatomic, readwrite) NSTimer * timer;
+
 @end
 
 @implementation FSMAutoMachine
 
 @synthesize interval = _interval;
+@synthesize timer = _timer;
+
+- (void) dealloc
+{
+	self.timer = nil;
+	
+	[super dealloc];
+}
 
 - (instancetype) init
 {
 	self = [super init];
 	if (self) {
 		_interval = 1.0f / 12.0f;
+		
+		self.timer = nil;
 	}
 	return self;
+}
+
+- (void) setTimer:(NSTimer *)timer
+{
+	if (_timer != timer) {
+		[_timer invalidate];
+		_timer = timer;
+	}
 }
 
 - (void) _startMachine
 {
 	// start
-	_timer = [NSTimer scheduledTimerWithTimeInterval:_interval
-											  target:self
-											selector:@selector(tick)
-											userInfo:nil
-											 repeats:YES];
+	self.timer = [NSTimer scheduledTimerWithTimeInterval:_interval
+												  target:self
+												selector:@selector(tick)
+												userInfo:nil
+												 repeats:YES];
 }
 
 - (void) _stopMachine
 {
 	// stop timer and release itself and the target
-	[_timer invalidate];
-	_timer = nil;
+	self.timer = nil;
 }
 
 - (void) start
