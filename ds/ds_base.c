@@ -77,6 +77,7 @@ int ds_compare_float(const ds_type * ptr1, const ds_type * ptr2)
 #pragma mark - Quick Sort
 
 #define DS_ITEM(index)     (ds_type *)(array + (index) * item_size)
+#define DS_COPY(dest, src) memcpy((dest), (src), item_size)
 
 void ds_qsort(ds_byte * array, const ds_size item_size,
 			  const ds_size first, const ds_size last,
@@ -98,7 +99,7 @@ void ds_qsort_b(ds_byte * array, const ds_size item_size,
 	ds_type * key = (ds_type *)malloc(item_size);
 	
 	// 1. take the first item as key item
-	memcpy(key, DS_ITEM(left), item_size);
+	DS_COPY(key, DS_ITEM(left));
 	
 	// 2. sort in range
 	while (1) {
@@ -109,7 +110,7 @@ void ds_qsort_b(ds_byte * array, const ds_size item_size,
 		if (left >= right) {
 			break; // finished
 		}
-		memcpy(DS_ITEM(left), DS_ITEM(right), item_size); // move the smaller to left
+		DS_COPY(DS_ITEM(left), DS_ITEM(right)); // move the smaller to left
 		
 		++left; // already compared, skip it
 		
@@ -120,14 +121,14 @@ void ds_qsort_b(ds_byte * array, const ds_size item_size,
 		if (left >= right) {
 			break; // finished
 		}
-		memcpy(DS_ITEM(right), DS_ITEM(left), item_size); // move the bigger to right
+		DS_COPY(DS_ITEM(right), DS_ITEM(left)); // move the bigger to right
 		
 		--right; // already compared, skip it
 	}
 	
 	// 3. put back the key item
 	if (first < left) {
-		memcpy(DS_ITEM(left), key, item_size);
+		DS_COPY(DS_ITEM(left), key);
 	}
 	
 	// 4. sort left part

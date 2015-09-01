@@ -174,6 +174,13 @@ void ds_chain_remove(ds_chain_table * chain, ds_chain_node * node)
 	_destroy(chain, node);
 }
 
+#define DS_SWAP(x, y)                                                          \
+        do {                                                                   \
+            memcpy(tmp, (x), chain->data_size);                                \
+            memcpy((x), (y), chain->data_size);                                \
+            memcpy((y), tmp, chain->data_size);                                \
+        } while(0)
+
 void ds_chain_sort(ds_chain_table * chain)
 {
 	if (chain->head == NULL || chain->head->next == NULL) {
@@ -189,27 +196,22 @@ void ds_chain_sort(ds_chain_table * chain)
 	ds_chain_node * pj;
 	
 	ds_type * tmp = (ds_type *)malloc(chain->data_size);
-	memset(tmp, 0, chain->data_size);
 	
-	if (chain->fn.compare && chain->fn.assign) {
+	if (chain->fn.compare) {
 		for (; pi; pi = pi->next) {
 			pj = pi->next;
 			for (; pj; pj = pj->next) {
 				if (chain->fn.compare(pi->data, pj->data) > 0) {
-					chain->fn.assign(tmp, pi->data, chain->data_size);
-					chain->fn.assign(pi->data, pj->data, chain->data_size);
-					chain->fn.assign(pj->data, tmp, chain->data_size);
+					DS_SWAP(pi->data, pj->data);
 				}
 			}
 		}
-	} else if (chain->bk.compare && chain->bk.assign) {
+	} else if (chain->bk.compare) {
 		for (; pi; pi = pi->next) {
 			pj = pi->next;
 			for (; pj; pj = pj->next) {
 				if (chain->bk.compare(pi->data, pj->data) > 0) {
-					chain->bk.assign(tmp, pi->data, chain->data_size);
-					chain->bk.assign(pi->data, pj->data, chain->data_size);
-					chain->bk.assign(pj->data, tmp, chain->data_size);
+					DS_SWAP(pi->data, pj->data);
 				}
 			}
 		}
@@ -218,9 +220,7 @@ void ds_chain_sort(ds_chain_table * chain)
 			pj = pi->next;
 			for (; pj; pj = pj->next) {
 				if (ds_compare(pi->data, pj->data) > 0) {
-					ds_assign(tmp, pi->data, chain->data_size);
-					ds_assign(pi->data, pj->data, chain->data_size);
-					ds_assign(pj->data, tmp, chain->data_size);
+					DS_SWAP(pi->data, pj->data);
 				}
 			}
 		}
