@@ -11,14 +11,14 @@
 
 #include "ds_chain.h"
 
-static inline void _assign(const ds_chain_table * chain, ds_type * desc, const ds_type * src)
+static inline void _assign(const ds_chain_table * chain, ds_type * dest, const ds_type * src)
 {
 	if (chain->fn.assign) {
-		chain->fn.assign(desc, src, chain->data_size);
+		chain->fn.assign(dest, src, chain->data_size);
 	} else if (chain->bk.assign) {
-		chain->bk.assign(desc, src, chain->data_size);
+		chain->bk.assign(dest, src, chain->data_size);
 	} else {
-		ds_assign(desc, src, chain->data_size);
+		ds_assign(dest, src, chain->data_size);
 	}
 }
 

@@ -95,3 +95,37 @@ CGRect CGRectGetBoundsFromParentOfNode(id node)
 		return [UIScreen mainScreen].bounds;
 	}
 }
+
+void ds_assign_point(ds_type * dest, const ds_type * src, const ds_size size)
+{
+	CGPoint * p = (CGPoint *)dest;
+	CGPoint * v = (CGPoint *)src;
+	p->x = v->x;
+	p->y = v->y;
+}
+
+void ds_assign_size(ds_type * dest, const ds_type * src, const ds_size size)
+{
+	CGSize * p = (CGSize *)dest;
+	CGSize * v = (CGSize *)src;
+	p->width = v->width;
+	p->height = v->height;
+}
+
+void ds_assign_vector(ds_type * dest, const ds_type * src, const ds_size size)
+{
+	CGVector * p = (CGVector *)dest;
+	CGVector * v = (CGVector *)src;
+	p->dx = v->dx;
+	p->dy = v->dy;
+}
+
+void ds_assign_rect(ds_type * dest, const ds_type * src, const ds_size size)
+{
+	CGRect * p = (CGRect *)dest;
+	CGRect * v = (CGRect *)src;
+	p->origin.x = v->origin.x;
+	p->origin.y = v->origin.y;
+	p->size.width = v->size.width;
+	p->size.height = v->size.height;
+}

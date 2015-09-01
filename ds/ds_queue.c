@@ -34,14 +34,14 @@ static inline void _expand(ds_queue * queue)
 	}
 }
 
-static inline void _assign(const ds_queue * queue, ds_type * desc, const ds_type * src)
+static inline void _assign(const ds_queue * queue, ds_type * dest, const ds_type * src)
 {
 	if (queue->fn.assign) {
-		queue->fn.assign(desc, src, queue->item_size);
+		queue->fn.assign(dest, src, queue->item_size);
 	} else if (queue->bk.assign) {
-		queue->bk.assign(desc, src, queue->item_size);
+		queue->bk.assign(dest, src, queue->item_size);
 	} else {
-		ds_assign(desc, src, queue->item_size);
+		ds_assign(dest, src, queue->item_size);
 	}
 }
 

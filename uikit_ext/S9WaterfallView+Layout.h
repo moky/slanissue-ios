@@ -22,15 +22,6 @@
 
 @end
 
-#define UIWaterfallViewJoiningPointAssignBlock()                               \
-        ^void(ds_type * dest, const ds_type * src, const size_t size) {        \
-            CGPoint * p = (CGPoint *)dest;                                     \
-            CGPoint * v = (CGPoint *)src;                                      \
-            p->x = v->x;                                                       \
-            p->y = v->y;                                                       \
-        }                                                                      \
-                              /* EOF 'UIWaterfallViewJoiningPointAssignBlock' */
-
 #define UIWaterfallViewJoiningPointCompareBlock(cond1, cond2, cond3, cond4)    \
         ^int(const ds_type * ptr1, const ds_type * ptr2) {                     \
             CGPoint * p1 = (CGPoint *)ptr1;                                    \

@@ -8,6 +8,7 @@
 
 #import "ds_array.h"
 #import "S9Array.h"
+#import "S9Geometry.h"
 #import "S9WaterfallView+Layout.h"
 
 NS_INLINE void add_first_joining_point(ds_array * pointPool,
@@ -383,7 +384,7 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 	//    each subview may offers two new joining point,
 	//    create a pool to save all available joining point(s)
 	ds_array * pointPool = ds_array_create(sizeof(CGPoint), count * 2);
-	pointPool->bk.assign = UIWaterfallViewJoiningPointAssignBlock();
+	pointPool->bk.assign = ds_assign_point_b;
 	add_first_joining_point(pointPool, direction, spaceHorizontal, spaceVertical, bounds);
 	NSAssert(pointPool->bk.compare, @"init failed");
 	

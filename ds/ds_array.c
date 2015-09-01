@@ -17,14 +17,14 @@ static inline void _expand(ds_array * array)
 	array->items = (ds_type *)realloc(array->items, array->capacity * array->item_size);
 }
 
-static inline void _assign(const ds_array * array, ds_type * desc, const ds_type * src)
+static inline void _assign(const ds_array * array, ds_type * dest, const ds_type * src)
 {
 	if (array->fn.assign) {
-		array->fn.assign(desc, src, array->item_size);
+		array->fn.assign(dest, src, array->item_size);
 	} else if (array->bk.assign) {
-		array->bk.assign(desc, src, array->item_size);
+		array->bk.assign(dest, src, array->item_size);
 	} else {
-		ds_assign(desc, src, array->item_size);
+		ds_assign(dest, src, array->item_size);
 	}
 }
 
