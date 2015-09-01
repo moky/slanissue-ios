@@ -33,7 +33,7 @@
 	if (!javascript) {
 		// load data from file
 		NSStringEncoding encoding = NSUTF8StringEncoding;
-		NSError * error;
+		NSError * error = nil;
 		javascript = [NSString stringWithContentsOfFile:jsFile encoding:encoding error:&error];
 		NSAssert(javascript && !error, @"decode error: %@,", error);
 		

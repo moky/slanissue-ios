@@ -41,11 +41,11 @@ int ds_compare(const ds_type * ptr1, const ds_type * ptr2);
 //  Quick Sort
 //
 void ds_qsort(ds_byte * array, const ds_size item_size,
-			  const ds_size left, const ds_size right,
+			  const ds_size first, const ds_size last,
 			  ds_compare_func compare);
 
 void ds_qsort_b(ds_byte * array, const ds_size item_size,
-				const ds_size left, const ds_size right,
+				const ds_size first, const ds_size last,
 				ds_compare_block compare);
 
 #endif /* defined(__ds_base__) */
