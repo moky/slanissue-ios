@@ -44,24 +44,22 @@ static inline void _erase_all(ds_array * array)
 	if (array->count == 0) {
 		return;
 	}
-	ds_byte * ptr = (ds_byte *)array->items;
-	ptr += array->count * array->item_size;
+	ds_type * item;
+	ds_size index;
 	if (array->fn.erase) {
-		for (; array->count > 0; --(array->count)) {
-			ptr -= array->item_size;
-			array->fn.erase((ds_type *)ptr, array->item_size);
+		DS_FOR_EACH_ARRAY_ITEM(array, item, index) {
+			array->fn.erase(item, array->item_size);
 		}
 	} else if (array->bk.erase) {
-		for (; array->count > 0; --(array->count)) {
-			ptr -= array->item_size;
-			array->bk.erase((ds_type *)ptr, array->item_size);
+		DS_FOR_EACH_ARRAY_ITEM(array, item, index) {
+			array->bk.erase(item, array->item_size);
 		}
 	} else {
-		for (; array->count > 0; --(array->count)) {
-			ptr -= array->item_size;
-			ds_erase((ds_type *)ptr, array->item_size);
+		DS_FOR_EACH_ARRAY_ITEM(array, item, index) {
+			ds_erase(item, array->item_size);
 		}
 	}
+	array->count = 0;
 }
 
 #pragma mark -
@@ -160,60 +158,54 @@ void ds_array_sort(ds_array * array)
 		return;
 	}
 	
-	ds_type * tmp = (ds_type *)malloc(array->item_size);
-	memset(tmp, 0, array->item_size);
-	
 	if (array->fn.compare && array->fn.assign)
 	{
 		ds_qsort((ds_byte *)array->items, array->item_size,
 				 0, array->count - 1,
-				 array->fn.compare, array->fn.assign, tmp);
+				 array->fn.compare);
 	}
 	else if (array->bk.compare && array->bk.assign)
 	{
 		ds_qsort_b((ds_byte *)array->items, array->item_size,
 				   0, array->count - 1,
-				   array->bk.compare, array->bk.assign, tmp);
+				   array->bk.compare);
 	}
 	else
 	{
 		ds_qsort((ds_byte *)array->items, array->item_size,
 				 0, array->count - 1,
-				 ds_compare, ds_assign, tmp);
+				 ds_compare);
 	}
-	
-	_erase(array, tmp);
-	free(tmp);
 }
 
 void ds_array_sort_insert(ds_array * array, const ds_type * item)
 {
 	ds_type * data;
-	ds_type index;
+	ds_size index;
 	
 	// 1. seek for index
 	if (array->fn.compare) {
-		DS_FOR_EACH_ARRAY_ITEM_REVERSE(array, data, index) {
-			if (array->fn.compare(data, item) <= 0) {
+		DS_FOR_EACH_ARRAY_ITEM(array, data, index) {
+			if (array->fn.compare(data, item) > 0) {
 				break; // got it
 			}
 		}
 	} else if (array->bk.compare) {
-		DS_FOR_EACH_ARRAY_ITEM_REVERSE(array, data, index) {
-			if (array->bk.compare(data, item) <= 0) {
+		DS_FOR_EACH_ARRAY_ITEM(array, data, index) {
+			if (array->bk.compare(data, item) > 0) {
 				break; // got it
 			}
 		}
 	} else {
-		DS_FOR_EACH_ARRAY_ITEM_REVERSE(array, data, index) {
-			if (ds_compare(data, item) <= 0) {
+		DS_FOR_EACH_ARRAY_ITEM(array, data, index) {
+			if (ds_compare(data, item) > 0) {
 				break; // got it
 			}
 		}
 	}
 	
-	// 2. the item at index is smaller(or equal), insert after it
-	ds_array_insert(array, item, index + 1);
+	// 2. the item at index is bigger, insert here
+	ds_array_insert(array, item, index);
 }
 
 ds_array * ds_array_copy(const ds_array * array)

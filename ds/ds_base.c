@@ -38,72 +38,80 @@ int ds_compare(const ds_type * ptr1, const ds_type * ptr2)
 
 void ds_qsort(ds_byte * array, const ds_size item_size,
 			  const ds_size left, const ds_size right,
-			  ds_compare_func cmp, ds_assign_func assign, ds_type * swap_space)
+			  ds_compare_func compare)
 {
 	ds_size first = left;
 	ds_size last = right;
 	
+	ds_type * key = (ds_type *)malloc(item_size);
+	
 	// 1. take the first item as key item
-	assign(swap_space, DS_ITEM(first), item_size);
+	memcpy(key, DS_ITEM(first), item_size);
 	
 	// 2. sort in range
 	while (first < last) {
-		while (first < last && cmp(DS_ITEM(last), swap_space) >= 0) {
+		while (first < last && compare(DS_ITEM(last), key) >= 0) {
 			--last;
 		}
-		assign(DS_ITEM(first), DS_ITEM(last), item_size); // move the smaller item to left
+		memcpy(DS_ITEM(first), DS_ITEM(last), item_size); // move the smaller item to left
 		
-		while (first < last && cmp(DS_ITEM(first), swap_space) <= 0) {
+		while (first < last && compare(DS_ITEM(first), key) <= 0) {
 			++first;
 		}
-		assign(DS_ITEM(last), DS_ITEM(first), item_size); // move the bigger item to right
+		memcpy(DS_ITEM(last), DS_ITEM(first), item_size); // move the bigger item to right
 	}
 	
 	// 3. put back the key item
-	assign(DS_ITEM(first), swap_space, item_size);
+	memcpy(DS_ITEM(first), key, item_size);
 	
 	// 4. sort left part
 	if (left + 1 < first) {
-		ds_qsort(array, item_size, left, first - 1, cmp, assign, swap_space);
+		ds_qsort(array, item_size, left, first - 1, compare);
 	}
 	// 5. sort right part
 	if (first + 1 < right) {
-		ds_qsort(array, item_size, first + 1, right, cmp, assign, swap_space);
+		ds_qsort(array, item_size, first + 1, right, compare);
 	}
+	
+	free(key);
 }
 
 void ds_qsort_b(ds_byte * array, const ds_size item_size,
 				const ds_size left, const ds_size right,
-				ds_compare_block cmp, ds_assign_block assign, ds_type * swap_space)
+				ds_compare_block compare)
 {
 	ds_size first = left;
 	ds_size last = right;
 	
+	ds_type * key = (ds_type *)malloc(item_size);
+	
 	// 1. take the first item as key item
-	assign(swap_space, DS_ITEM(first), item_size);
+	memcpy(key, DS_ITEM(first), item_size);
 	
 	// 2. sort in range
 	while (first < last) {
-		while (first < last && cmp(DS_ITEM(last), swap_space) >= 0) {
+		while (first < last && compare(DS_ITEM(last), key) >= 0) {
 			--last;
 		}
-		assign(DS_ITEM(first), DS_ITEM(last), item_size); // move the smaller to left
+		memcpy(DS_ITEM(first), DS_ITEM(last), item_size); // move the smaller to left
 		
-		while (first < last && cmp(DS_ITEM(first), swap_space) <= 0) {
+		while (first < last && compare(DS_ITEM(first), key) <= 0) {
 			++first;
 		}
-		assign(DS_ITEM(last), DS_ITEM(first), item_size); // move the bigger to right
+		memcpy(DS_ITEM(last), DS_ITEM(first), item_size); // move the bigger to right
 	}
 	
 	// 3. put back the key item
-	assign(DS_ITEM(first), swap_space, item_size);
+	memcpy(DS_ITEM(first), key, item_size);
 	
 	// 4. sort left part
 	if (left + 1 < first) {
-		ds_qsort_b(array, item_size, left, first - 1, cmp, assign, swap_space);
+		ds_qsort_b(array, item_size, left, first - 1, compare);
 	}
 	// 5. sort right part
 	if (first + 1 < right) {
-		ds_qsort_b(array, item_size, first + 1, right, cmp, assign, swap_space);
+		ds_qsort_b(array, item_size, first + 1, right, compare);
 	}
+	
+	free(key);
 }
