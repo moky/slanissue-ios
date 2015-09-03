@@ -18,7 +18,7 @@ static NSUInteger _indexForString(NSString * string, NSMutableArray * mStringsAr
 	NSUInteger index = 0;
 	
 	NSString * str;
-	S9_FOR_EACH(str, mStringsArray) {
+	S9_FOR_EACH(mStringsArray, str) {
 		if ([str isEqualToString:string]) {
 			break;
 		}
@@ -56,7 +56,7 @@ static NSUInteger _processArray(NSArray * array,
 	NSUInteger iCount = 1;
 	
 	NSObject * object;
-	S9_FOR_EACH(object, array) {
+	S9_FOR_EACH(array, object) {
 		pChild = pItemBuffer + iCount;
 		iCount += _processObject(object, pChild, iPlaceLeft - iCount, mStringsArray);
 	}
@@ -86,7 +86,7 @@ static NSUInteger _processDictionary(NSDictionary * dict,
 	
 	NSString * key;
 	NSObject * object;
-	S9_FOR_EACH_KEY_VALUE(key, object, dict) {
+	S9_FOR_EACH_KEY_VALUE(dict, key, object) {
 		// key
 		pKey = pItemBuffer + iCount;
 		keyId = _indexForString(key, mStringsArray);
@@ -250,7 +250,7 @@ static unsigned char * _createStringsBuffer(NSArray * stringsArray,
 	const char * str;
 	NSUInteger len;
 	MOFStringItem * item;
-	S9_FOR_EACH(string, stringsArray) {
+	S9_FOR_EACH(stringsArray, string) {
 		//str = [string cStringUsingEncoding:NSUTF8StringEncoding];
 		str = [string UTF8String];
 		len = strlen(str);

@@ -16,23 +16,23 @@
 @end
 
 //--------------------------------------------------------------------- for each
-#define S9_FOR_EACH(item, array)                                               \
+#define S9_FOR_EACH(array, item)                                               \
     for (NSEnumerator * __e = [(array) objectEnumerator];                      \
          ((item) = [__e nextObject]); )                                        \
                                                          /* EOF 'S9_FOR_EACH' */
 
-#define S9_FOR_EACH_SAFE(item, array)                                          \
+#define S9_FOR_EACH_SAFE(array, item)                                          \
     for (NSUInteger __i = 0;                                                   \
          (__i < [(array) count]) && ((item) = [(array) objectAtIndex:__i]);    \
          ++__i)                                                                \
                                                     /* EOF 'S9_FOR_EACH_SAFE' */
 
-#define S9_FOR_EACH_REVERSE(item, array)                                       \
+#define S9_FOR_EACH_REVERSE(array, item)                                       \
     for (NSEnumerator * __e = [(array) reverseObjectEnumerator];               \
          ((item) = [__e nextObject]); )                                        \
                                                  /* EOF 'S9_FOR_EACH_REVERSE' */
 
-#define S9_FOR_EACH_REVERSE_SAFE(item, array)                                  \
+#define S9_FOR_EACH_REVERSE_SAFE(array, item)                                  \
     for (NSInteger __i = [(array) count] - 1;                                  \
          (__i>=0 && __i<[(array) count])&&((item)=[(array) objectAtIndex:__i]);\
          --__i)                                                                \

@@ -10,74 +10,10 @@
 
 #include "ds_base.h"
 
-// default type: unsigned long
-void ds_assign(ds_type * dest, const ds_type * src, const ds_size size)
-{
-	memcpy(dest, src, size);
-}
-
-void ds_erase(ds_type * ptr, const ds_size size)
-{
-	memset(ptr, 0, size);
-}
-
-int ds_compare(const ds_type * ptr1, const ds_type * ptr2)
-{
-	if (*ptr1 > *ptr2) {
-		return 1;
-	} else if (*ptr1 < *ptr2) {
-		return -1;
-	} else {
-		return 0;
-	}
-}
-
-// int
-void ds_assign_int(ds_type * dest, const ds_type * src, const ds_size size)
-{
-	int * p = (int *)dest;
-	int * v = (int *)src;
-	*p = *v;
-}
-
-int ds_compare_int(const ds_type * ptr1, const ds_type * ptr2)
-{
-	int * p1 = (int *)ptr1;
-	int * p2 = (int *)ptr2;
-	if (*p1 > *p2) {
-		return 1;
-	} else if (*p1 < *p2) {
-		return -1;
-	} else {
-		return 0;
-	}
-}
-
-// float
-void ds_assign_float(ds_type * dest, const ds_type * src, const ds_size size)
-{
-	float * p = (float *)dest;
-	float * v = (float *)src;
-	*p = *v;
-}
-
-int ds_compare_float(const ds_type * ptr1, const ds_type * ptr2)
-{
-	float * p1 = (float *)ptr1;
-	float * p2 = (float *)ptr2;
-	if (*p1 > *p2) {
-		return 1;
-	} else if (*p1 < *p2) {
-		return -1;
-	} else {
-		return 0;
-	}
-}
-
-#pragma mark - Quick Sort
-
 #define DS_ITEM(index)     (ds_type *)(array + (index) * item_size)
 #define DS_COPY(dest, src) memcpy((dest), (src), item_size)
+
+// Quick Sort
 
 void ds_qsort(ds_byte * array, const ds_size item_size,
 			  const ds_size first, const ds_size last,
@@ -141,4 +77,37 @@ void ds_qsort_b(ds_byte * array, const ds_size item_size,
 	}
 	
 	free(key);
+}
+
+// Bubble Sort
+
+void ds_bsort(ds_byte * array, const ds_size item_size, const ds_size count,
+			  ds_compare_func compare)
+{
+	ds_compare_block block = ^int(const ds_type * ptr1, const ds_type * ptr2) {
+		return compare(ptr1, ptr2);
+	};
+	ds_bsort_b(array, item_size, count, block);
+}
+
+void ds_bsort_b(ds_byte * array, const ds_size item_size, const ds_size count,
+				ds_compare_block compare)
+{
+	ds_size i, j;
+	ds_byte *pi, *pj;
+	
+	ds_type * tmp = (ds_type *)malloc(item_size);
+	
+	for (i = 0, pi = array; i < count; ++i, pi += item_size) {
+		for (j = i + 1, pj = pi + item_size; j < count; ++j, pj += item_size) {
+			if (compare((ds_type *)pi, (ds_type *)pj) > 0) {
+				// swap pi & pj
+				memcpy(tmp, pi, item_size);
+				memcpy(pi, pj, item_size);
+				memcpy(pj, tmp, item_size);
+			}
+		}
+	}
+	
+	free(tmp);
 }

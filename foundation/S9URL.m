@@ -30,7 +30,7 @@
 	NSString * value;
 	
 	NSString * item;
-	S9_FOR_EACH(item, array) {
+	S9_FOR_EACH(array, item) {
 		range = [item rangeOfString:@"="];
 		if (range.location == NSNotFound) {
 			S9Log(@"invalid item: %@", item);

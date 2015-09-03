@@ -172,7 +172,7 @@
 	if (!_loadingIndicator) {
 		// get indicator from subviews of trayView by class
 		UIActivityIndicatorView * aiv;
-		S9_FOR_EACH(aiv, self.trayView.subviews) {
+		S9_FOR_EACH(self.trayView.subviews, aiv) {
 			if ([aiv isKindOfClass:[UIActivityIndicatorView class]]) {
 				_loadingIndicator = [aiv retain];
 				break;
@@ -203,7 +203,7 @@
 	if (!_textLabel) {
 		// get first label from subviews of trayView
 		UILabel * label;
-		S9_FOR_EACH(label, self.trayView.subviews) {
+		S9_FOR_EACH(self.trayView.subviews, label) {
 			if ([label isKindOfClass:[UILabel class]]) {
 				_textLabel = [label retain];
 				break;
@@ -254,7 +254,7 @@
 		// get second label from subviews of trayView
 		UILabel * textLabel = nil;
 		UILabel * label;
-		S9_FOR_EACH(label, self.trayView.subviews) {
+		S9_FOR_EACH(self.trayView.subviews, label) {
 			if ([label isKindOfClass:[UILabel class]]) {
 				if (textLabel) {
 					_timeLabel = [label retain];

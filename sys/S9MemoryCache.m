@@ -116,7 +116,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	
 	id<NSCopying> key;
 	id object;
-	S9_FOR_EACH_KEY_VALUE(key, object, _dataPool) {
+	S9_FOR_EACH_KEY_VALUE(_dataPool, key, object) {
 		if (object == anObject) { // compare exactly, and faster
 			[mArray addObject:key];
 		}

@@ -18,9 +18,9 @@
 	SEL selector;
 	
 	// get all targets
-	S9_FOR_EACH(target, [self allTargets]) {
+	S9_FOR_EACH([self allTargets], target) {
 		// get all actions for target
-		S9_FOR_EACH(action, [self actionsForTarget:target forControlEvent:controlEvent]) {
+		S9_FOR_EACH([self actionsForTarget:target forControlEvent:controlEvent], action) {
 			// perform selector
 			selector = NSSelectorFromString(action);
 			[target performSelector:selector withObject:self];

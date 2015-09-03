@@ -22,7 +22,7 @@
 {
 	NSArray * subviews = self.subviews;
 	UIView * sv;
-	S9_FOR_EACH_REVERSE_SAFE(sv, subviews) {
+	S9_FOR_EACH_REVERSE_SAFE(subviews, sv) {
 		[sv removeFromSuperview];
 	}
 }

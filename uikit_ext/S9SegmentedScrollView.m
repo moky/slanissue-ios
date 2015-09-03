@@ -75,7 +75,7 @@
 		
 		// 2. set content edge inset for all scroll views
 		UIScrollView * scrollView;
-		S9_FOR_EACH(scrollView, self.subviews) {
+		S9_FOR_EACH(self.subviews, scrollView) {
 			if ([scrollView isKindOfClass:[UIScrollView class]]) {
 				[self _resetScrollView:scrollView];
 			}
@@ -197,7 +197,7 @@
 	if (!_currentScrollView) {
 		UIScrollView * scrollView;
 		NSUInteger index = 0;
-		S9_FOR_EACH(scrollView, self.subviews) {
+		S9_FOR_EACH(self.subviews, scrollView) {
 			if ([scrollView isKindOfClass:[UIScrollView class]]) {
 				if (index == _selectedIndex) {
 					_currentScrollView = scrollView;

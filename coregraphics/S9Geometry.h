@@ -19,9 +19,9 @@ CG_EXTERN CGRect CGRectGetBoundsFromParentOfNode(id node);
 //
 //  functions & blocks for DataStructure
 //
-void    ds_assign_point(ds_type * dest, const ds_type * src, const ds_size size);
+void    ds_assign_point(ds_type * dest, const ds_type * src);
 #define ds_assign_point_b                                                      \
-        ^void(ds_type * dest, const ds_type * src, const ds_size size) {       \
+        ^void(ds_type * dest, const ds_type * src) {                           \
             CGPoint * p = (CGPoint *)dest;                                     \
             CGPoint * v = (CGPoint *)src;                                      \
             p->x = v->x;                                                       \
@@ -29,9 +29,9 @@ void    ds_assign_point(ds_type * dest, const ds_type * src, const ds_size size)
         }                                                                      \
                                                    /* EOF 'ds_assign_point_b' */
 
-void    ds_assign_size(ds_type * dest, const ds_type * src, const ds_size size);
+void    ds_assign_size(ds_type * dest, const ds_type * src);
 #define ds_assign_size_b                                                       \
-        ^void(ds_type * dest, const ds_type * src, const ds_size size) {       \
+        ^void(ds_type * dest, const ds_type * src) {                           \
             CGSize * p = (CGSize *)dest;                                       \
             CGSize * v = (CGSize *)src;                                        \
             p->width = v->width;                                               \
@@ -39,9 +39,9 @@ void    ds_assign_size(ds_type * dest, const ds_type * src, const ds_size size);
         }                                                                      \
                                                     /* EOF 'ds_assign_size_b' */
 
-void    ds_assign_vector(ds_type * dest, const ds_type * src, const ds_size size);
+void    ds_assign_vector(ds_type * dest, const ds_type * src);
 #define ds_assign_vector_b                                                     \
-        ^void(ds_type * dest, const ds_type * src, const ds_size size) {       \
+        ^void(ds_type * dest, const ds_type * src) {                           \
             CGVector * p = (CGVector *)dest;                                   \
             CGVector * v = (CGVector *)src;                                    \
             p->dx = v->dx;                                                     \
@@ -49,9 +49,9 @@ void    ds_assign_vector(ds_type * dest, const ds_type * src, const ds_size size
         }                                                                      \
                                                   /* EOF 'ds_assign_vector_b' */
 
-void    ds_assign_rect(ds_type * dest, const ds_type * src, const ds_size size);
+void    ds_assign_rect(ds_type * dest, const ds_type * src);
 #define ds_assign_rect_b                                                       \
-        ^void(ds_type * dest, const ds_type * src, const ds_size size) {       \
+        ^void(ds_type * dest, const ds_type * src) {                           \
             CGRect * p = (CGRect *)dest;                                       \
             CGRect * v = (CGRect *)src;                                        \
             p->origin.x = v->origin.x;                                         \

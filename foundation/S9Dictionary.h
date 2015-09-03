@@ -18,7 +18,7 @@
 @end
 
 //--------------------------------------------------------------------- for each
-#define S9_FOR_EACH_KEY_VALUE(key, value, dict)                                \
+#define S9_FOR_EACH_KEY_VALUE(dict, key, value)                                \
     for (NSEnumerator * __e = [(dict) keyEnumerator];                          \
          ((key)=[__e nextObject]) && ((value)=[(dict) objectForKey:(key)]); )  \
                                                /* EOF 'S9_FOR_EACH_KEY_VALUE' */

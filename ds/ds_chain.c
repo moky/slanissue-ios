@@ -14,22 +14,22 @@
 static inline void _assign(const ds_chain_table * chain, ds_type * dest, const ds_type * src)
 {
 	if (chain->fn.assign) {
-		chain->fn.assign(dest, src, chain->data_size);
+		chain->fn.assign(dest, src);
 	} else if (chain->bk.assign) {
-		chain->bk.assign(dest, src, chain->data_size);
+		chain->bk.assign(dest, src);
 	} else {
-		ds_assign(dest, src, chain->data_size);
+		memcpy(dest, src, chain->data_size);
 	}
 }
 
 static inline void _erase(const ds_chain_table * chain, ds_type * ptr)
 {
 	if (chain->fn.erase) {
-		chain->fn.erase(ptr, chain->data_size);
+		chain->fn.erase(ptr);
 	} else if (chain->bk.erase) {
-		chain->bk.erase(ptr, chain->data_size);
+		chain->bk.erase(ptr);
 	} else {
-		ds_erase(ptr, chain->data_size);
+		bzero(ptr, chain->data_size);
 	}
 }
 
@@ -143,11 +143,7 @@ ds_chain_node * ds_chain_first(const ds_chain_table * chain, const ds_type * dat
 			}
 		}
 	} else {
-		DS_FOR_EACH_CHAIN_NODE(chain, node) {
-			if (ds_compare(node->data, data) == 0) {
-				return node;
-			}
-		}
+		//S9Log(@"cannot sort the chain without comparing function");
 	}
 	return NULL;
 }
@@ -216,17 +212,9 @@ void ds_chain_sort(ds_chain_table * chain)
 			}
 		}
 	} else {
-		for (; pi; pi = pi->next) {
-			pj = pi->next;
-			for (; pj; pj = pj->next) {
-				if (ds_compare(pi->data, pj->data) > 0) {
-					DS_SWAP(pi->data, pj->data);
-				}
-			}
-		}
+		//S9Log(@"cannot sort the chain without comparing function");
 	}
 	
-	_erase(chain, tmp);
 	free(tmp);
 }
 
@@ -247,11 +235,8 @@ void ds_chain_sort_insert(ds_chain_table * chain, const ds_type * data)
 			}
 		}
 	} else {
-		DS_FOR_EACH_CHAIN_NODE(chain, node) {
-			if (node->next && ds_compare(node->next->data, data) > 0) {
-				break;
-			}
-		}
+		//S9Log(@"cannot sort the chain without comparing function");
+		node = chain->tail;
 	}
 	// 2. insert
 	ds_chain_insert(chain, data, node);

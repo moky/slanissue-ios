@@ -22,7 +22,7 @@
 	NSMutableDictionary * mDict = [[NSMutableDictionary alloc] initWithCapacity:[pairs count]];
 	
 	NSString * pair;
-	S9_FOR_EACH(pair, pairs) {
+	S9_FOR_EACH(pairs, pair) {
 		NSRange range = [pair rangeOfString:@":"];
 		if (range.location == NSNotFound) {
 			continue;

@@ -37,22 +37,22 @@ static inline void _expand(ds_queue * queue)
 static inline void _assign(const ds_queue * queue, ds_type * dest, const ds_type * src)
 {
 	if (queue->fn.assign) {
-		queue->fn.assign(dest, src, queue->item_size);
+		queue->fn.assign(dest, src);
 	} else if (queue->bk.assign) {
-		queue->bk.assign(dest, src, queue->item_size);
+		queue->bk.assign(dest, src);
 	} else {
-		ds_assign(dest, src, queue->item_size);
+		memcpy(dest, src, queue->item_size);
 	}
 }
 
 static inline void _erase(const ds_queue * queue, ds_type * ptr)
 {
 	if (queue->fn.erase) {
-		queue->fn.erase(ptr, queue->item_size);
+		queue->fn.erase(ptr);
 	} else if (queue->bk.erase) {
-		queue->bk.erase(ptr, queue->item_size);
+		queue->bk.erase(ptr);
 	} else {
-		ds_erase(ptr, queue->item_size);
+		bzero(ptr, queue->item_size);
 	}
 }
 

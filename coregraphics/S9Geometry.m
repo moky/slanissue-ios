@@ -96,7 +96,7 @@ CGRect CGRectGetBoundsFromParentOfNode(id node)
 	}
 }
 
-void ds_assign_point(ds_type * dest, const ds_type * src, const ds_size size)
+void ds_assign_point(ds_type * dest, const ds_type * src)
 {
 	CGPoint * p = (CGPoint *)dest;
 	CGPoint * v = (CGPoint *)src;
@@ -104,7 +104,7 @@ void ds_assign_point(ds_type * dest, const ds_type * src, const ds_size size)
 	p->y = v->y;
 }
 
-void ds_assign_size(ds_type * dest, const ds_type * src, const ds_size size)
+void ds_assign_size(ds_type * dest, const ds_type * src)
 {
 	CGSize * p = (CGSize *)dest;
 	CGSize * v = (CGSize *)src;
@@ -112,7 +112,7 @@ void ds_assign_size(ds_type * dest, const ds_type * src, const ds_size size)
 	p->height = v->height;
 }
 
-void ds_assign_vector(ds_type * dest, const ds_type * src, const ds_size size)
+void ds_assign_vector(ds_type * dest, const ds_type * src)
 {
 	CGVector * p = (CGVector *)dest;
 	CGVector * v = (CGVector *)src;
@@ -120,7 +120,7 @@ void ds_assign_vector(ds_type * dest, const ds_type * src, const ds_size size)
 	p->dy = v->dy;
 }
 
-void ds_assign_rect(ds_type * dest, const ds_type * src, const ds_size size)
+void ds_assign_rect(ds_type * dest, const ds_type * src)
 {
 	CGRect * p = (CGRect *)dest;
 	CGRect * v = (CGRect *)src;

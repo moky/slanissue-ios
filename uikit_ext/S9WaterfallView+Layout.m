@@ -266,7 +266,7 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 	UIView * v;
 	CGRect frame;
 	
-	S9_FOR_EACH(v, view.subviews) {
+	S9_FOR_EACH(view.subviews, v) {
 		frame = v.frame;
 		switch (direction) {
 				/* top */
@@ -332,13 +332,13 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 	
 	// move subviews if needs
 	if (UIWaterfallViewDirectionMatch(UIWaterfallViewDirectionMaskBottom, direction)) {
-		S9_FOR_EACH(v, view.subviews) {
+		S9_FOR_EACH(view.subviews, v) {
 			center = v.center;
 			center.y += dy;
 			v.center = center;
 		}
 	} else if (UIWaterfallViewDirectionMatch(UIWaterfallViewDirectionMaskRight, direction)) {
-		S9_FOR_EACH(v, view.subviews) {
+		S9_FOR_EACH(view.subviews, v) {
 			center = v.center;
 			center.x += dx;
 			v.center = center;
@@ -401,7 +401,7 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 	
 	// 2. layout each subview
 	index = -1;
-	S9_FOR_EACH(child, subviews) {
+	S9_FOR_EACH(subviews, child) {
 		++index;
 		NSAssert(pointPool->count > 0, @"no available joining point");
 		frame = child.frame;
@@ -416,7 +416,7 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 			
 			// 2.1.2. check each elder sibling whether conflict
 			conflicts = NO;
-			S9_FOR_EACH_REVERSE(v, subviews) {
+			S9_FOR_EACH_REVERSE(subviews, v) {
 				if (CGRectIntersectsRect(frame, v.frame)) {
 					conflicts = YES;
 					// TODO: check whether the space is too small, if YES, remove it

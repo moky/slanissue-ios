@@ -20,22 +20,22 @@ static inline void _expand(ds_array * array)
 static inline void _assign(const ds_array * array, ds_type * dest, const ds_type * src)
 {
 	if (array->fn.assign) {
-		array->fn.assign(dest, src, array->item_size);
+		array->fn.assign(dest, src);
 	} else if (array->bk.assign) {
-		array->bk.assign(dest, src, array->item_size);
+		array->bk.assign(dest, src);
 	} else {
-		ds_assign(dest, src, array->item_size);
+		memcpy(dest, src, array->item_size);
 	}
 }
 
 static inline void _erase(const ds_array * array, ds_type * ptr)
 {
 	if (array->fn.erase) {
-		array->fn.erase(ptr, array->item_size);
+		array->fn.erase(ptr);
 	} else if (array->bk.erase) {
-		array->bk.erase(ptr, array->item_size);
+		array->bk.erase(ptr);
 	} else {
-		ds_erase(ptr, array->item_size);
+		bzero(ptr, array->item_size);
 	}
 }
 
@@ -48,15 +48,15 @@ static inline void _erase_all(ds_array * array)
 	ds_size index;
 	if (array->fn.erase) {
 		DS_FOR_EACH_ARRAY_ITEM(array, item, index) {
-			array->fn.erase(item, array->item_size);
+			array->fn.erase(item);
 		}
 	} else if (array->bk.erase) {
 		DS_FOR_EACH_ARRAY_ITEM(array, item, index) {
-			array->bk.erase(item, array->item_size);
+			array->bk.erase(item);
 		}
 	} else {
 		DS_FOR_EACH_ARRAY_ITEM(array, item, index) {
-			ds_erase(item, array->item_size);
+			bzero(item, array->item_size);
 		}
 	}
 	array->count = 0;
@@ -172,9 +172,7 @@ void ds_array_sort(ds_array * array)
 	}
 	else
 	{
-		ds_qsort((ds_byte *)array->items, array->item_size,
-				 0, array->count - 1,
-				 ds_compare);
+		//S9Log(@"cannot sort without comparing function");
 	}
 }
 
@@ -197,11 +195,8 @@ void ds_array_sort_insert(ds_array * array, const ds_type * item)
 			}
 		}
 	} else {
-		DS_FOR_EACH_ARRAY_ITEM(array, data, index) {
-			if (ds_compare(data, item) > 0) {
-				break; // got it
-			}
-		}
+		//S9Log(@"cannot sort the array without comparing function");
+		index = array->count;
 	}
 	
 	// 2. the item at index is bigger, insert here

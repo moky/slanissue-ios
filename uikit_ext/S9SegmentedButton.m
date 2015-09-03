@@ -106,7 +106,7 @@
 	CGPoint center = CGPointMake(bounds.size.width * 0.5f, bounds.size.height * 0.5f);
 	
 	UIButton * btn;
-	S9_FOR_EACH(btn, self.subviews) {
+	S9_FOR_EACH(self.subviews, btn) {
 		btn.bounds = bounds;
 		btn.center = center;
 		if (_direction == UISegmentedButtonAutoLayoutDirectionHorizontal) {

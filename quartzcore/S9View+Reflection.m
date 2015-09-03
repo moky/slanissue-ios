@@ -22,7 +22,7 @@
 - (BOOL) hasReflection
 {
 	CALayer * layer;
-	S9_FOR_EACH(layer, self.layer.sublayers) {
+	S9_FOR_EACH(self.layer.sublayers, layer) {
 		if ([layer.name isEqualToString:S9_VIEW_REFLECTION_LAYER_NAME]) {
 			return YES;
 		}
@@ -34,7 +34,7 @@
 {
 	NSArray * subLayers = self.layer.sublayers;
 	CALayer * layer;
-	S9_FOR_EACH_REVERSE_SAFE(layer, subLayers) {
+	S9_FOR_EACH_REVERSE_SAFE(subLayers, layer) {
 		if ([layer.name isEqualToString:S9_VIEW_REFLECTION_LAYER_NAME]) {
 			[layer removeFromSuperlayer];
 		}
