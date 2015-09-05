@@ -121,5 +121,12 @@
 #import "S9ScrollRefreshControlStateMachine.h"
 #import "S9ScrollRefreshControl.h"
 #import "S9ScrollRefreshView.h"
+// uikit_ext/page
+#import "S9PageScrollViewDataSource.h"
+#import "S9PageScrollView.h"
+#import "S9PrismScrollView.h"
+#import "S9DockScrollView.h"
+#import "S9CoverFlowView.h"
+
 
 NSString * slanissueVersion(void);
