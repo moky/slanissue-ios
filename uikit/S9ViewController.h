@@ -10,6 +10,17 @@
 
 @interface UIViewController (SlanissueToolkit)
 
+// get frame/bounds/center of self.view
+- (CGRect) frame;
+- (CGRect) bounds;
+- (CGPoint) center;
+
+// get superlayer
+- (UIViewController *) parent;
+
+// get all sublayers
+- (NSArray *) children;
+
 // get all children of parent, includes self
 - (NSArray *) siblings;
 

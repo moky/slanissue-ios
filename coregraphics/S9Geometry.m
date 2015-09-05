@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 
 #import "s9Macros.h"
+#import "S9Layer.h"
+#import "S9View.h"
+#import "S9ViewController.h"
 #import "S9Geometry.h"
 
 CGSize CGSizeAspectFit(CGSize fromSize, CGSize toSize)
@@ -47,54 +50,28 @@ CGSize CGSizeAspectFill(CGSize fromSize, CGSize toSize)
 
 CGRect CGRectGetFrameFromNode(id node)
 {
-	if ([node isKindOfClass:[UIView class]]) {
-		UIView * view = (UIView *)node;
-		return view.frame;
-	} else if ([node isKindOfClass:[CALayer class]]) {
-		CALayer * layer = (CALayer *)node;
-		return layer.frame;
-	} else if ([node isKindOfClass:[UIViewController class]]) {
-		UIViewController * vc = (UIViewController *)node;
-		UIView * view = vc.view;
-		return view.frame;
-	} else {
-		S9Log(@"unsupported node: %@", node);
-		return CGRectZero;
+	if ([node isKindOfClass:[UIView class]] ||
+		[node isKindOfClass:[UIViewController class]] ||
+		[node isKindOfClass:[CALayer class]]) {
+		return [node frame];
 	}
+	S9Log(@"unsupported node: %@", node);
+	return CGRectZero;
 }
 
 CGRect CGRectGetBoundsFromParentOfNode(id node)
 {
-	if ([node isKindOfClass:[UIView class]]) {
-		UIView * view = (UIView *)node;
-		if (view.superview) {
-			return view.superview.bounds;
-		} else if (view.window) {
-			return view.window.bounds;
-		} else {
-			return [UIScreen mainScreen].bounds;
-		}
-	} else if ([node isKindOfClass:[CALayer class]]) {
-		CALayer * layer = (CALayer *)node;
-		if (layer.superlayer) {
-			return layer.superlayer.bounds;
-		} else {
-			return [UIScreen mainScreen].bounds;
-		}
-	} else if ([node isKindOfClass:[UIViewController class]]) {
-		UIViewController * vc = (UIViewController *)node;
-		if (vc.parentViewController) {
-			return vc.parentViewController.view.bounds;
-		} else if (vc.view.window) {
-			return vc.view.window.bounds;
-		} else {
-			return [UIScreen mainScreen].bounds;
-		}
-	} else {
-		S9Log(@"unsupported node: %@", node);
-		return [UIScreen mainScreen].bounds;
+	if ([node isKindOfClass:[UIView class]] ||
+		[node isKindOfClass:[UIViewController class]] ||
+		[node isKindOfClass:[CALayer class]]) {
+		id parent = [node parent];
+		return parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
 	}
+	S9Log(@"unsupported node: %@", node);
+	return CGRectZero;
 }
+
+#pragma mark -
 
 void ds_assign_point(ds_type * dest, const ds_type * src)
 {

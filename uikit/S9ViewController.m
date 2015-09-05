@@ -10,6 +10,31 @@
 
 @implementation UIViewController (SlanissueToolkit)
 
+- (CGRect) frame
+{
+	return self.view.frame;
+}
+
+- (CGRect) bounds
+{
+	return self.view.bounds;
+}
+
+- (CGPoint) center
+{
+	return self.view.center;
+}
+
+- (UIViewController *) parent
+{
+	return self.parentViewController;
+}
+
+- (NSArray *) children
+{
+	return self.childViewControllers;
+}
+
 - (NSArray *) siblings
 {
 	return self.parentViewController.childViewControllers;

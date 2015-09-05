@@ -13,6 +13,16 @@
 
 @implementation UIView (SlanissueToolkit)
 
+- (UIView *) parent
+{
+	return self.superview;
+}
+
+- (NSArray *) children
+{
+	return self.subviews;
+}
+
 - (NSArray *) siblings
 {
 	return self.superview.subviews;

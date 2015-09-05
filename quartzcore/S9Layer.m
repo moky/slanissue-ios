@@ -10,6 +10,16 @@
 
 @implementation CALayer (SlanissueToolkit)
 
+- (CALayer *) parent
+{
+	return self.superlayer;
+}
+
+- (NSArray *) children
+{
+	return self.sublayers;
+}
+
 - (NSArray *) siblings
 {
 	return self.superlayer.sublayers;

@@ -10,6 +10,12 @@
 
 @interface UIView (SlanissueToolkit)
 
+// get superlayer
+- (UIView *) parent;
+
+// get all sublayers
+- (NSArray *) children;
+
 // get all children of parent, includes self
 - (NSArray *) siblings;
 
