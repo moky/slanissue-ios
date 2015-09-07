@@ -249,17 +249,17 @@ void ds_chain_reverse(ds_chain_table * chain)
 		// 2. the chain has only one node
 		return;
 	}
-	ds_chain_node * prev = chain->head;
-	ds_chain_node * node = prev->next;
+	ds_chain_node * prev = NULL;
+	ds_chain_node * node = chain->head;
 	ds_chain_node * next;
-	for (; node->next; node = next) {
+	
+	for (; node; prev = node, node = next) {
 		next = node->next;
 		node->next = prev;
-		prev = node;
 	}
 	
-	// change head & tail node
-	//assert(chain->tail = node, "error");
+	// swap head & tail
+	node = chain->tail;
 	chain->tail = chain->head;
 	chain->head = node;
 }
