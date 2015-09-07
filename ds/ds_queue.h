@@ -14,9 +14,10 @@
 #define ds_queue_at(queue, index)                                              \
     ({                                                                         \
         ds_byte * __ptr = (ds_byte *)((queue)->items);                         \
-        (ds_type *)((((queue)->head + (index)) < (queue)->capacity) ?          \
-            (__ptr + (queue)->head + (index)) :                                \
-            (__ptr + (queue)->head + (index) - (queue)->capacity));            \
+        (ds_type *)(__ptr + (queue)->item_size *                               \
+            (((queue)->head + (index)) < (queue)->capacity ?                   \
+                (queue)->head + (index) :                                      \
+                (queue)->head + (index) - (queue)->capacity));                 \
     })                                                                         \
                                                          /* EOF 'ds_queue_at' */
 
