@@ -10,8 +10,10 @@
 
 #define s9_difftime(timeval2, timeval1)                                        \
     (((timeval2).tv_sec  - (timeval1).tv_sec) +                                \
-     ((timeval2).tv_usec - (timeval1).tv_usec) / 1000000.0f)
+     ((timeval2).tv_usec - (timeval1).tv_usec) / 1000000.0f)                   \
+                                                         /* EOF 's9_difftime' */
 
+#define s9_sleep(seconds) [S9Time sleep:(seconds)]
 
 typedef long long S9TimeValue;
 
