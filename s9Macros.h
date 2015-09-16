@@ -12,10 +12,16 @@
 //-------------------------------------------------------------------------- Log
 #ifdef S9_DEBUG
 #	define S9Log(...)                                                          \
-        printf("<%s:%d>%s %s\r\n", S9FilenameFromString(__FILE__), __LINE__,   \
+        printf("<%s:%d>%s %s\n", [[[NSString stringWithUTF8String:__FILE__] filename] UTF8String], __LINE__, \
             __FUNCTION__, [[NSString stringWithFormat:__VA_ARGS__] UTF8String])
+#	define S9Assert(cond, ...)                                                 \
+        if (!(cond)) {                                                         \
+            S9Log(__VA_ARGS__);                                                \
+            assert(cond);                                                      \
+        }
 #else
-#	define S9Log(...)   do {} while(0)
+#	define S9Log(...)    do {} while(0)
+#	define S9Assert(...) do {} while(0)
 #endif
 
 //------------------------------------------------------------------ switch case

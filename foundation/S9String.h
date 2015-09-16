@@ -10,6 +10,11 @@
 
 #import "S9Math.h"
 
+// create MD5 string
+#define MD5(string) [(string) MD5String]
+// calculate a string
+#define CGFloatFromString(string) calculate([(string) UTF8String])
+
 @interface NSString (SlanissueToolkit)
 
 // convert object to JsON string
@@ -27,47 +32,10 @@
 // "/path/to/../something" => "/path/something"
 - (NSString *) simplifyPath;
 
+// get filename
+- (NSString *) filename;
+
 //  "{{1+2, 3-4}, {5*6, 7/8}}" => "{{3,-1},{30,0.875}}"
 - (NSString *) calculate;
 
 @end
-
-#define MD5(string) [(string) MD5String]
-
-#define CGFloatFromString(string) calculate([(string) cStringUsingEncoding:NSUTF8StringEncoding])
-
-//{
-//	char * str = path;
-//	if (str) {
-//		str = strrchr(path, '/');
-//		if (str) {
-//			str += 1;
-//		} else {
-//			str = strrchr(path, '\\');
-//			if (str) {
-//				str += 1;
-//			} else {
-//				str = path;
-//			}
-//		}
-//	}
-//	return str;
-//}
-#define S9FilenameFromString(czPath) ({                                        \
-    const char * path = czPath; /* avoid multi-accessing */                    \
-    const char * str = path;                                                   \
-    if (str) {                                                                 \
-        str = strrchr(path, '/');                                              \
-        if (str) {                                                             \
-            str += 1; /* skip '/' */                                           \
-        } else {                                                               \
-            str = strrchr(path, '\\');                                         \
-            if (str) {                                                         \
-                str += 1; /* skip '\' */                                       \
-            } else {                                                           \
-                str = path; /* the whole string */                             \
-            }                                                                  \
-        }                                                                      \
-    }                                                                          \
-    str;})                                                                     \
-                                                /* EOF 'S9FilenameFromString' */

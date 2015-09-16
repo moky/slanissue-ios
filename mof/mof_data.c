@@ -17,14 +17,28 @@
 #define MOF_VERSION     0x01
 #define MOF_SUB_VERSION 0x01
 
-#define MOF_ASSERT(cond, format, ...)                                          \
-    if (!(cond)) {                                                             \
+#ifdef  NDEBUG
+#	define MOF_LOG(...) do {} while(0)
+#elif   DEBUG
+#	define MOF_LOG(...)                                                        \
         printf("<mof_data.c:%d> %s ", __LINE__, __FUNCTION__);                 \
-        printf(format, ##__VA_ARGS__);                                         \
-        printf("\r\n");                                                        \
-        assert(cond);                                                          \
-    }                                                                          \
+        printf(__VA_ARGS__);                                                   \
+        printf("\n");                                                          \
+                                                             /* EOF 'MOF_LOG' */
+#else
+#	define MOF_LOG(...) do {} while(0)
+#endif
+
+#ifndef NS_BLOCK_ASSERTIONS
+#	define MOF_ASSERT(cond, ...)                                               \
+        if (!(cond)) {                                                         \
+            MOF_LOG(__VA_ARGS__);                                              \
+            assert(cond);                                                      \
+        }                                                                      \
                                                         /* EOF 'MOF_ASSERT()' */
+#else
+#	define MOF_ASSERT(cond, format, ...) do {} while(0)
+#endif
 
 // create initialized buffer
 mof_data * mof_create(const mof_uint buf_len)
@@ -133,7 +147,7 @@ const mof_data * mof_load(const char * __restrict filename)
 	FILE * fp = fopen(filename, "rb");
 	if (!fp) {
 		// failed to open file for reading
-		MOF_ASSERT(MOFFalse, "failed to open file for reading: %s", filename);
+		MOF_LOG("failed to open file for reading: %s", filename);
 		return NULL;
 	}
 	

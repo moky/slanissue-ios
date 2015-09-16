@@ -95,6 +95,13 @@
 	return [string autorelease];
 }
 
+- (NSString *) filename
+{
+	NSRange range = [self rangeOfString:@"?"];
+	NSString * string = range.location == NSNotFound ? self : [self substringToIndex:range.location];
+	return [string lastPathComponent];
+}
+
 - (NSString *) calculate
 {
 	NSString * string = self;
