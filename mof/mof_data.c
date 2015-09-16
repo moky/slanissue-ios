@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <assert.h>
 
 #include "mof_data.h"
 
@@ -21,6 +22,7 @@
         printf("<mof_data.c:%d> %s ", __LINE__, __FUNCTION__);                 \
         printf(format, ##__VA_ARGS__);                                         \
         printf("\r\n");                                                        \
+        assert(cond);                                                          \
     }                                                                          \
                                                         /* EOF 'MOF_ASSERT()' */
 

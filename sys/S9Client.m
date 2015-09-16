@@ -120,7 +120,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) deviceIdentifier
 {
 	if (!_deviceIdentifier) {
-		self.deviceIdentifier = [[UIDevice currentDevice] globalIdentifier];
+		self.deviceIdentifier = [[UIDevice currentDevice] UUIDString];
 	}
 	return _deviceIdentifier;
 }

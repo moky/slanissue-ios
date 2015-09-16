@@ -8,6 +8,23 @@
 
 #import "S9Image.h"
 
+CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
+{
+	// create
+	imageRef = CGImageCreateWithImageInRect(imageRef, rect);
+	UIImage * image = [UIImage imageWithCGImage:imageRef];
+	CGImageRelease(imageRef);
+	
+	// draw
+	UIGraphicsBeginImageContext(rect.size);
+	[image drawInRect:CGRectMake(0.0f, 0.0f, rect.size.width, rect.size.height)];
+	image = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	
+	// copy
+	return CGImageRetain(image.CGImage);
+}
+
 UIImage * UIImageWithName(NSString * name)
 {
 	UIImage * image = nil;
@@ -49,6 +66,28 @@ UIImage * UIImageWithName(NSString * name)
 		return NO;
 	}
 	return [data writeToFile:path atomically:useAuxiliaryFile];
+}
+
+@end
+
+@implementation UIImage (QRCode)
+
++ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size
+{
+	// TODO: implement me
+	return nil;
+}
+
++ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size small:(UIImage *)image
+{
+	// TODO: implement me
+	return nil;
+}
+
+- (NSString *) QRCode
+{
+	// TODO: implement me
+	return nil;
 }
 
 @end

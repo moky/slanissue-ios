@@ -13,8 +13,8 @@
 // get hw.machine
 - (NSString *) machine;
 
-// generates a hash from the MAC-address
-- (NSString *) globalIdentifier;
+// a UUID that may be used to uniquely identify the device, same across apps from a single vendor.
+- (NSString *) UUIDString;
 
 // rotate the current device for supported interface orientations
 // return YES if rotated

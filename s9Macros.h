@@ -49,30 +49,13 @@
                                           /* EOF 'CFStringCreateWithNSString' */
 
 #define CFDictionaryCreateWithKeysAndValues(keys, values)                      \
-        CFDictionaryCreate(NULL,                                               \
-                (keys),                                        \
-                (values),                                      \
+        CFDictionaryCreate(kCFAllocatorDefault,                                \
+                (const void **)(keys),                                         \
+                (const void **)(values),                                       \
                 sizeof(keys) / sizeof((keys)[0]),                              \
                 &kCFTypeDictionaryKeyCallBacks,                                \
                 &kCFTypeDictionaryValueCallBacks);                             \
                                  /* EOF 'CFDictionaryCreateWithKeysAndValues' */
-
-//----------------------------------------------------------------- CoreGraphics
-#define CGImageCreateCopyWithImageInRect(imageRef, rect)                       \
-    ({                                                                         \
-        CGImageRef __ref = (imageRef);                                         \
-        CGRect __rect = (rect);                                                \
-        __ref = CGImageCreateWithImageInRect(__ref, __rect);                   \
-        UIImage * __img = [UIImage imageWithCGImage:__ref];                    \
-        CGImageRelease(__ref);                                                 \
-        __rect.origin = CGPointZero;                                           \
-        UIGraphicsBeginImageContext(__rect.size);                              \
-        [__img drawInRect:__rect];                                             \
-        __img = UIGraphicsGetImageFromCurrentImageContext();                   \
-        UIGraphicsEndImageContext();                                           \
-        CGImageRetain(__img.CGImage);                                          \
-    })                                                                         \
-                                    /* EOF 'CGImageCreateCopyWithImageInRect' */
 
 //--------------------------------------------------------------------- CoreText
 #define CTLineGetBounds(line)                                                  \

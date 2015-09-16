@@ -11,32 +11,55 @@
 #import "s9Macros.h"
 #import "S9Device.h"
 
-@implementation UIDevice (SlanissueToolkit)
-
-- (NSString *) machine
+static NSString * _machine(void)
 {
 	size_t size;
 	sysctlbyname("hw.machine", NULL, &size, NULL, 0);
 	char * machine = malloc(size);
 	sysctlbyname("hw.machine", machine, &size, NULL, 0);
-	NSString * hardware = [[NSString alloc] initWithCString:machine encoding:NSUTF8StringEncoding];
+	assert(machine != NULL);
+	NSString * string = [[NSString alloc] initWithCString:machine encoding:NSUTF8StringEncoding];
 	free(machine);
-	return [hardware autorelease];
+	return [string autorelease];
 }
 
-static NSString * s_uniqueGlobalDeviceIdentifier = nil;
-
-- (NSString *) globalIdentifier
+#define kApplicationUUIDKey @"uuid"
+static NSString * _uuid(void)
 {
-	if (!s_uniqueGlobalDeviceIdentifier) {
-		if ([[self systemVersion] floatValue] >= 6.0f) {
-			s_uniqueGlobalDeviceIdentifier = [[self identifierForVendor] UUIDString];
-			[s_uniqueGlobalDeviceIdentifier retain];
-		} else {
-			s_uniqueGlobalDeviceIdentifier = [[NSString alloc] initWithString:@"0123456789abcdef"];
-		}
+	NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
+	NSString * string = [defaults objectForKey:kApplicationUUIDKey];
+	if (string) {
+		return string;
 	}
-	return s_uniqueGlobalDeviceIdentifier;
+	
+	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
+	assert(uuid != NULL);
+	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uuid);
+	assert(str != NULL);
+	string = [[NSString alloc] initWithFormat:@"%@", str];
+	CFReleaseSafe(str);
+	CFReleaseSafe(uuid);
+	
+	[defaults setObject:string forKey:kApplicationUUIDKey];
+	[defaults synchronize];
+	
+	return [string autorelease];
+}
+
+@implementation UIDevice (SlanissueToolkit)
+
+- (NSString *) machine
+{
+	return _machine();
+}
+
+- (NSString *) UUIDString
+{
+	if ([[self systemVersion] floatValue] < 6.0f) {
+		return _uuid();
+	} else {
+		return [[self identifierForVendor] UUIDString];
+	}
 }
 
 - (BOOL) rotateForSupportedInterfaceOrientationsOfViewController:(UIViewController *)viewController
