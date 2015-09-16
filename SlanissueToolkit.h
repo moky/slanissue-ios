@@ -15,8 +15,6 @@
  *      <QuartzCore.framework>
  *      <UIKit.framework>
  *
- *      "IdentifierAddition"
- *
  */
 
 /* debug */

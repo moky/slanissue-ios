@@ -6,12 +6,7 @@
 //  Copyright (c) 2015 Slanissue.com. All rights reserved.
 //
 
-/**
- *  Identifier Addition for UIDevice:
- *      https://github.com/gekitz/UIDevice-with-UniqueIdentifier-for-iOS-5
- */
-// 'libs/IdentifierAddition'
-#import "NSString+MD5Addition.h"
+#import <CommonCrypto/CommonDigest.h>
 
 #import "s9Macros.h"
 #import "S9Object.h"
@@ -26,7 +21,21 @@
 
 - (NSString *) MD5String
 {
-	return [self stringFromMD5];
+	if ([self length] == 0) {
+		return nil;
+	}
+	
+	const char * value = [self UTF8String];
+	
+	unsigned char buffer[CC_MD5_DIGEST_LENGTH];
+	CC_MD5(value, (CC_LONG)strlen(value), buffer);
+	
+	NSMutableString * string = [[NSMutableString alloc] initWithCapacity:CC_MD5_DIGEST_LENGTH * 2];
+	for (NSInteger count = 0; count < CC_MD5_DIGEST_LENGTH; ++count) {
+		[string appendFormat:@"%02x",buffer[count]];
+	}
+	
+	return [string autorelease];
 }
 
 - (NSString *) trim

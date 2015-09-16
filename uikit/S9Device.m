@@ -8,13 +8,6 @@
 
 #include <sys/sysctl.h>
 
-/**
- *  Identifier Addition for UIDevice:
- *      https://github.com/gekitz/UIDevice-with-UniqueIdentifier-for-iOS-5
- */
-// 'libs/IdentifierAddition'
-#import "UIDevice+IdentifierAddition.h"
-
 #import "s9Macros.h"
 #import "S9Device.h"
 
@@ -36,11 +29,11 @@ static NSString * s_uniqueGlobalDeviceIdentifier = nil;
 - (NSString *) globalIdentifier
 {
 	if (!s_uniqueGlobalDeviceIdentifier) {
-		if ([self respondsToSelector:@selector(uniqueGlobalDeviceIdentifier)]) {
-			s_uniqueGlobalDeviceIdentifier = [self uniqueGlobalDeviceIdentifier];
+		if ([[self systemVersion] floatValue] >= 6.0f) {
+			s_uniqueGlobalDeviceIdentifier = [[self identifierForVendor] UUIDString];
 			[s_uniqueGlobalDeviceIdentifier retain];
 		} else {
-			s_uniqueGlobalDeviceIdentifier = @"0123456789abcdef0123456789abcdef";
+			s_uniqueGlobalDeviceIdentifier = [[NSString alloc] initWithString:@"0123456789abcdef"];
 		}
 	}
 	return s_uniqueGlobalDeviceIdentifier;

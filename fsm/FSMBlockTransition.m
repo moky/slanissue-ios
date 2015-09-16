@@ -8,6 +8,8 @@
 
 #import "FSMBlockTransition.h"
 
+#if NS_BLOCKS_AVAILABLE
+
 @implementation FSMBlockTransition
 
 @synthesize block = _block;
@@ -28,3 +30,5 @@
 }
 
 @end
+
+#endif
