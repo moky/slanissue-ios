@@ -23,27 +23,17 @@ static NSString * _machine(void)
 	return [string autorelease];
 }
 
-#define kApplicationUUIDKey @"uuid"
+#define kApplicationUUIDKey @"UUID"
 static NSString * _uuid(void)
 {
 	NSUserDefaults * defaults = [NSUserDefaults standardUserDefaults];
 	NSString * string = [defaults objectForKey:kApplicationUUIDKey];
-	if (string) {
-		return string;
+	if (!string) {
+		string = UUID();
+		[defaults setObject:string forKey:kApplicationUUIDKey];
+		[defaults synchronize];
 	}
-	
-	CFUUIDRef uuid = CFUUIDCreate(kCFAllocatorDefault);
-	assert(uuid != NULL);
-	CFStringRef str = CFUUIDCreateString(kCFAllocatorDefault, uuid);
-	assert(str != NULL);
-	string = [[NSString alloc] initWithFormat:@"%@", str];
-	CFReleaseSafe(str);
-	CFReleaseSafe(uuid);
-	
-	[defaults setObject:string forKey:kApplicationUUIDKey];
-	[defaults synchronize];
-	
-	return [string autorelease];
+	return string;
 }
 
 @implementation UIDevice (SlanissueToolkit)

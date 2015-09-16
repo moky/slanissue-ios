@@ -8,6 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+#define UUID()                                                                 \
+        ({                                                                     \
+            CFUUIDRef __id = CFUUIDCreate(kCFAllocatorDefault);                \
+            CFStringRef __ref = CFUUIDCreateString(kCFAllocatorDefault, __id); \
+            NSString * __str = [[NSString alloc] initWithFormat:@"%@", __ref]; \
+            CFReleaseSafe(__ref);                                              \
+            CFReleaseSafe(__id);                                               \
+            [__str autorelease];                                               \
+        })                                                                     \
+                                                                /* EOF 'UUID' */
+
 @interface UIDevice (SlanissueToolkit)
 
 // get hw.machine
