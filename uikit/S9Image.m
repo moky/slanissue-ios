@@ -8,7 +8,6 @@
 
 #import "s9Macros.h"
 #import "S9MemoryCache.h"
-#import "S9Client.h"
 #import "S9Image.h"
 
 CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
@@ -30,11 +29,6 @@ CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
 
 CIImage * CIImageWithQRCode(NSString * string)
 {
-	float sysVer = [[[S9Client getInstance] systemVersion] floatValue];
-	if (sysVer < 7.0f) {
-		return nil;
-	}
-	
 	// Need to convert the string to a UTF-8 encoded NSData object
 	NSData * data = [string dataUsingEncoding:NSUTF8StringEncoding];
 	// Create the filter
@@ -49,10 +43,11 @@ CIImage * CIImageWithQRCode(NSString * string)
 UIImage * UIImageWithQRCode(NSString * string, CGSize size)
 {
 	CIImage * ciImage = CIImageWithQRCode(string);
-	if (!ciImage) {
-		return nil;
-	}
-	
+	return ciImage ? UIImageWithCIImage(ciImage, size) : nil;
+}
+
+UIImage * UIImageWithCIImage(CIImage * ciImage, CGSize size)
+{
 	CGRect extent = CGRectIntegral(ciImage.extent);
 	CGFloat width = CGRectGetWidth(extent);
 	CGFloat height = CGRectGetHeight(extent);
@@ -65,9 +60,9 @@ UIImage * UIImageWithQRCode(NSString * string, CGSize size)
 	height *= scale;
 	
 	// create a bitmap image that we'll draw into a bitmap context at the desired size;
-	CGContextRef ctx = CGBitmapContextCreate(nil, size.width, size.height, 8, 0,
-											 CGColorSpaceCreateDeviceGray(),
-											 (CGBitmapInfo)kCGImageAlphaNone);
+	CGColorSpaceRef space = CGColorSpaceCreateDeviceGray();
+	CGContextRef ctx = CGBitmapContextCreate(NULL, size.width, size.height, 8, 0,
+											 space, (CGBitmapInfo)kCGImageAlphaNone);
 	
 	CIContext * context = [CIContext contextWithOptions:nil];
 	CGImageRef bitmapImage = [context createCGImage:ciImage fromRect:extent];
@@ -85,8 +80,37 @@ UIImage * UIImageWithQRCode(NSString * string, CGSize size)
 	CGImageRelease(scaledImage);
 	CGImageRelease(bitmapImage);
 	CGContextRelease(ctx);
+	CGColorSpaceRelease(space);
 	
 	return uiImage;
+}
+
+UIImage * UIImageWithSmallImage(UIImage * background, UIImage * icon, CGRect rect)
+{
+	CGSize canvasSize = background.size;
+	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
+	CGContextRef ctx = CGBitmapContextCreate(NULL, canvasSize.width, canvasSize.height, 8, 0,
+											 space, (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
+	
+	CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
+	// draw the background
+	CGContextDrawImage(ctx, CGRectMake(0.0f, 0.0f, canvasSize.width, canvasSize.height), background.CGImage);
+	
+	// draw the icon
+	CGSize iconSize = icon.size;
+	CGContextTranslateCTM(ctx, rect.origin.x, rect.origin.y);
+	CGContextScaleCTM(ctx, rect.size.width / iconSize.width, rect.size.height / iconSize.height);
+	CGContextDrawImage(ctx, CGRectMake(0.0f, 0.0f, iconSize.width, iconSize.height), icon.CGImage);
+	
+	CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
+	UIImage * image = [UIImage imageWithCGImage:imageRef];
+	
+	// clean up
+	CGImageRelease(imageRef);
+	CGContextRelease(ctx);
+	CGColorSpaceRelease(space);
+	
+	return image;
 }
 
 UIImage * UIImageWithName(NSString * name)
@@ -158,12 +182,15 @@ UIImage * UIImageWithName(NSString * name)
 + (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size small:(UIImage *)icon
 {
 	UIImage * image = UIImageWithQRCode(string, size);
-	if (!icon || !image) {
-		return image;
+	if (icon && image) {
+		CGFloat width = icon.size.width;
+		CGFloat height = icon.size.height;
+		CGRect rect = CGRectMake((size.width - width) * 0.5f,
+								 (size.height - height) * 0.5f,
+								 width,
+								 height);
+		image = UIImageWithSmallImage(image, icon, rect);
 	}
-	
-	// TODO: draw icon in the center of QRCode image
-	
 	return image;
 }
 

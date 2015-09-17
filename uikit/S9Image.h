@@ -13,6 +13,9 @@ CG_EXTERN CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRec
 CG_EXTERN CIImage * CIImageWithQRCode(NSString * string);
 UIKIT_EXTERN UIImage * UIImageWithQRCode(NSString * string, CGSize size);
 
+UIKIT_EXTERN UIImage * UIImageWithCIImage(CIImage * ciImage, CGSize size);
+UIKIT_EXTERN UIImage * UIImageWithSmallImage(UIImage * background, UIImage * icon, CGRect rect);
+
 UIKIT_EXTERN UIImage * UIImageWithName(NSString * name);
 
 @interface UIImage (SlanissueToolkit)
