@@ -173,7 +173,8 @@
 
 - (instancetype) initWithAction:(S9FiniteTimeAction *)action times:(NSUInteger)times
 {
-	self = [self init];
+	float duration = action.duration * times;
+	self = [self initWithDuration:duration];
 	if (self) {
 		self.innerAction = action;
 		_times = times;
@@ -214,11 +215,12 @@
 		// next time
 		[_innerAction startWithTarget:_target];
 		
-		// over?
+		// repeat is over?
 		if (_total == _times) {
 			// set it in the original position
 			[_innerAction update:0.0f];
 		} else {
+			// start next repeat with the right update
 			[_innerAction update:(time - _total)];
 		}
 	} else {
