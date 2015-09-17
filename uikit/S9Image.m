@@ -8,6 +8,7 @@
 
 #import "s9Macros.h"
 #import "S9MemoryCache.h"
+#import "S9Client.h"
 #import "S9Image.h"
 
 CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
@@ -25,6 +26,67 @@ CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
 	
 	// copy
 	return CGImageRetain(image.CGImage);
+}
+
+CIImage * CIImageWithQRCode(NSString * string)
+{
+	float sysVer = [[[S9Client getInstance] systemVersion] floatValue];
+	if (sysVer < 7.0f) {
+		return nil;
+	}
+	
+	// Need to convert the string to a UTF-8 encoded NSData object
+	NSData * data = [string dataUsingEncoding:NSUTF8StringEncoding];
+	// Create the filter
+	CIFilter * filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+	// Set the message content and error-correction level
+	[filter setValue:data forKey:@"inputMessage"];
+	[filter setValue:@"M" forKey:@"inputCorrectionLevel"];
+	
+	return filter.outputImage;
+}
+
+UIImage * UIImageWithQRCode(NSString * string, CGSize size)
+{
+	CIImage * ciImage = CIImageWithQRCode(string);
+	if (!ciImage) {
+		return nil;
+	}
+	
+	CGRect extent = CGRectIntegral(ciImage.extent);
+	CGFloat width = CGRectGetWidth(extent);
+	CGFloat height = CGRectGetHeight(extent);
+	if (width <= 0.0f || height <= 0.0f) {
+		return nil;
+	}
+	
+	CGFloat scale = MIN(size.width / width, size.height / height);
+	width *= scale;
+	height *= scale;
+	
+	// create a bitmap image that we'll draw into a bitmap context at the desired size;
+	CGContextRef ctx = CGBitmapContextCreate(nil, size.width, size.height, 8, 0,
+											 CGColorSpaceCreateDeviceGray(),
+											 (CGBitmapInfo)kCGImageAlphaNone);
+	
+	CIContext * context = [CIContext contextWithOptions:nil];
+	CGImageRef bitmapImage = [context createCGImage:ciImage fromRect:extent];
+	
+	CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
+	CGContextTranslateCTM(ctx, (size.width - width) * 0.5f, (size.height - height) * 0.5f);
+	CGContextScaleCTM(ctx, scale, scale);
+	CGContextDrawImage(ctx, extent, bitmapImage);
+	
+	// Create an image with the contents of our bitmap
+	CGImageRef scaledImage = CGBitmapContextCreateImage(ctx);
+	UIImage * uiImage = [UIImage imageWithCGImage:scaledImage];
+	
+	// Cleanup
+	CGImageRelease(scaledImage);
+	CGImageRelease(bitmapImage);
+	CGContextRelease(ctx);
+	
+	return uiImage;
 }
 
 UIImage * UIImageWithName(NSString * name)
@@ -90,14 +152,19 @@ UIImage * UIImageWithName(NSString * name)
 
 + (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size
 {
-	// TODO: implement me
-	return nil;
+	return UIImageWithQRCode(string, size);
 }
 
-+ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size small:(UIImage *)image
++ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size small:(UIImage *)icon
 {
-	// TODO: implement me
-	return nil;
+	UIImage * image = UIImageWithQRCode(string, size);
+	if (!icon || !image) {
+		return image;
+	}
+	
+	// TODO: draw icon in the center of QRCode image
+	
+	return image;
 }
 
 - (NSString *) QRCode

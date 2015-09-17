@@ -10,6 +10,9 @@
 
 CG_EXTERN CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect);
 
+CG_EXTERN CIImage * CIImageWithQRCode(NSString * string);
+UIKIT_EXTERN UIImage * UIImageWithQRCode(NSString * string, CGSize size);
+
 UIKIT_EXTERN UIImage * UIImageWithName(NSString * name);
 
 @interface UIImage (SlanissueToolkit)
@@ -21,7 +24,7 @@ UIKIT_EXTERN UIImage * UIImageWithName(NSString * name);
 @interface UIImage (QRCode)
 
 + (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size;
-+ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size small:(UIImage *)image;
++ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size small:(UIImage *)icon;
 
 - (NSString *) QRCode;
 

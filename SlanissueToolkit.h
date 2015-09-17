@@ -12,6 +12,7 @@
  *      <Foundation.framework>
  *      <CoreFoundation.framework>
  *      <CoreGraphics.framework>
+ *      <CoreImage.framework>
  *      <QuartzCore.framework>
  *      <UIKit.framework>
  *
