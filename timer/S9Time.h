@@ -15,26 +15,22 @@
 
 #define s9_sleep(seconds) [S9Time sleep:(seconds)]
 
-typedef long long S9TimeValue;
-
 @interface S9Time : NSObject
 
-@property(nonatomic, readonly) unsigned int second;
-
-@property(nonatomic, readonly) unsigned int microseconds; // excludes second part
-@property(nonatomic, readonly) unsigned int nanosecond;   // excludes second part
+@property(nonatomic, readonly) time_t second;
+@property(nonatomic, readonly) suseconds_t microsecond; // excludes second part
 
 + (instancetype) now;
+
++ (void) sleep:(float)seconds;
 
 @end
 
 @interface S9Time (Convenient)
 
-+ (S9TimeValue) second;
-+ (S9TimeValue) millisecond; // 0.001 second (10 ^ -3)
-+ (S9TimeValue) microsecond; // 0.000001 second (10 ^ -6)
-+ (S9TimeValue) nanosecond;  // 0.000000001 second (10 ^ -9)
-
-+ (void) sleep:(S9TimeValue)seconds;
++ (time_t) seconds;
++ (clock_t) milliseconds; // 0.001 second (10 ^ -3)
++ (clock_t) microseconds; // 0.000001 second (10 ^ -6)
++ (clock_t) nanoseconds;  // 0.000000001 second (10 ^ -9)
 
 @end

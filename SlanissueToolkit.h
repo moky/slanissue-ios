@@ -124,6 +124,8 @@
 #import "S9Math.h"
 #import "S9Client.h"
 #import "S9MemoryCache.h"
+#import "S9Texture.h"
+#import "S9TextureCache.h"
 
 //
 //  timer

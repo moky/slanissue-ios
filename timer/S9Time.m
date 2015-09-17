@@ -31,24 +31,14 @@
 	return self;
 }
 
-+ (instancetype) now
+- (time_t) second
 {
-	return [[self alloc] init];
+	return _time.tv_sec;
 }
 
-- (unsigned int) second
-{
-	return (unsigned int)_time.tv_sec;
-}
-
-- (unsigned int) microseconds
+- (suseconds_t) microsecond
 {
 	return _time.tv_usec;
-}
-
-- (unsigned int) nanosecond
-{
-	return _time.tv_usec * 1000;
 }
 
 - (NSString *) description
@@ -56,43 +46,48 @@
 	return [NSString stringWithFormat:@"%ld.%06d sec", _time.tv_sec, _time.tv_usec];
 }
 
++ (instancetype) now
+{
+	return [[self alloc] init];
+}
+
++ (void) sleep:(float)seconds
+{
+	useconds_t microsecond = seconds * 1000000;
+	usleep(microsecond);
+}
+
 @end
 
 @implementation S9Time (Convenient)
 
-+ (S9TimeValue) second
++ (time_t) seconds
 {
 	return time(NULL);
 }
 
-+ (S9TimeValue) millisecond
++ (clock_t) milliseconds
 {
 	struct timeb time;
 	ftime(&time);
-	S9TimeValue tv = time.time;
+	time_t tv = time.time;
 	return tv * 1000 + time.millitm;
 }
 
-+ (S9TimeValue) microsecond
++ (clock_t) microseconds
 {
 	struct timeval time;
 	gettimeofday(&time, NULL);
-	S9TimeValue tv = time.tv_sec;
+	time_t tv = time.tv_sec;
 	return tv * 1000000 + time.tv_usec;
 }
 
-+ (S9TimeValue) nanosecond
++ (clock_t) nanoseconds
 {
 //	struct timespec time;
 //	gethrestime();
 //	return time.tv_sec * 1000000000 + time.tv_nsec;
-	return [self microsecond] * 1000;
-}
-
-+ (void) sleep:(S9TimeValue)seconds
-{
-	useconds_t microsecond = (useconds_t)seconds * 1000000;
-	usleep(microsecond);
+	return [self microseconds] * 1000;
 }
 
 @end

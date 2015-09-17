@@ -10,10 +10,10 @@
 
 @interface CALayer (SlanissueToolkit)
 
-// get superlayer
+// superlayer
 - (CALayer *) parent;
 
-// get all sublayers
+// sublayers
 - (NSArray *) children;
 
 // get all children of parent, includes self

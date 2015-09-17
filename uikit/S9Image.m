@@ -6,6 +6,8 @@
 //  Copyright (c) 2015 Slanissue.com. All rights reserved.
 //
 
+#import "s9Macros.h"
+#import "S9MemoryCache.h"
 #import "S9Image.h"
 
 CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
@@ -27,10 +29,21 @@ CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
 
 UIImage * UIImageWithName(NSString * name)
 {
-	UIImage * image = nil;
 	if (!name) {
-		// error
-	} else if ([name rangeOfString:@"/"].location == NSNotFound) {
+		S9Log(@"image name cannot be nil");
+		return nil;
+	}
+	
+	// 1. check memory cache
+	S9MemoryCache * cache = [S9MemoryCache getInstance];
+	UIImage * image = [cache objectForKey:name];
+	if (image) {
+		// got from cache
+		return image;
+	}
+	
+	// 2. create new image
+	if ([name rangeOfString:@"/"].location == NSNotFound) {
 		// get image from main bundle
 		image = [UIImage imageNamed:name];
 	} else if ([name rangeOfString:@"://"].location == NSNotFound || [name hasPrefix:@"file://"]) {
@@ -48,6 +61,9 @@ UIImage * UIImageWithName(NSString * name)
 			[url release];
 		}
 	}
+	
+	// 3. cache image
+	[cache setObject:image forKey:name];
 	return image;
 }
 
