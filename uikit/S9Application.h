@@ -10,7 +10,14 @@
 
 @interface UIApplication (SlanissueToolkit)
 
+/**
+ *  call me in '-[UIApplicationDelegate applicationDidEnterBackground:]'
+ */
 - (UIBackgroundTaskIdentifier) beginBackgroundTask;
+
+/**
+ *  call me in '-[UIApplicationDelegate applicationWillEnterForeground:]'
+ */
 - (void) endBackgroundTask;
 
 @end

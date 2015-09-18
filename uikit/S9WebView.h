@@ -13,6 +13,7 @@
 @property(nonatomic, readonly) NSString * title;
 @property(nonatomic, readonly) NSURL * URL;
 
+// inject a 'Javascript' file into the current web
 - (NSString *) inject:(NSString *)jsFile;
 
 @end

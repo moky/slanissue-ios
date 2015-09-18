@@ -10,6 +10,7 @@
 
 @interface NSURL (SlanissueToolkit)
 
+// "....?a=1&b=2&c=3#fragment" => {a: 1, b: 2, c: 3}
 - (NSDictionary *) parameters;
 
 @end

@@ -10,6 +10,9 @@
 
 @interface UIControl (SlanissueToolkit)
 
+/**
+ *  perform the event to all actions matched on all targets
+ */
 - (void) performControlEvent:(UIControlEvents)controlEvent;
 
 @end

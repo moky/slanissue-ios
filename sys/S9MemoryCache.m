@@ -57,7 +57,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 {
 	NSAssert(aKey, @"key cannot be nil");
 	@synchronized(self) {
-		return [[[_dataPool objectForKey:aKey] retain] autorelease];
+		id object = [_dataPool objectForKey:aKey];
+		[[object retain] autorelease];
+		return object;
 	}
 }
 
@@ -65,7 +67,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 {
 	NSAssert(aKey, @"key cannot be nil");
 	@synchronized(self) {
-		return [[_dataPool objectForKey:aKey] retain];
+		id object = [_dataPool objectForKey:aKey];
+		[object retain];
+		return object;
 	}
 }
 
@@ -73,7 +77,8 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 {
 	NSAssert(aKey, @"key cannot be nil");
 	@synchronized(self) {
-		[[_dataPool objectForKey:aKey] release];
+		id object = [_dataPool objectForKey:aKey];
+		[object release];
 	}
 }
 
@@ -113,15 +118,15 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 {
 	NSAssert(anObject, @"object cannot be nil");
 	NSMutableArray * mArray = [[NSMutableArray alloc] initWithCapacity:2];
-	
-	id<NSCopying> key;
-	id object;
-	S9_FOR_EACH_KEY_VALUE(_dataPool, key, object) {
-		if (object == anObject) { // compare exactly, and faster
-			[mArray addObject:key];
+	@synchronized(self) {
+		id<NSCopying> key;
+		id object;
+		S9_FOR_EACH_KEY_VALUE(_dataPool, key, object) {
+			if (object == anObject) { // compare exactly, and faster
+				[mArray addObject:key];
+			}
 		}
 	}
-	
 	return [mArray autorelease];
 }
 
