@@ -27,90 +27,27 @@ CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
 	return CGImageRetain(image.CGImage);
 }
 
-CIImage * CIImageWithQRCode(NSString * string)
+CIImage * CIImageWithQRCode(NSString * text)
 {
-	// Need to convert the string to a UTF-8 encoded NSData object
-	NSData * data = [string dataUsingEncoding:NSUTF8StringEncoding];
-	// Create the filter
+	NSData * data = [text dataUsingEncoding:NSUTF8StringEncoding];
 	CIFilter * filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
-	// Set the message content and error-correction level
 	[filter setValue:data forKey:@"inputMessage"];
 	[filter setValue:@"M" forKey:@"inputCorrectionLevel"];
-	
 	return filter.outputImage;
 }
 
-UIImage * UIImageWithQRCode(NSString * string, CGSize size)
+UIImage * UIImageWithQRCode(NSString * text, CGFloat size)
 {
-	CIImage * ciImage = CIImageWithQRCode(string);
-	return ciImage ? UIImageWithCIImage(ciImage, size) : nil;
-}
-
-UIImage * UIImageWithCIImage(CIImage * ciImage, CGSize size)
-{
+	CIImage * ciImage = CIImageWithQRCode(text);
 	CGRect extent = CGRectIntegral(ciImage.extent);
 	CGFloat width = CGRectGetWidth(extent);
-	CGFloat height = CGRectGetHeight(extent);
-	if (width <= 0.0f || height <= 0.0f) {
-		return nil;
-	}
-	
-	CGFloat scale = MIN(size.width / width, size.height / height);
-	width *= scale;
-	height *= scale;
-	
-	// create a bitmap image that we'll draw into a bitmap context at the desired size;
-	CGColorSpaceRef space = CGColorSpaceCreateDeviceGray();
-	CGContextRef ctx = CGBitmapContextCreate(NULL, size.width, size.height, 8, 0,
-											 space, (CGBitmapInfo)kCGImageAlphaNone);
 	
 	CIContext * context = [CIContext contextWithOptions:nil];
-	CGImageRef bitmapImage = [context createCGImage:ciImage fromRect:extent];
-	
-	CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
-	CGContextTranslateCTM(ctx, (size.width - width) * 0.5f, (size.height - height) * 0.5f);
-	CGContextScaleCTM(ctx, scale, scale);
-	CGContextDrawImage(ctx, extent, bitmapImage);
-	
-	// Create an image with the contents of our bitmap
-	CGImageRef scaledImage = CGBitmapContextCreateImage(ctx);
-	UIImage * uiImage = [UIImage imageWithCGImage:scaledImage];
-	
-	// Cleanup
-	CGImageRelease(scaledImage);
-	CGImageRelease(bitmapImage);
-	CGContextRelease(ctx);
-	CGColorSpaceRelease(space);
+	CGImageRef cgImage = [context createCGImage:ciImage fromRect:extent];
+	UIImage * uiImage = [UIImage imageWithCGImage:cgImage scale:(width/size) orientation:UIImageOrientationUp];
+	CGImageRelease(cgImage);
 	
 	return uiImage;
-}
-
-UIImage * UIImageWithSmallImage(UIImage * background, UIImage * icon, CGRect rect)
-{
-	CGSize canvasSize = background.size;
-	CGColorSpaceRef space = CGColorSpaceCreateDeviceRGB();
-	CGContextRef ctx = CGBitmapContextCreate(NULL, canvasSize.width, canvasSize.height, 8, 0,
-											 space, (CGBitmapInfo)kCGImageAlphaPremultipliedLast);
-	
-	CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
-	// draw the background
-	CGContextDrawImage(ctx, CGRectMake(0.0f, 0.0f, canvasSize.width, canvasSize.height), background.CGImage);
-	
-	// draw the icon
-	CGSize iconSize = icon.size;
-	CGContextTranslateCTM(ctx, rect.origin.x, rect.origin.y);
-	CGContextScaleCTM(ctx, rect.size.width / iconSize.width, rect.size.height / iconSize.height);
-	CGContextDrawImage(ctx, CGRectMake(0.0f, 0.0f, iconSize.width, iconSize.height), icon.CGImage);
-	
-	CGImageRef imageRef = CGBitmapContextCreateImage(ctx);
-	UIImage * image = [UIImage imageWithCGImage:imageRef];
-	
-	// clean up
-	CGImageRelease(imageRef);
-	CGContextRelease(ctx);
-	CGColorSpaceRelease(space);
-	
-	return image;
 }
 
 UIImage * UIImageWithName(NSString * name)
@@ -170,26 +107,40 @@ UIImage * UIImageWithName(NSString * name)
 	return [data writeToFile:path atomically:useAuxiliaryFile];
 }
 
+- (UIImage *) imageWithImage:(UIImage *)smallImage inRect:(CGRect)rect
+{
+	UIGraphicsBeginImageContext(self.size);
+	CGContextRef ctx = UIGraphicsGetCurrentContext();
+	CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
+	
+	// draw
+	[self drawInRect:CGRectMake(0.0f, 0.0f, self.size.width, self.size.height)];
+	[smallImage drawInRect:rect];
+	// got
+	UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+	
+	UIGraphicsEndImageContext();
+	return image;
+}
+
 @end
 
 @implementation UIImage (QRCode)
 
-+ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size
++ (UIImage *) imageWithQRCode:(NSString *)string size:(CGFloat)size
 {
 	return UIImageWithQRCode(string, size);
 }
 
-+ (UIImage *) imageWithQRCode:(NSString *)string size:(CGSize)size small:(UIImage *)icon
++ (UIImage *) imageWithQRCode:(NSString *)string size:(CGFloat)size small:(UIImage *)icon
 {
 	UIImage * image = UIImageWithQRCode(string, size);
 	if (icon && image) {
-		CGFloat width = icon.size.width;
-		CGFloat height = icon.size.height;
-		CGRect rect = CGRectMake((size.width - width) * 0.5f,
-								 (size.height - height) * 0.5f,
-								 width,
-								 height);
-		image = UIImageWithSmallImage(image, icon, rect);
+		CGFloat w = icon.size.width;
+		CGFloat h = icon.size.height;
+		CGFloat x = (size - w) * 0.5f;
+		CGFloat y = (size - h) * 0.5f;
+		image = [image imageWithImage:icon inRect:CGRectMake(x, y, w, h)];
 	}
 	return image;
 }
