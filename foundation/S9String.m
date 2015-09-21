@@ -134,7 +134,7 @@
 		substr = [string substringWithRange:range];
 		substr = [substr trim];
 		if ([substr length] > 0) {
-			string = [NSString stringWithFormat:@"%@%.1f%@",
+			string = [NSString stringWithFormat:@"%@%.2f%@",
 					  [string substringToIndex:pos1 + 1],
 					  CGFloatFromString(substr),
 					  [string substringFromIndex:pos2 + 1]];

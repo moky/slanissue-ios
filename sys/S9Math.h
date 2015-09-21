@@ -20,8 +20,13 @@
 #define M_180_PI    57.29577951308232                       /* 180/pi         */
 #endif
 
-#define Radian(degree)    ((degree) * M_PI_180)
-#define Degree(radian)    ((radian) * M_180_PI)
+#ifndef RadianFromDegree
+#define RadianFromDegree(degree)    ((degree) * M_PI_180)
+#endif
+
+#ifndef DegreeFromRadian
+#define DegreeFromRadian(radian)    ((radian) * M_180_PI)
+#endif
 
 
 //
