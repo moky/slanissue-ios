@@ -107,6 +107,7 @@
 #import "S9ParticleView.h"
 #import "S9WaterfallView.h"
 #import "S9WaterfallView+Layout.h"
+#import "S9QRCodeImage.h"
 // uikit_ext/refresh
 #import "S9ScrollRefreshControlState.h"
 #import "S9ScrollRefreshControlStateMachine.h"

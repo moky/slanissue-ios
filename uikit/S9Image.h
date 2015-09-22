@@ -24,16 +24,6 @@ CG_EXTERN CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRec
 UIKIT_EXTERN UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale);
 
 /**
- *  create a QRCode image with text
- */
-CG_EXTERN CIImage * CIImageWithQRCode(NSString * text);
-
-/**
- *  create a QRCode image with text, and {size, size}
- */
-UIKIT_EXTERN UIImage * UIImageWithQRCode(NSString * text, CGFloat size);
-
-/**
  *  load image, with memory cache
  *
  *    1. 'name' is a filename, load from main bundle
@@ -56,24 +46,5 @@ UIKIT_EXTERN UIImage * UIImageWithName(NSString * name);
  */
 - (UIImage *) imageWithImagesAndRects:(UIImage *)image1, /* (CGRect)rect1,
                                       (UIImage *)image2, (CGRect)rect2, */ ... NS_REQUIRES_NIL_TERMINATION;
-
-@end
-
-@interface UIImage (QRCode)
-
-/**
- *  create a QRCode image with text, and {size, size}
- */
-+ (UIImage *) imageWithQRCode:(NSString *)string size:(CGFloat)size;
-
-/**
- *  create a QRCode image with text, and {size, size}, and a small icon in center
- */
-+ (UIImage *) imageWithQRCode:(NSString *)string size:(CGFloat)size small:(UIImage *)icon;
-
-/**
- *  try to recognize the QRCode string in the image
- */
-- (NSString *) QRCode;
 
 @end
