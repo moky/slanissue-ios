@@ -7,6 +7,7 @@
 //
 
 #import "s9Macros.h"
+#import "S9Client.h"
 #import "S9MemoryCache.h"
 #import "S9Image.h"
 
@@ -44,13 +45,14 @@ CGContextRef CGBitmapContextCreateWithCGImage(CGImageRef imageRef, CGSize size)
 	return ctx;
 }
 
-UIImage * UIImageWithCIImage(CIImage * image, CGSize size)
+UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale)
 {
+	size = CGSizeMake(size.width * scale, size.height * scale);
 	CGRect extent = CGRectIntegral(image.extent);
 	CGFloat width = CGRectGetWidth(extent);
 	CGFloat height = CGRectGetHeight(extent);
-	CGFloat sx = width > 0.0f ? size.width / width : 1.0f;
-	CGFloat sy = height > 0.0f ? size.height / height : 1.0f;
+	CGFloat sx = width > 0.0f ? size.width / width : scale;
+	CGFloat sy = height > 0.0f ? size.height / height : scale;
 	
 	CIContext * context = [CIContext contextWithOptions:nil];
 	CGImageRef imageRef = [context createCGImage:image fromRect:extent];
@@ -62,7 +64,9 @@ UIImage * UIImageWithCIImage(CIImage * image, CGSize size)
 	// draw
 	CGContextDrawImage(ctx, extent, imageRef);
 	CGImageRef scaledImage = CGBitmapContextCreateImage(ctx);
-	UIImage * result = [UIImage imageWithCGImage:scaledImage];
+	UIImage * result = [UIImage imageWithCGImage:scaledImage
+										   scale:scale
+									 orientation:UIImageOrientationUp];
 	
 	// clean up
 	CGImageRelease(scaledImage);
@@ -82,8 +86,9 @@ CIImage * CIImageWithQRCode(NSString * text)
 
 UIImage * UIImageWithQRCode(NSString * text, CGFloat size)
 {
+	CGFloat screenScale = [[S9Client getInstance] screenScale];
 	CIImage * image = CIImageWithQRCode(text);
-	return UIImageWithCIImage(image, CGSizeMake(size, size));
+	return UIImageWithCIImage(image, CGSizeMake(size, size), screenScale);
 }
 
 UIImage * UIImageWithName(NSString * name)
@@ -146,12 +151,12 @@ UIImage * UIImageWithName(NSString * name)
 - (UIImage *) imageWithImagesAndRects:(UIImage *)image1, ... NS_REQUIRES_NIL_TERMINATION
 {
 	UIImage * image = self;
-	CGSize size = image.size;
-	CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+	CGFloat scale = image.scale;
+	CGRect rect = CGRectMake(0.0f, 0.0f, image.size.width * scale, image.size.height * scale);
 	CGImageRef imageRef = image.CGImage;
 	
 	// create bitmap
-	CGContextRef ctx = CGBitmapContextCreateWithCGImage(imageRef, size);
+	CGContextRef ctx = CGBitmapContextCreateWithCGImage(imageRef, rect.size);
 	
 	// draw self
 	CGContextDrawImage(ctx, rect, imageRef);
@@ -161,12 +166,17 @@ UIImage * UIImageWithName(NSString * name)
 	va_start(params, image1);
 	while (image1) {
 		CGRect rect1 = va_arg(params, CGRect);
+		// scale
+		rect1 = CGRectMake(rect1.origin.x * scale,
+						   rect1.origin.y * scale,
+						   rect1.size.width * scale,
+						   rect1.size.height * scale);
 		
 		// coordinate system: GL => UI
 		CGFloat tx = rect1.origin.x;
-		CGFloat ty = size.height - rect1.origin.y - rect1.size.height;
-		CGFloat sx = rect1.size.width / size.width;
-		CGFloat sy = rect1.size.height / size.height;
+		CGFloat ty = rect.size.height - rect1.origin.y - rect1.size.height;
+		CGFloat sx = rect1.size.width / rect.size.width;
+		CGFloat sy = rect1.size.height / rect.size.height;
 		
 		CGAffineTransform atm = CGAffineTransformIdentity;
 		atm = CGAffineTransformTranslate(atm, tx, ty);
@@ -181,7 +191,9 @@ UIImage * UIImageWithName(NSString * name)
 	va_end(params);
 	
 	imageRef = CGBitmapContextCreateImage(ctx);
-	image = [UIImage imageWithCGImage:imageRef];
+	image = [UIImage imageWithCGImage:imageRef
+								scale:scale
+						  orientation:UIImageOrientationUp];
 	
 	// clean up
 	CGImageRelease(imageRef);
