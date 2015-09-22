@@ -14,6 +14,16 @@
 CG_EXTERN CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect);
 
 /**
+ *  create a Non-Interpolation bitmap context with parameters from imageRef
+ */
+//CG_EXTERN CGContextRef CGBitmapContextCreateWithCGImage(CGImageRef imageRef, CGSize size);
+
+/**
+ *  create a non-interpolation scaled UIImage from CIImage, with size
+ */
+UIKIT_EXTERN UIImage * UIImageWithCIImage(CIImage * image, CGSize size);
+
+/**
  *  create a QRCode image with text
  */
 CG_EXTERN CIImage * CIImageWithQRCode(NSString * text);
@@ -40,9 +50,10 @@ UIKIT_EXTERN UIImage * UIImageWithName(NSString * name);
 - (BOOL) writeToFile:(NSString *)path atomically:(BOOL)useAuxiliaryFile;
 
 /**
- *  create an image with self as canvas, and draw the smallImage in rect
+ *  create a new image with self as canvas, and draw the each images on it in rects
  */
-- (UIImage *) imageWithImage:(UIImage *)smallImage inRect:(CGRect)rect;
+- (UIImage *) imageWithImagesAndRects:(UIImage *)image1, /* (CGRect)rect1,
+                                      (UIImage *)image2, (CGRect)rect2, */ ... NS_REQUIRES_NIL_TERMINATION;
 
 @end
 

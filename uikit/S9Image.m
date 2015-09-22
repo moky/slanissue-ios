@@ -27,6 +27,50 @@ CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
 	return CGImageRetain(image.CGImage);
 }
 
+CGContextRef CGBitmapContextCreateWithCGImage(CGImageRef imageRef, CGSize size)
+{
+	void * data = NULL;
+	size_t width = size.width > 0.0f ? size.width : CGImageGetWidth(imageRef);
+	size_t height = size.height > 0.0f ? size.height : CGImageGetHeight(imageRef);
+	size_t bitsPerComponent = CGImageGetBitsPerComponent(imageRef);
+	size_t bytesPerRow = 0;//CGImageGetBytesPerRow(imageRef);
+	CGColorSpaceRef colorSpace = CGImageGetColorSpace(imageRef);
+	CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(imageRef);
+	
+	CGContextRef ctx = CGBitmapContextCreate(data, width, height,
+											 bitsPerComponent, bytesPerRow,
+											 colorSpace, bitmapInfo);
+	CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
+	return ctx;
+}
+
+UIImage * UIImageWithCIImage(CIImage * image, CGSize size)
+{
+	CGRect extent = CGRectIntegral(image.extent);
+	CGFloat width = CGRectGetWidth(extent);
+	CGFloat height = CGRectGetHeight(extent);
+	CGFloat sx = width > 0.0f ? size.width / width : 1.0f;
+	CGFloat sy = height > 0.0f ? size.height / height : 1.0f;
+	
+	CIContext * context = [CIContext contextWithOptions:nil];
+	CGImageRef imageRef = [context createCGImage:image fromRect:extent];
+	
+	// create bitmap
+	CGContextRef ctx = CGBitmapContextCreateWithCGImage(imageRef, size);
+	CGContextScaleCTM(ctx, sx, sy);
+	
+	// draw
+	CGContextDrawImage(ctx, extent, imageRef);
+	CGImageRef scaledImage = CGBitmapContextCreateImage(ctx);
+	UIImage * result = [UIImage imageWithCGImage:scaledImage];
+	
+	// clean up
+	CGImageRelease(scaledImage);
+	CGContextRelease(ctx);
+	CGImageRelease(imageRef);
+	return result;
+}
+
 CIImage * CIImageWithQRCode(NSString * text)
 {
 	NSData * data = [text dataUsingEncoding:NSUTF8StringEncoding];
@@ -38,16 +82,8 @@ CIImage * CIImageWithQRCode(NSString * text)
 
 UIImage * UIImageWithQRCode(NSString * text, CGFloat size)
 {
-	CIImage * ciImage = CIImageWithQRCode(text);
-	CGRect extent = CGRectIntegral(ciImage.extent);
-	CGFloat width = CGRectGetWidth(extent);
-	
-	CIContext * context = [CIContext contextWithOptions:nil];
-	CGImageRef cgImage = [context createCGImage:ciImage fromRect:extent];
-	UIImage * uiImage = [UIImage imageWithCGImage:cgImage scale:(width/size) orientation:UIImageOrientationUp];
-	CGImageRelease(cgImage);
-	
-	return uiImage;
+	CIImage * image = CIImageWithQRCode(text);
+	return UIImageWithCIImage(image, CGSizeMake(size, size));
 }
 
 UIImage * UIImageWithName(NSString * name)
@@ -107,19 +143,49 @@ UIImage * UIImageWithName(NSString * name)
 	return [data writeToFile:path atomically:useAuxiliaryFile];
 }
 
-- (UIImage *) imageWithImage:(UIImage *)smallImage inRect:(CGRect)rect
+- (UIImage *) imageWithImagesAndRects:(UIImage *)image1, ... NS_REQUIRES_NIL_TERMINATION
 {
-	UIGraphicsBeginImageContext(self.size);
-	CGContextRef ctx = UIGraphicsGetCurrentContext();
-	CGContextSetInterpolationQuality(ctx, kCGInterpolationNone);
+	UIImage * image = self;
+	CGSize size = image.size;
+	CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+	CGImageRef imageRef = image.CGImage;
 	
-	// draw
-	[self drawInRect:CGRectMake(0.0f, 0.0f, self.size.width, self.size.height)];
-	[smallImage drawInRect:rect];
-	// got
-	UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+	// create bitmap
+	CGContextRef ctx = CGBitmapContextCreateWithCGImage(imageRef, size);
 	
-	UIGraphicsEndImageContext();
+	// draw self
+	CGContextDrawImage(ctx, rect, imageRef);
+	
+	// draw images
+	va_list params;
+	va_start(params, image1);
+	while (image1) {
+		CGRect rect1 = va_arg(params, CGRect);
+		
+		// coordinate system: GL => UI
+		CGFloat tx = rect1.origin.x;
+		CGFloat ty = size.height - rect1.origin.y - rect1.size.height;
+		CGFloat sx = rect1.size.width / size.width;
+		CGFloat sy = rect1.size.height / size.height;
+		
+		CGAffineTransform atm = CGAffineTransformIdentity;
+		atm = CGAffineTransformTranslate(atm, tx, ty);
+		atm = CGAffineTransformScale(atm, sx, sy);
+		
+		CGContextConcatCTM(ctx, atm);
+		CGContextDrawImage(ctx, rect, image1.CGImage);
+		CGContextConcatCTM(ctx, CGAffineTransformInvert(atm));
+		
+		image1 = va_arg(params, UIImage *);
+	}
+	va_end(params);
+	
+	imageRef = CGBitmapContextCreateImage(ctx);
+	image = [UIImage imageWithCGImage:imageRef];
+	
+	// clean up
+	CGImageRelease(imageRef);
+	CGContextRelease(ctx);
 	return image;
 }
 
@@ -140,7 +206,7 @@ UIImage * UIImageWithName(NSString * name)
 		CGFloat h = icon.size.height;
 		CGFloat x = (size - w) * 0.5f;
 		CGFloat y = (size - h) * 0.5f;
-		image = [image imageWithImage:icon inRect:CGRectMake(x, y, w, h)];
+		image = [image imageWithImagesAndRects:icon, CGRectMake(x, y, w, h), nil];
 	}
 	return image;
 }
