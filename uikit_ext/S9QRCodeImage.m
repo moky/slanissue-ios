@@ -14,8 +14,8 @@ CIImage * CIImageWithQRCode(NSString * text)
 {
 	NSData * data = [text dataUsingEncoding:NSUTF8StringEncoding];
 	CIFilter * filter = [CIFilter filterWithName:@"CIQRCodeGenerator"];
+	[filter setDefaults];
 	[filter setValue:data forKey:@"inputMessage"];
-	[filter setValue:@"M" forKey:@"inputCorrectionLevel"];
 	return filter.outputImage;
 }
 
