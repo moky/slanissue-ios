@@ -10,6 +10,9 @@
 
 @interface UIView (SlanissueToolkit)
 
+// _viewDelegate
+- (UIViewController *) controller;
+
 // superview
 - (UIView *) parent;
 

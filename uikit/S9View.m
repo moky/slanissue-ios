@@ -13,6 +13,16 @@
 
 @implementation UIView (SlanissueToolkit)
 
+- (UIViewController *) controller
+{
+	UIViewController * vc = nil;//_viewDelegate;
+	UIResponder * responder = self.nextResponder;
+	if ([responder isKindOfClass:[UIViewController class]]) {
+		vc = (UIViewController *)responder;
+	}
+	return vc;
+}
+
 - (UIView *) parent
 {
 	return self.superview;
