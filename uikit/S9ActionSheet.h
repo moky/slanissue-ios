@@ -10,7 +10,7 @@
 
 @interface UIActionSheet (SlanissueToolkit)
 
-// show in 'keyWindow.rootViewController.view'
+// show in 'sharedApplication.keyWindow.rootViewController.view'
 - (void) show;
 
 @end

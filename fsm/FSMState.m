@@ -55,29 +55,28 @@ extern fsm_transition * inner_transition(const FSMTransition * transition);
 
 - (instancetype) init
 {
-	self = [super init];
-	if (self) {
-		[_name release];
-		_name = nil;
-		
-		[_transitions release];
-		_transitions = [[NSMutableArray alloc] initWithCapacity:4];
-	}
-	return self;
+	return [self initWithName:nil];
 }
 
 - (instancetype) initWithName:(NSString *)name
 {
-	self = [self init];
+	self = [super init];
 	if (self) {
-		const char * str = [name UTF8String];
-		if (str) {
-			fsm_state_set_name(_innerState, str);
-		}
-		
 		self.name = name;
+		self.transitions = [NSMutableArray arrayWithCapacity:4];
 	}
 	return self;
+}
+
+- (void) setName:(NSString *)name
+{
+	if (![_name isEqualToString:name]) {
+		[name retain];
+		[_name release];
+		_name = name;
+		
+		fsm_state_set_name(_innerState, [name UTF8String]);
+	}
 }
 
 - (void) addTransition:(FSMTransition *)transition

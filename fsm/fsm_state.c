@@ -44,6 +44,8 @@ void fsm_state_set_name(fsm_state * s, const char * name)
 			len = sizeof(s->name) - 1;
 		}
 		strncpy(s->name, name, len);
+	} else {
+		memset(s->name, 0, sizeof(s->name));
 	}
 }
 

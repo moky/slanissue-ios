@@ -60,26 +60,28 @@ static fsm_bool _evaluate(const fsm_machine * m, const fsm_state * s, const fsm_
 
 - (instancetype) init
 {
+	return [self initWithTargetStateName:nil];
+}
+
+/* designated initializer */
+- (instancetype) initWithTargetStateName:(NSString *)name
+{
 	self = [super init];
 	if (self) {
-		[_targetStateName release];
-		_targetStateName = nil;
+		self.targetStateName = name;
 	}
 	return self;
 }
 
-- (instancetype) initWithTargetStateName:(NSString *)name
+- (void) setTargetStateName:(NSString *)targetStateName
 {
-	self = [self init];
-	if (self) {
-		const char * str = [name UTF8String];
-		if (str) {
-			fsm_transition_set_target(_innerTransition, str);
-		}
+	if (![_targetStateName isEqualToString:targetStateName]) {
+		[targetStateName retain];
+		[_targetStateName release];
+		_targetStateName = targetStateName;
 		
-		self.targetStateName = name;
+		fsm_transition_set_target(_innerTransition, [targetStateName UTF8String]);
 	}
-	return self;
 }
 
 - (BOOL) evaluate:(FSMMachine *)machine

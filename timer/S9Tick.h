@@ -30,8 +30,7 @@ typedef void (*S9TickImp)(id, SEL, float);
 
 @property(nonatomic, readwrite, getter=isPaused) BOOL paused;
 
-/* designated initializer */
-- (instancetype) initWithTarget:(id)target selector:(SEL)selector;
+- (instancetype) initWithTarget:(id)target selector:(SEL)selector NS_DESIGNATED_INITIALIZER;
 
 @end
 

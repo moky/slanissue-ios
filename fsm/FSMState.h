@@ -15,7 +15,7 @@
 
 @property(nonatomic, readonly) NSString * name;
 
-- (instancetype) initWithName:(NSString *)name;
+- (instancetype) initWithName:(NSString *)name NS_DESIGNATED_INITIALIZER;
 
 - (void) addTransition:(FSMTransition *)transition;
 

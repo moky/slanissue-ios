@@ -18,8 +18,7 @@
 @property(nonatomic, retain) S9Action * action;
 @property(nonatomic, readwrite) BOOL paused;
 
-/* designated initializer */
-- (instancetype) initWithTarget:(id)target action:(S9Action *)action paused:(BOOL)paused;
+- (instancetype) initWithTarget:(id)target action:(S9Action *)action paused:(BOOL)paused NS_DESIGNATED_INITIALIZER;
 
 @end
 
@@ -41,6 +40,7 @@
 	return [self initWithTarget:nil action:NULL paused:YES];
 }
 
+/* designated initializer */
 - (instancetype) initWithTarget:(id)target action:(S9Action *)action paused:(BOOL)paused
 {
 	self = [super init];

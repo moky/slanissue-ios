@@ -26,10 +26,10 @@
 
 - (instancetype) init
 {
-	self = [self initWithTarget:nil selector:NULL];
-	return self;
+	return [self initWithTarget:nil selector:NULL];
 }
 
+/* designated initializer */
 - (instancetype) initWithTarget:(id)target selector:(SEL)selector
 {
 	self = [super init];

@@ -14,7 +14,7 @@
 
 @property(nonatomic, readonly) NSString * targetStateName;
 
-- (instancetype) initWithTargetStateName:(NSString *)name;
+- (instancetype) initWithTargetStateName:(NSString *)name NS_DESIGNATED_INITIALIZER;
 
 - (BOOL) evaluate:(FSMMachine *)machine;
 

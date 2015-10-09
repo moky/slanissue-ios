@@ -37,5 +37,7 @@ void fsm_transition_set_target(fsm_transition * t, const char * target)
 			len = sizeof(t->target) - 1;
 		}
 		strncpy(t->target, target, len);
+	} else {
+		memset(t->target, 0, sizeof(t->target));
 	}
 }

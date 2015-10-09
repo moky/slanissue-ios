@@ -50,10 +50,10 @@
         }                                                                      \
         return s_singleton_instance;                                           \
     }                                                                          \
-    - (id) copy { return self; }                                               \
-    - (id) mutableCopy { return self; }                                        \
-    - (instancetype) retain { return self; }                                   \
-    - (oneway void) release { /* do nothing */ }                               \
+    - (id) copy                  { return self; }                              \
+    - (id) mutableCopy           { return self; }                              \
+    - (instancetype) retain      { return self; }                              \
+    - (oneway void) release      { /* do nothing */ }                          \
     - (instancetype) autorelease { return self; }                              \
-    - (NSUInteger) retainCount { return NSUIntegerMax; }                       \
+    - (NSUInteger) retainCount   { return NSUIntegerMax; }                     \
                                     /* EOF 'S9_IMPLEMENT_SINGLETON_FUNCTIONS' */
