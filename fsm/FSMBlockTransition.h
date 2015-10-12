@@ -16,7 +16,8 @@ typedef BOOL (^FSMBlock)(FSMMachine * machine, FSMTransition * transition);
 
 @property(nonatomic, readwrite) FSMBlock block;
 
-- (instancetype) initWithTargetStateName:(NSString *)name block:(FSMBlock)block;
+- (instancetype) initWithTargetStateName:(NSString *)name
+								   block:(FSMBlock)block NS_DESIGNATED_INITIALIZER;
 
 @end
 

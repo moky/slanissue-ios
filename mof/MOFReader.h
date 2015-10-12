@@ -12,7 +12,6 @@
 
 @property(nonatomic, readonly) NSObject * root;
 
-//@protected:
-- (void) parseWithFilename:(NSString *)mof; // called by 'loadFromFile:'
+- (instancetype) initWithFile:(NSString *)filename;
 
 @end

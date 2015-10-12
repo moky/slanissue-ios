@@ -20,19 +20,15 @@
 	[super dealloc];
 }
 
-- (instancetype) init
+- (instancetype) initWithTargetStateName:(NSString *)name
 {
-	self = [super init];
-	if (self) {
-		self.delegate = nil;
-		self.selector = NULL;
-	}
-	return self;
+	return [self initWithTargetStateName:name delegate:nil selector:NULL];
 }
 
+/* designated initializer */
 - (instancetype) initWithTargetStateName:(NSString *)name delegate:(id)delegate selector:(SEL)selector
 {
-	self = [self initWithTargetStateName:name];
+	self = [super initWithTargetStateName:name];
 	if (self) {
 		self.delegate = delegate;
 		self.selector = selector;
@@ -42,7 +38,7 @@
 
 - (BOOL) evaluate:(FSMMachine *)machine
 {
-	NSAssert(_delegate && _selector, @"error");
+	NSAssert(_delegate && _selector, @"delegate or selector error");
 	if ([_delegate respondsToSelector:_selector]) {
 		IMP imp = [_delegate methodForSelector:_selector];
 		BOOL (*sender)(id, SEL, id, id) = (BOOL (*)(id, SEL, id, id))imp;

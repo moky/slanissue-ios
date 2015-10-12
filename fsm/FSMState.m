@@ -55,17 +55,23 @@ extern fsm_transition * inner_transition(const FSMTransition * transition);
 
 - (instancetype) init
 {
-	return [self initWithName:nil];
+	return [self initWithName:nil capacity:4];
 }
 
-- (instancetype) initWithName:(NSString *)name
+/* designated initializer */
+- (instancetype) initWithName:(NSString *)name capacity:(NSUInteger)capacity
 {
 	self = [super init];
 	if (self) {
 		self.name = name;
-		self.transitions = [NSMutableArray arrayWithCapacity:4];
+		self.transitions = [NSMutableArray arrayWithCapacity:capacity];
 	}
 	return self;
+}
+
+- (instancetype) initWithName:(NSString *)name
+{
+	return [self initWithName:name capacity:4];
 }
 
 - (void) setName:(NSString *)name

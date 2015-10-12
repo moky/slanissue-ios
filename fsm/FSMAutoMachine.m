@@ -29,15 +29,31 @@
 	[super dealloc];
 }
 
-- (instancetype) init
+- (instancetype) initWithDefaultStateName:(NSString *)name capacity:(NSUInteger)capacity
 {
-	self = [super init];
+	return [self initWithDefaultStateName:name
+								 capacity:capacity
+								 interval:(1.0f / 12.0f)];
+}
+
+/* designated initializer */
+- (instancetype) initWithDefaultStateName:(NSString *)name
+								 capacity:(NSUInteger)capacity
+								 interval:(NSTimeInterval)interval
+{
+	self = [super initWithDefaultStateName:name capacity:capacity];
 	if (self) {
-		_interval = 1.0f / 12.0f;
-		
+		_interval = interval;
 		self.timer = nil;
 	}
 	return self;
+}
+
+- (instancetype) initWithInterval:(NSTimeInterval)interval
+{
+	return [self initWithDefaultStateName:@"default"
+								 capacity:8
+								 interval:interval];
 }
 
 - (void) setTimer:(NSTimer *)timer

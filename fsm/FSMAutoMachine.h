@@ -12,4 +12,10 @@
 
 @property(nonatomic, readwrite) NSTimeInterval interval; // default is 1.0/12.0
 
+- (instancetype) initWithDefaultStateName:(NSString *)name
+								 capacity:(NSUInteger)capacity
+								 interval:(NSTimeInterval)interval NS_DESIGNATED_INITIALIZER;
+
+- (instancetype) initWithInterval:(NSTimeInterval)interval;
+
 @end

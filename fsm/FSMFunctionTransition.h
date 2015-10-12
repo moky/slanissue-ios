@@ -15,6 +15,6 @@
 
 - (instancetype) initWithTargetStateName:(NSString *)name
 								delegate:(id)delegate
-								selector:(SEL)selector;
+								selector:(SEL)selector NS_DESIGNATED_INITIALIZER;
 
 @end

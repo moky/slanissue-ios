@@ -33,17 +33,24 @@
 	[super dealloc];
 }
 
-- (instancetype) init
+/* designated initializer */
+- (instancetype) initWithDataBuffer:(const MOFData *)data
 {
-	self = [super init];
+	self = [super initWithDataBuffer:data];
 	if (self) {
-		[_strings release];
-		_strings = nil;
-		
-		[_root release];
-		_root = nil;
-		
-		_nextItem = NULL;
+		self.strings = nil;
+		self.root = nil;
+		self.nextItem = NULL;
+	}
+	return self;
+}
+
+- (instancetype) initWithFile:(NSString *)filename
+{
+	self = [super initWithFile:filename];
+	if (self) {
+		[self parseWithFilename:filename];
+		NSAssert(_root != nil, @"parse error: %@", filename);
 	}
 	return self;
 }
@@ -58,17 +65,6 @@
 {
 	NSAssert(_nextItem && _nextItem < [self endOfItems], @"error");
 	return _nextItem++;
-}
-
-- (BOOL) loadFromFile:(NSString *)filename
-{
-	if (![super loadFromFile:filename]) {
-		return NO;
-	}
-	
-	[self parseWithFilename:filename];
-	
-	return _root != nil;
 }
 
 - (void) parseWithFilename:(NSString *)mof

@@ -21,30 +21,31 @@
 
 - (instancetype) init
 {
+	return [self initWithDataBuffer:NULL];
+}
+
+/* designated initializer */
+- (instancetype) initWithDataBuffer:(const MOFData *)data
+{
 	self = [super init];
 	if (self) {
-		[self setDataBuffer:NULL];
+		[self setDataBuffer:data];
 	}
 	return self;
 }
 
 - (instancetype) initWithLength:(NSUInteger)bufferLength
 {
-	self = [self init];
-	if (self) {
-		const MOFData * data = mof_create((MOFUInteger)bufferLength);
-		[self setDataBuffer:data];
-	}
-	return self;
+	const MOFData * data = mof_create((MOFUInteger)bufferLength);
+	NSAssert(data != NULL, @"[MOF] failed to create data buffer: %u", bufferLength);
+	return [self initWithDataBuffer:data];
 }
 
 - (instancetype) initWithFile:(NSString *)filename
 {
-	self = [self init];
-	if (self) {
-		[self loadFromFile:filename];
-	}
-	return self;
+	const MOFData * data = mof_load([filename UTF8String]);
+	NSAssert(data != NULL, @"[MOF] failed to load data from file: %@", filename);
+	return [self initWithDataBuffer:data];
 }
 
 - (void) setDataBuffer:(const MOFData *)data
@@ -56,17 +57,6 @@
 		}
 		_dataBuffer = buffer;
 	}
-}
-
-- (BOOL) loadFromFile:(NSString *)filename
-{
-	const MOFData * data = mof_load([filename UTF8String]);
-	[self setDataBuffer:data];
-	if (_dataBuffer == NULL) {
-		NSLog(@"[MOF] failed to load data from file: %@", filename);
-		return NO;
-	}
-	return YES;
 }
 
 - (BOOL) checkDataFormat

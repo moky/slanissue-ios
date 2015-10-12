@@ -14,9 +14,15 @@
 
 @synthesize block = _block;
 
+- (instancetype) initWithTargetStateName:(NSString *)name
+{
+	return [self initWithTargetStateName:name block:NULL];
+}
+
+/* designated initializer */
 - (instancetype) initWithTargetStateName:(NSString *)name block:(FSMBlock)block
 {
-	self = [self initWithTargetStateName:name];
+	self = [super initWithTargetStateName:name];
 	if (self) {
 		self.block = block;
 	}
@@ -25,7 +31,7 @@
 
 - (BOOL) evaluate:(FSMMachine *)machine
 {
-	NSAssert(_block, @"error");
+	NSAssert(_block, @"block error");
 	return _block ? _block(machine, self) : NO;
 }
 

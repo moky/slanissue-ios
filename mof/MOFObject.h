@@ -25,13 +25,14 @@ typedef mof_data        MOFData;
 	unsigned char * _dataBuffer;
 }
 
+- (instancetype) initWithDataBuffer:(const MOFData *)data NS_DESIGNATED_INITIALIZER;
+
 // create an initialized buffer with length
 - (instancetype) initWithLength:(NSUInteger)bufferLength;
 
-// init and call 'loadFromFile:'
+// load from file
 - (instancetype) initWithFile:(NSString *)filename;
 
-- (BOOL) loadFromFile:(NSString *)filename;
 - (BOOL) saveToFile:(NSString *)filename;
 
 - (BOOL) checkDataFormat;

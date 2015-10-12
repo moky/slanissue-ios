@@ -30,6 +30,8 @@
 @property(nonatomic, retain) NSString * defaultStateName; // default is "default"
 @property(nonatomic, readonly) FSMState * currentState;
 
+- (instancetype) initWithDefaultStateName:(NSString *)name capacity:(NSUInteger)capacity NS_DESIGNATED_INITIALIZER;
+
 - (void) addState:(FSMState *)state; // add state with transition(s)
 
 - (void) start;  // start machine from default state

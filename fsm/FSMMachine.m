@@ -82,12 +82,18 @@ typedef NS_ENUM(NSUInteger, FSMStatus) {
 
 - (instancetype) init
 {
+	return [self initWithDefaultStateName:@"default" capacity:8];
+}
+
+/* designated initializer */
+- (instancetype) initWithDefaultStateName:(NSString *)name capacity:(NSUInteger)capacity
+{
 	self = [super init];
 	if (self) {
 		_status = FSMMachineStatusStop;
 		
-		self.defaultStateName = @"default";
-		self.states = [NSMutableArray arrayWithCapacity:8];
+		self.defaultStateName = name;
+		self.states = [NSMutableArray arrayWithCapacity:capacity];
 		
 		self.delegate = nil;
 	}
