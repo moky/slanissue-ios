@@ -37,14 +37,19 @@
 - (instancetype) initWithLength:(NSUInteger)bufferLength
 {
 	const MOFData * data = mof_create((MOFUInteger)bufferLength);
-	NSAssert(data != NULL, @"[MOF] failed to create data buffer: %u", bufferLength);
+	NSAssert(data != NULL, @"[MOF] failed to create data buffer: %u", (unsigned int)bufferLength);
 	return [self initWithDataBuffer:data];
 }
 
 - (instancetype) initWithFile:(NSString *)filename
 {
 	const MOFData * data = mof_load([filename UTF8String]);
-	NSAssert(data != NULL, @"[MOF] failed to load data from file: %@", filename);
+	//NSAssert(data != NULL, @"[MOF] failed to load data from file: %@", filename);
+	if (!_dataBuffer) {
+		[self release];
+		self = nil;
+		return self;
+	}
 	return [self initWithDataBuffer:data];
 }
 

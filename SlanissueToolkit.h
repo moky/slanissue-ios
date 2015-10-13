@@ -120,6 +120,13 @@
 #import "S9DockScrollView.h"
 #import "S9CoverFlowView.h"
 
+
+//
+//  lang
+//
+#import "S9StringsFile.h"
+#import "S9Translator.h"
+
 //
 //  sys
 //
