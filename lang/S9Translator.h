@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+#define S9TranslatorSetCurrentLanguage(language)                               \
+        [[S9Translator getInstance] setCurrentLanguage:(language)]
 #define S9TranslatorAddLanguagePack(tableName, bundlePath)                     \
         [[S9Translator getInstance] addTable:(tableName) bundlePath:(bundlePath)]
 #define S9TranslatorScanLanguagePacks(bundlePath)                              \
