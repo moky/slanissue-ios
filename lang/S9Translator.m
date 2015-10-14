@@ -52,7 +52,7 @@
 		NSArray * languages = [ud objectForKey:@"AppleLanguages"];
 		self.currentLanguage = [languages firstObject];
 		
-		self.isDirty = NO;
+		_isDirty = NO;
 		
 		self.tables = [NSMutableDictionary dictionaryWithCapacity:4];
 		self.dictionaries = nil;
@@ -122,7 +122,6 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	}
 	
 	NSMutableDictionary * dictionaries = [[NSMutableDictionary alloc] initWithCapacity:([_tables count] + 1)];
-	
 	NSMutableDictionary * all = [[NSMutableDictionary alloc] initWithCapacity:64];
 	
 	NSString * lang = self.currentLanguage;
@@ -130,6 +129,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	NSString * dir;
 	NSDictionary * dict;
 	S9_FOR_EACH_KEY_VALUE(_tables, name, dir) {
+		NSAssert([name length] > 0 && ![name isEqualToString:S9TranslatorAllTables], @"invalid table: %@", name);
 		dict = [S9StringsFile stringsFromFile:name withLanguage:lang bundlePath:dir];
 		if (!dict) {
 			if (![lang isEqualToString:S9TranslatorDefaultLanguage]) {
@@ -146,14 +146,16 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 		
 		[all addEntriesFromDictionary:dict];
 	}
-	
 	NSAssert([all count] > 0, @"no strings found");
+	
 	if ([all count] > 0) {
 		[dictionaries setObject:all forKey:S9TranslatorAllTables];
+		self.dictionaries = dictionaries;
+	} else {
+		self.dictionaries = nil; // clear
 	}
-	[all release];
 	
-	self.dictionaries = dictionaries;
+	[all release];
 	[dictionaries release];
 	
 	_isDirty = NO;
@@ -161,10 +163,14 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 
 - (NSString *) localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tableName
 {
-	[self reload];
+	if (!key) {
+		return value;
+	}
 	
-	if ([_dictionaries count] > 0) {
-		if ([tableName length] == 0) {
+	[self reload]; // reload if needs
+	
+	if (_dictionaries) {
+		if (!tableName) {
 			tableName = S9TranslatorAllTables;
 		}
 		NSDictionary * table = [_dictionaries objectForKey:tableName];

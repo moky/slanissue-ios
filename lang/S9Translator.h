@@ -9,16 +9,21 @@
 #import <Foundation/Foundation.h>
 
 #define S9TranslatorSetCurrentLanguage(language)                               \
-        [[S9Translator getInstance] setCurrentLanguage:(language)]
+        [[S9Translator getInstance] setCurrentLanguage:(language)]             \
+                                      /* EOF 'S9TranslatorSetCurrentLanguage' */
 #define S9TranslatorAddLanguagePack(tableName, bundlePath)                     \
         [[S9Translator getInstance] addTable:(tableName) bundlePath:(bundlePath)]
+                                         /* EOF 'S9TranslatorAddLanguagePack' */
 #define S9TranslatorScanLanguagePacks(bundlePath)                              \
-        [[S9Translator getInstance] addAllTablesWithBundlePath:(bundlePath)]
+        [[S9Translator getInstance] addAllTablesWithBundlePath:(bundlePath)]   \
+                                       /* EOF 'S9TranslatorScanLanguagePacks' */
 
-#define S9LocalizedString(key, comment) \
+#define S9LocalizedString(key, comment)                                        \
         [[S9Translator getInstance] localizedStringForKey:(key) value:@"" table:nil]
-#define S9LocalizedStringFromTable(key, tbl, comment) \
+                                                   /* EOF 'S9LocalizedString' */
+#define S9LocalizedStringFromTable(key, tbl, comment)                          \
         [[S9Translator getInstance] localizedStringForKey:(key) value:@"" table:(tbl)]
+                                          /* EOF 'S9LocalizedStringFromTable' */
 
 @interface S9Translator : NSObject
 

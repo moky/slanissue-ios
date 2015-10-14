@@ -108,6 +108,7 @@ NSString * NSStringByRemovingComments(NSString * text)
 	}
 	[file release];
 	
+	NSAssert([strings count] > 0, @"no strings found: %@/%@.lproj/%@.strings", dir, language, filename);
 	return strings;
 }
 
@@ -137,6 +138,7 @@ NSString * NSStringByRemovingComments(NSString * text)
 	NSArray * lines = [plain componentsSeparatedByString:@"\n"];
 	NSString * line;
 	
+	NSAssert([lines count] > 0, @"empty file: %@", path);
 	NSMutableDictionary * mDict = [[NSMutableDictionary alloc] initWithCapacity:[lines count]];
 	
 	NSRange range;
