@@ -27,6 +27,6 @@ FOUNDATION_EXTERN NSString * NSStringByRemovingComments(NSString * text);
 /**
  *  save dictionary to file "${dir}/${language}.lproj/${filename}.strings"
  */
-//- (BOOL) saveFile:(NSString *)filename withLanguage:(NSString *)language bundlePath:(NSString *)dir;
+- (BOOL) saveFile:(NSString *)filename withLanguage:(NSString *)language bundlePath:(NSString *)dir;
 
 @end

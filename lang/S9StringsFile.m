@@ -65,7 +65,7 @@ NSString * NSStringByRemovingLineComments(NSString * text)
 			// comment to end
 			break;
 		}
-		pos = range.location + range.length;
+		pos = range.location;
 	} while (true);
 	
 	return [plain autorelease];
@@ -182,10 +182,10 @@ NSString * NSStringByRemovingComments(NSString * text)
 {
 	NSString * path = StringsFilePath(filename, language, dir);
 	
-	// 'plist' format ?
-	if ([_dictionary writeToFile:path atomically:YES]) {
-		return YES;
-	}
+//	// 'plist' format ?
+//	if ([_dictionary writeToFile:path atomically:YES]) {
+//		return YES;
+//	}
 	
 	// 'text' format ?
 	NSMutableString * text = [[NSMutableString alloc] init];
