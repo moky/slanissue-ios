@@ -78,9 +78,9 @@
 	if (self) {
 		self.targets = [NSMutableArray arrayWithCapacity:32];
 		
-		[[S9Scheduler getInstance] scheduleTickForTarget:self
-												priority:0
-												  paused:NO];
+		[S9SharedScheduler() scheduleTickForTarget:self
+										  priority:0
+											paused:NO];
 	}
 	return self;
 }

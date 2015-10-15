@@ -82,25 +82,26 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	return _currentLanguage ? _currentLanguage : S9TranslatorDefaultLanguage;
 }
 
-- (void) addTable:(NSString *)name bundlePath:(NSString *)dir
+- (void) addTable:(NSString *)tbl bundlePath:(NSString *)dir
 {
-	[_tables setObject:dir forKey:name];
+	NSAssert(tbl && dir, @"failed to add table: %@, dir: %@", tbl, dir);
+	S9DictionarySetObjectForKey(_tables, dir, tbl);
 	_isDirty = YES;
 }
 
-- (void) addAllTablesWithBundlePath:(NSString *)path
+- (void) addAllTablesWithBundlePath:(NSString *)dir
 {
-	[self addAllTablesWithBundlePath:path language:self.currentLanguage];
+	[self addAllTablesWithBundlePath:dir language:self.currentLanguage];
 }
 
-- (void) addAllTablesWithBundlePath:(NSString *)path language:(NSString *)language
+- (void) addAllTablesWithBundlePath:(NSString *)dir language:(NSString *)lang
 {
-	NSString * dir = [language stringByAppendingPathExtension:@"lproj"];
-	dir = [path stringByAppendingPathComponent:dir];
+	NSString * langDir = [lang stringByAppendingPathExtension:@"lproj"];
+	langDir = [dir stringByAppendingPathComponent:langDir];
 	
 	NSFileManager * fm = [NSFileManager defaultManager];
 	NSError * error = nil;
-	NSArray * array = [fm contentsOfDirectoryAtPath:dir error:&error];
+	NSArray * array = [fm contentsOfDirectoryAtPath:langDir error:&error];
 	if (error) {
 		S9Log(@"error: %@", error);
 		return;
@@ -110,7 +111,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	S9_FOR_EACH(array, filename) {
 		if ([filename hasSuffix:@".strings"]) {
 			[self addTable:[filename stringByDeletingPathExtension]
-				bundlePath:path];
+				bundlePath:dir];
 		}
 	}
 }
@@ -156,7 +157,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	_isDirty = NO;
 }
 
-- (NSString *) localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tableName
+- (NSString *) localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tbl
 {
 	if (!key) {
 		return value;
@@ -165,10 +166,10 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	[self reload]; // reload if needs
 	
 	if (_dictionaries) {
-		if (!tableName) {
-			tableName = S9TranslatorAllTables;
+		if (!tbl) {
+			tbl = S9TranslatorAllTables;
 		}
-		NSDictionary * table = [_dictionaries objectForKey:tableName];
+		NSDictionary * table = [_dictionaries objectForKey:tbl];
 		NSString * string = [table objectForKey:key];
 		if (string) {
 			//S9Log(@"got localized string from table: %@", tableName);
@@ -176,7 +177,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 		}
 	}
 	
-	return [[NSBundle mainBundle] localizedStringForKey:key value:value table:tableName];
+	return [[NSBundle mainBundle] localizedStringForKey:key value:value table:tbl];
 }
 
 @end

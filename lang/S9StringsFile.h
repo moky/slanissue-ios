@@ -22,14 +22,14 @@ FOUNDATION_EXTERN NSText * NSTextByRemovingComments(NSText * text);
 #pragma mark - Localization
 
 /**
- *  load strings file from "${dir}/${language}.lproj/${filename}.strings"
+ *  load strings file from "${dir}/${lang}.lproj/${name}.strings"
  */
-- (instancetype) initWithFile:(NSString *)filename language:(NSString *)language bundlePath:(NSString *)dir;
+- (instancetype) initWithFile:(NSString *)name language:(NSString *)lang bundlePath:(NSString *)dir;
 
 /**
- *  save dictionary to file "${dir}/${language}.lproj/${filename}.strings"
+ *  save dictionary to file "${dir}/${lang}.lproj/${name}.strings"
  */
-- (BOOL) saveToFile:(NSString *)filename language:(NSString *)language bundlePath:(NSString *)dir;
+- (BOOL) saveToFile:(NSString *)name language:(NSString *)lang bundlePath:(NSString *)dir;
 
 @end
 

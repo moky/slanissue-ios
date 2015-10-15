@@ -85,3 +85,21 @@
 - (BOOL) isTargetPaused:(id)target;
 
 @end
+
+#define S9SharedScheduler()                            [S9Scheduler getInstance]
+
+#define S9ScheduleSelector(selector, target, interval_, paused_)               \
+        [S9SharedScheduler() scheduleSelector:(selector) forTarget:(target) interval:(interval_) paused:(paused_)]
+                                                  /* EOF 'S9ScheduleSelector' */
+
+#define S9ScheduleTick(target, prior, paused_)                                 \
+        [S9SharedScheduler() scheduleTickForTarget:(target) priority:(prior) paused:(paused_)]
+                                                      /* EOF 'S9ScheduleTick' */
+
+#define S9UnscheduleSelector(selector, target)                                 \
+        [S9SharedScheduler() unscheduleSelector:(selector) forTarget:(target)]
+                                                /* EOF 'S9UnscheduleSelector' */
+
+#define S9UnscheduleTick(target)                                               \
+        [S9SharedScheduler() unscheduleTickForTarget:(target)]                 \
+                                                    /* EOF 'S9UnscheduleTick' */

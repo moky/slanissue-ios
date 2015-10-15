@@ -11,8 +11,9 @@
 #import "S9Dictionary.h"
 #import "S9StringsFile.h"
 
-#define StringsFilePath(filename, language, dir)                               \
-        [NSString stringWithFormat:@"%@/%@.lproj/%@.strings", (dir), (language), (filename)]
+#define StringsFilePath(name, lang, dir)                                       \
+        [NSString stringWithFormat:@"%@/%@.lproj/%@.strings", (dir), (lang), (name)]
+                                                     /* EOF 'StringsFilePath' */
 
 NS_INLINE NSText * remove_block_comments(NSText * text)
 {
@@ -226,15 +227,15 @@ NS_INLINE BOOL save_strings_file(NSString * path, NSDictionary * data)
 
 #pragma mark - Localization
 
-- (instancetype) initWithFile:(NSString *)filename language:(NSString *)language bundlePath:(NSString *)dir
+- (instancetype) initWithFile:(NSString *)name language:(NSString *)lang bundlePath:(NSString *)dir
 {
-	NSString * path = StringsFilePath(filename, language, dir);
+	NSString * path = StringsFilePath(name, lang, dir);
 	return [self initWithFile:path];
 }
 
-- (BOOL) saveToFile:(NSString *)filename language:(NSString *)language bundlePath:(NSString *)dir
+- (BOOL) saveToFile:(NSString *)name language:(NSString *)lang bundlePath:(NSString *)dir
 {
-	NSString * path = StringsFilePath(filename, language, dir);
+	NSString * path = StringsFilePath(name, lang, dir);
 	return [self saveToFile:path];
 }
 

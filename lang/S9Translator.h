@@ -14,34 +14,36 @@
 
 + (instancetype) getInstance;
 
-// path: "${dir}/${currentLanguage}.lproj/${tableName}.strings"
-- (void) addTable:(NSString *)name bundlePath:(NSString *)dir;
+// path: "${dir}/${currentLanguage}.lproj/${tbl}.strings"
+- (void) addTable:(NSString *)tbl bundlePath:(NSString *)dir;
 
 // add all "*.strings" file in bundle with current language
-- (void) addAllTablesWithBundlePath:(NSString *)path;
-- (void) addAllTablesWithBundlePath:(NSString *)path language:(NSString *)language;
+- (void) addAllTablesWithBundlePath:(NSString *)dir;
+- (void) addAllTablesWithBundlePath:(NSString *)dir language:(NSString *)lang;
 
 // reload all tables
 - (void) reload;
 
 // translate the 'key' string to current language
-- (NSString *) localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tableName;
+- (NSString *) localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tbl;
 
 @end
 
-#define S9TranslatorSetCurrentLanguage(language)                               \
-        [[S9Translator getInstance] setCurrentLanguage:(language)]             \
+#define S9SharedTranslator()                          [S9Translator getInstance]
+
+#define S9TranslatorSetCurrentLanguage(lang)                                   \
+        [S9SharedTranslator() setCurrentLanguage:(lang)]                       \
                                       /* EOF 'S9TranslatorSetCurrentLanguage' */
-#define S9TranslatorAddLanguagePack(tableName, bundlePath)                     \
-        [[S9Translator getInstance] addTable:(tableName) bundlePath:(bundlePath)]
+#define S9TranslatorAddLanguagePack(tbl, dir)                                  \
+        [S9SharedTranslator() addTable:(tbl) bundlePath:(dir)]                 \
                                          /* EOF 'S9TranslatorAddLanguagePack' */
-#define S9TranslatorScanLanguagePacks(bundlePath)                              \
-        [[S9Translator getInstance] addAllTablesWithBundlePath:(bundlePath)]   \
+#define S9TranslatorScanLanguagePacks(dir)                                     \
+        [S9SharedTranslator() addAllTablesWithBundlePath:(dir)]                \
                                        /* EOF 'S9TranslatorScanLanguagePacks' */
 
 #define S9LocalizedString(key, comment)                                        \
-        [[S9Translator getInstance] localizedStringForKey:(key) value:@"" table:nil]
+        [S9SharedTranslator() localizedStringForKey:(key) value:@"" table:nil] \
                                                    /* EOF 'S9LocalizedString' */
 #define S9LocalizedStringFromTable(key, tbl, comment)                          \
-        [[S9Translator getInstance] localizedStringForKey:(key) value:@"" table:(tbl)]
+        [S9SharedTranslator() localizedStringForKey:(key) value:@"" table:(tbl)]
                                           /* EOF 'S9LocalizedStringFromTable' */
