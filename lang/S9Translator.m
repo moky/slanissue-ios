@@ -109,7 +109,8 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	NSString * filename;
 	S9_FOR_EACH(array, filename) {
 		if ([filename hasSuffix:@".strings"]) {
-			[self addTable:[filename stringByDeletingPathExtension] bundlePath:path];
+			[self addTable:[filename stringByDeletingPathExtension]
+				bundlePath:path];
 		}
 	}
 }
@@ -129,22 +130,16 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	NSString * dir;
 	NSDictionary * dict;
 	S9_FOR_EACH_KEY_VALUE(_tables, name, dir) {
-		NSAssert([name length] > 0 && ![name isEqualToString:S9TranslatorAllTables], @"invalid table: %@", name);
-		dict = [S9StringsFile stringsFromFile:name withLanguage:lang bundlePath:dir];
-		if (!dict) {
-			if (![lang isEqualToString:S9TranslatorDefaultLanguage]) {
-				dict = [S9StringsFile stringsFromFile:name
-										 withLanguage:S9TranslatorDefaultLanguage
-										   bundlePath:dir];
-			}
-			if (!dict) {
-				NSAssert(false, @"no language file(%@.strings) for language(%@) in dir: %@", name, lang, dir);
-				continue;
-			}
+		NSAssert([name length] > 0 && ![name isEqualToString:S9TranslatorAllTables],
+				 @"invalid table: %@", name);
+		dict = S9LocalizedStringsFileLoad(name, lang, dir);
+		NSAssert([dict isKindOfClass:[NSDictionary class]],
+				 @"no language file(%@.strings) for language(%@) in dir: %@",
+				 name, lang, dir);
+		if (dict) {
+			[dictionaries setObject:dict forKey:name];
+			[all addEntriesFromDictionary:dict];
 		}
-		[dictionaries setObject:dict forKey:name];
-		
-		[all addEntriesFromDictionary:dict];
 	}
 	NSAssert([all count] > 0, @"no strings found");
 	

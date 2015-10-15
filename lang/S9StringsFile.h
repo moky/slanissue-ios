@@ -6,27 +6,45 @@
 //  Copyright (c) 2015 Slanissue.com. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import "S9String.h"
 
-FOUNDATION_EXTERN NSString * NSStringByRemovingComments(NSString * text);
+FOUNDATION_EXTERN NSText * NSTextByRemovingComments(NSText * text);
 
 @interface S9StringsFile : NSObject
 
-@property(nonatomic, retain) NSDictionary * dictionary;
+@property(nonatomic, readonly) NSDictionary * dictionary;
 
-/**
- *  get dictionary<NSString *, NSString *> in .strings file, see below
- */
-+ (NSDictionary *) stringsFromFile:(NSString *)filename withLanguage:(NSString *)language bundlePath:(NSString *)dir;
+- (instancetype) initWithDictionary:(NSDictionary *)dict NS_DESIGNATED_INITIALIZER;
+- (instancetype) initWithFile:(NSString *)path;
+
+- (BOOL) saveToFile:(NSString *)path;
+
+#pragma mark - Localization
 
 /**
  *  load strings file from "${dir}/${language}.lproj/${filename}.strings"
  */
-- (BOOL) loadFile:(NSString *)filename withLanguage:(NSString *)language bundlePath:(NSString *)dir;
+- (instancetype) initWithFile:(NSString *)filename language:(NSString *)language bundlePath:(NSString *)dir;
 
 /**
  *  save dictionary to file "${dir}/${language}.lproj/${filename}.strings"
  */
-- (BOOL) saveFile:(NSString *)filename withLanguage:(NSString *)language bundlePath:(NSString *)dir;
+- (BOOL) saveToFile:(NSString *)filename language:(NSString *)language bundlePath:(NSString *)dir;
 
 @end
+
+#define S9StringsFileLoad(path)                                                \
+        [[[[S9StringsFile alloc] initWithFile:(path)] autorelease] dictionary] \
+                                                   /* EOF 'S9StringsFileLoad' */
+
+#define S9LocalizedStringsFileLoad(name, lang, dir)                            \
+        [[[[S9StringsFile alloc] initWithFile:(name) language:(lang) bundlePath:(dir)] autorelease] dictionary]
+                                          /* EOF 'S9LocalizedStringsFileLoad' */
+
+#define S9StringsFileSave(dict, path)                                          \
+        [[[[S9StringsFile alloc] initWithDictionary:(dict)] autorelease] saveToFile:(path)]
+                                                   /* EOF 'S9StringsFileSave' */
+
+#define S9LocalizedStringsFileSave(dict, name, lang, dir)                      \
+        [[[[S9StringsFile alloc] initWithDictionary:(dict)] autorelease] saveToFile:(name) language:(lang) bundlePath:(dir)]
+                                          /* EOF 'S9LocalizedStringsFileSave' */

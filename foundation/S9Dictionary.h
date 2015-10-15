@@ -15,6 +15,12 @@
 //
 + (NSDictionary *) dictionaryWithString:(NSString *)mapString;
 
+//
+//  dictionary file reader/writer, supported type: plist|mof|js|json|strings
+//
++ (NSDictionary *) loadFromFile:(NSString *)path;
+- (BOOL) saveToFile:(NSString *)path;
+
 @end
 
 //--------------------------------------------------------------------- for each

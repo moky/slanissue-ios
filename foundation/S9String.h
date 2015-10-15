@@ -10,6 +10,8 @@
 
 #import "S9Math.h"
 
+typedef NSString NSText;
+
 // create MD5 string
 #define MD5(string) [(string) MD5String]
 // calculate a string

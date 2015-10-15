@@ -24,9 +24,23 @@
 
 @end
 
-#define NSObjectFromJSONData(data)     [NSObject objectWithJSONData:(data) options:NSJSONReadingAllowFragments]
-#define NSObjectFromJSONString(string) [NSObject objectWithJSONString:(string) encoding:NSUTF8StringEncoding]
-#define JSONStringFromNSObject(object) [(object) JSONStringWithEncoding:NSUTF8StringEncoding options:0]
+//------------------------------------------------------------------------- json
+#define NSObjectFromJSONData(data)                                             \
+        [NSObject objectWithJSONData:(data) options:NSJSONReadingAllowFragments]
+                                                /* EOF 'NSObjectFromJSONData' */
+#define NSObjectFromJSONString(string)                                         \
+        [NSObject objectWithJSONString:(string) encoding:NSUTF8StringEncoding] \
+                                              /* EOF 'NSObjectFromJSONString' */
+#define JSONStringFromNSObject(object)                                         \
+        [(object) JSONStringWithEncoding:NSUTF8StringEncoding options:0]       \
+                                              /* EOF 'JSONStringFromNSObject' */
+
+#define JSONFileLoad(path)                                                     \
+        NSObjectFromJSONData([NSData dataWithContentsOfFile:path])             \
+                                                        /* EOF 'JSONFileLoad' */
+#define JSONFileSave(object, path)                                             \
+        [JSONStringFromNSObject(object) writeToFile:(path) atomically:YES encoding:NSUTF8StringEncoding error:nil]
+                                                        /* EOF 'JSONFileSave' */
 
 //-------------------------------------------------------------------- singleton
 #define S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)                          \

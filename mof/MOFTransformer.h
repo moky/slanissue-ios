@@ -13,3 +13,8 @@
 - (instancetype) initWithObject:(NSObject *)root;
 
 @end
+
+#define MOFSave(obj, path)                                                     \
+        [[[[MOFTransformer alloc] initWithObject:(obj)] autorelease] saveToFile:(path)]
+                                                             /* EOF 'MOFSave' */
+

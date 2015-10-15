@@ -15,3 +15,7 @@
 - (instancetype) initWithFile:(NSString *)filename;
 
 @end
+
+#define MOFLoad(path)                                                          \
+        [[[[MOFReader alloc] initWithFile:(path)] autorelease] root]           \
+                                                             /* EOF 'MOFLoad' */
