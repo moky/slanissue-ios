@@ -26,6 +26,11 @@
 
 - (NSString *) inject:(NSString *)jsFile
 {
+	return [[self class] inject:jsFile webview:self];
+}
+
++ (NSString *) inject:(NSString *)jsFile webview:(UIWebView *)wv
+{
 	S9MemoryCache * cache = [S9MemoryCache getInstance];
 	S9Log(@"injecting %@", jsFile);
 	
@@ -42,7 +47,7 @@
 	}
 	
 	// inject
-	return javascript ? [self stringByEvaluatingJavaScriptFromString:javascript] : nil;
+	return javascript ? [wv stringByEvaluatingJavaScriptFromString:javascript] : nil;
 }
 
 @end

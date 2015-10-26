@@ -170,9 +170,10 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 			tbl = S9TranslatorAllTables;
 		}
 		NSDictionary * table = [_dictionaries objectForKey:tbl];
+		NSAssert([table isKindOfClass:[NSDictionary class]], @"no such table: %@", table);
 		NSString * string = [table objectForKey:key];
 		if (string) {
-			//S9Log(@"got localized string from table: %@", tableName);
+			NSAssert([string isKindOfClass:[NSString class]], @"must be a string: %@", string);
 			return string;
 		}
 	}

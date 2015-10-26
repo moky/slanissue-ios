@@ -16,4 +16,6 @@
 // inject a 'Javascript' file into the current web
 - (NSString *) inject:(NSString *)jsFile;
 
++ (NSString *) inject:(NSString *)jsFile webview:(UIWebView *)wv;
+
 @end
