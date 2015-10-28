@@ -37,9 +37,6 @@ typedef NSString NSText;
 // get filename
 - (NSString *) filename;
 
-// get image scale, @2x => 2.0f, @3x =>3.0f
-- (float) scale;
-
 //  "{{1+2, 3-4}, {5*6, 7/8}}" => "{{3,-1},{30,0.875}}"
 - (NSString *) calculate;
 

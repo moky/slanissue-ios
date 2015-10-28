@@ -102,28 +102,6 @@
 	return [string lastPathComponent];
 }
 
-- (float) scale
-{
-	NSRange range1 = [self rangeOfString:@"@"];
-	if (range1.location == NSNotFound) {
-		return 1.0f;
-	}
-	range1.location += range1.length;
-	range1.length = [self length] - range1.location;
-	
-	NSRange range2 = [self rangeOfString:@"x" options:NSCaseInsensitiveSearch range:range1];
-	if (range2.location == NSNotFound) {
-		return 1.0f;
-	}
-	range1.length = range2.location - range1.location;
-	NSAssert(range1.length > 0 && range1.length <  3, @"error: %@", self);
-	
-	float scale = [[self substringWithRange:range1] floatValue];
-	NSAssert(scale > 0.0f, @"error scale: %@", self);
-	
-	return scale > 0.0f ? scale : 1.0f;
-}
-
 - (NSString *) calculate
 {
 	NSString * string = self;

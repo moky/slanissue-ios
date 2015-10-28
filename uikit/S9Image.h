@@ -24,11 +24,6 @@ CG_EXTERN CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRec
 UIKIT_EXTERN UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale);
 
 /**
- *  create an animated image with GIF data
- */
-UIKIT_EXTERN UIImage * UIImageWithGIFData(NSData * data, CGFloat scale);
-
-/**
  *  load image, with memory cache
  *
  *    1. 'name' is a filename, load from main bundle
@@ -36,6 +31,24 @@ UIKIT_EXTERN UIImage * UIImageWithGIFData(NSData * data, CGFloat scale);
  *    3. 'name' is a URL, download from remote
  */
 UIKIT_EXTERN UIImage * UIImageWithName(NSString * name);
+
+typedef NS_ENUM(NSUInteger, UIImageFileType) {
+	UIImageFileTypeUnknown,
+	UIImageFileTypePNG,
+	UIImageFileTypeJPEG,
+	UIImageFileTypeGIF,
+	UIImageFileTypeBMP,
+};
+
+/**
+ *  get file type from filename (or url string)
+ */
+UIKIT_EXTERN UIImageFileType UIImageFileTypeFromName(NSString * filename);
+
+/**
+ *  get image scale from filename (e.g.: "Icon@2x.png" => 2.0f, "Icon@3x.png" =>3.0f, ...)
+ */
+UIKIT_EXTERN CGFloat UIImageScaleFromName(NSString * filename);
 
 @interface UIImage (SlanissueToolkit)
 

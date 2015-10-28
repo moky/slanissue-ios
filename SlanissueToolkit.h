@@ -87,6 +87,11 @@
 #import "S9View+Reflection.h"
 
 //
+//  ImageIO
+//
+#import "S9Image+GIF.h"
+
+//
 //  UIKit
 //
 #import "S9Device.h"

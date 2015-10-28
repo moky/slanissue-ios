@@ -6,12 +6,11 @@
 //  Copyright (c) 2015 Slanissue.com. All rights reserved.
 //
 
-#import <ImageIO/ImageIO.h>
-
 #import "s9Macros.h"
 #import "S9String.h"
 #import "S9Client.h"
 #import "S9MemoryCache.h"
+#import "S9Image+GIF.h"
 #import "S9Image.h"
 
 CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRect rect)
@@ -78,73 +77,6 @@ UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale)
 	return result;
 }
 
-static CGFloat CGImageSourceGetFrameDuration(CGImageSourceRef source, NSUInteger index)
-{
-	float duration = 0.1f;
-	
-	CFDictionaryRef framePropertiesRef = CGImageSourceCopyPropertiesAtIndex(source, index, nil);
-	NSDictionary * frameProperties = (__bridge NSDictionary *)framePropertiesRef;
-	NSDictionary * gifProperties = frameProperties[(NSString *)kCGImagePropertyGIFDictionary];
-	
-	NSNumber * delayTime = gifProperties[(NSString *)kCGImagePropertyGIFUnclampedDelayTime];
-	if (delayTime) {
-		duration = [delayTime floatValue];
-	} else {
-		delayTime = gifProperties[(NSString *)kCGImagePropertyGIFDelayTime];
-		if (delayTime) {
-			duration = [delayTime floatValue];
-		}
-	}
-	CFRelease(framePropertiesRef);
-	
-	// Many annoying ads specify a 0 duration to make an image flash as quickly as possible.
-	// We follow Firefox's behavior and use a duration of 100 ms for any frames that specify
-	// a duration of <= 10 ms. See <rdar://problem/7689300> and <http://webkit.org/b/36082>
-	// for more information.
-	return duration < 0.011f ? 0.100f : duration;
-}
-
-UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
-{
-	CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
-	size_t count = CGImageSourceGetCount(source);
-	if (count <= 1) {
-		CFRelease(source);
-#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
-		CGFloat systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
-		if (systemVersion < 6.0f)
-			return [UIImage imageWithData:data];
-		else
-#endif
-			return [UIImage imageWithData:data scale:scale];
-	}
-	
-	NSMutableArray * array = [[NSMutableArray alloc] initWithCapacity:count];
-	NSTimeInterval duration = 0.0f;
-	
-	UIImage * image;
-	CGImageRef imageRef;
-	for (size_t index = 0; index < count; ++index) {
-		duration += CGImageSourceGetFrameDuration(source, index);
-		
-		imageRef = CGImageSourceCreateImageAtIndex(source, index, NULL);
-		image = [[UIImage alloc] initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
-		[array addObject:image];
-		[image release];
-		CGImageRelease(imageRef);
-	}
-	CFRelease(source);
-	
-	if (duration <= 0.0f) {
-		duration = count / 12.0f;
-	}
-	
-	image = [UIImage animatedImageWithImages:array duration:duration];
-	[array release];
-	
-	return image;
-}
-
 UIImage * UIImageWithName(NSString * name)
 {
 	// 1. check memory cache
@@ -155,25 +87,25 @@ UIImage * UIImageWithName(NSString * name)
 		return image;
 	}
 	
+	UIImageFileType type = UIImageFileTypeFromName(name);
+	
 	// 2. create new image
 	if ([name rangeOfString:@"/"].location == NSNotFound) {
 		// get image from main bundle
-		NSString * ext = [[name pathExtension] lowercaseString];
-		if ([ext isEqualToString:@"gif"]) {
+		if (type == UIImageFileTypeGIF) {
 			NSString * path = [[S9Client getInstance] applicationDirectory];
 			path = [path stringByAppendingPathComponent:name];
 			NSData * data = [[NSData alloc] initWithContentsOfFile:path];
-			image = UIImageWithGIFData(data, [name scale]);
+			image = UIImageWithGIFData(data, UIImageScaleFromName(name));
 			[data release];
 		} else {
 			image = [UIImage imageNamed:name];
 		}
 	} else if ([name rangeOfString:@"://"].location == NSNotFound || [name hasPrefix:@"file://"]) {
 		// get image from local file
-		NSString * ext = [[name pathExtension] lowercaseString];
-		if ([ext isEqualToString:@"gif"]) {
+		if (type == UIImageFileTypeGIF) {
 			NSData * data = [[NSData alloc] initWithContentsOfFile:name];
-			image = UIImageWithGIFData(data, [name scale]);
+			image = UIImageWithGIFData(data, UIImageScaleFromName(name));
 			[data release];
 		} else {
 			image = [UIImage imageWithContentsOfFile:name];
@@ -184,13 +116,17 @@ UIImage * UIImageWithName(NSString * name)
 		if (url) {
 			NSData * data = [[NSData alloc] initWithContentsOfURL:url];
 			if (data) {
+				if (type == UIImageFileTypeGIF) {
+					image = UIImageWithGIFData(data, UIImageScaleFromName(name));
+				} else {
 #if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
-				CGFloat systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
-				if (systemVersion < 6.0f)
-					image = [UIImage imageWithData:data];
-				else
+					CGFloat systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
+					if (systemVersion < 6.0f)
+						image = [UIImage imageWithData:data];
+					else
 #endif
-					image = [UIImage imageWithData:data scale:[name scale]];
+						image = [UIImage imageWithData:data scale:UIImageScaleFromName(name)];
+				}
 				[data release];
 			}
 			[url release];
@@ -202,15 +138,52 @@ UIImage * UIImageWithName(NSString * name)
 	return image;
 }
 
+UIImageFileType UIImageFileTypeFromName(NSString * filename)
+{
+	NSString * ext = [[filename pathExtension] lowercaseString];
+	if ([ext isEqualToString:@"png"]) {
+		return UIImageFileTypePNG;
+	} else if ([ext isEqualToString:@"jpg"] || [ext isEqualToString:@"jpeg"]) {
+		return UIImageFileTypeJPEG;
+	} else if ([ext isEqualToString:@"gif"]) {
+		return UIImageFileTypeGIF;
+	} else if ([ext isEqualToString:@"bmp"]) {
+		return UIImageFileTypeBMP;
+	}
+	return UIImageFileTypeUnknown;
+}
+
+CGFloat UIImageScaleFromName(NSString * filename)
+{
+	// '@'
+	NSRange range1 = [filename rangeOfString:@"@" options:NSBackwardsSearch];
+	if (range1.location == NSNotFound) {
+		return 1.0f;
+	}
+	range1.location += range1.length;
+	range1.length = [filename length] - range1.location;
+	
+	// 'x'
+	NSRange range2 = [filename rangeOfString:@"x" options:NSCaseInsensitiveSearch range:range1];
+	if (range2.location == NSNotFound) {
+		return 1.0f;
+	}
+	range1.length = range2.location - range1.location;
+	
+	// scale
+	float scale = [[filename substringWithRange:range1] floatValue];
+	return scale > 0.0f ? scale : 1.0f;
+}
+
 @implementation UIImage (SlanissueToolkit)
 
 - (BOOL) writeToFile:(NSString *)path atomically:(BOOL)useAuxiliaryFile
 {
 	NSData * data = nil;
-	NSString * ext = [[path pathExtension] lowercaseString];
-	if ([ext isEqualToString:@"png"]) {
+	UIImageFileType type = UIImageFileTypeFromName(path);
+	if (type == UIImageFileTypePNG) {
 		data = UIImagePNGRepresentation(self);
-	} else if ([ext isEqualToString:@"jpg"] || [ext isEqualToString:@"jpeg"]) {
+	} else if (type == UIImageFileTypeJPEG) {
 		data = UIImageJPEGRepresentation(self, 1.0f);
 	} else {
 		NSAssert(false, @"unsupportd image format: %@", path);
