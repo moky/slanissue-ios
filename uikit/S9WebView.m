@@ -40,7 +40,7 @@
 		NSStringEncoding encoding = NSUTF8StringEncoding;
 		NSError * error = nil;
 		javascript = [NSString stringWithContentsOfFile:jsFile encoding:encoding error:&error];
-		NSAssert(javascript && !error, @"decode error: %@,", error);
+		NSAssert(javascript && !error, @"decode error: %@", error);
 		
 		// cache it
 		[cache setObject:javascript forKey:jsFile];

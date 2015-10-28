@@ -110,7 +110,13 @@ UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
 	size_t count = CGImageSourceGetCount(source);
 	if (count <= 1) {
 		CFRelease(source);
-		return [UIImage imageWithData:data scale:scale];
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
+		CGFloat systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
+		if (systemVersion < 6.0f)
+			return [UIImage imageWithData:data];
+		else
+#endif
+			return [UIImage imageWithData:data scale:scale];
 	}
 	
 	NSMutableArray * array = [[NSMutableArray alloc] initWithCapacity:count];
@@ -178,13 +184,13 @@ UIImage * UIImageWithName(NSString * name)
 		if (url) {
 			NSData * data = [[NSData alloc] initWithContentsOfURL:url];
 			if (data) {
-#ifdef __IPHONE_6_0
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_6_0
 				CGFloat systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
-				if (systemVersion >= 6.0f)
-					image = [UIImage imageWithData:data scale:[name scale]];
+				if (systemVersion < 6.0f)
+					image = [UIImage imageWithData:data];
 				else
 #endif
-					image = [UIImage imageWithData:data];
+					image = [UIImage imageWithData:data scale:[name scale]];
 				[data release];
 			}
 			[url release];
