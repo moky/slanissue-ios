@@ -24,6 +24,11 @@ CG_EXTERN CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRec
 UIKIT_EXTERN UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale);
 
 /**
+ *  create an animated image with GIF data
+ */
+UIKIT_EXTERN UIImage * UIImageWithGIFData(NSData * data, CGFloat scale);
+
+/**
  *  load image, with memory cache
  *
  *    1. 'name' is a filename, load from main bundle

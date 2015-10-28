@@ -14,6 +14,7 @@
  *      <CoreGraphics.framework>
  *      <CoreImage.framework>
  *      <QuartzCore.framework>
+ *      <ImageIO.framework>
  *      <UIKit.framework>
  *
  */

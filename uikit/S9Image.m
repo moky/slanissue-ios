@@ -6,7 +6,11 @@
 //  Copyright (c) 2015 Slanissue.com. All rights reserved.
 //
 
+#import <ImageIO/ImageIO.h>
+
 #import "s9Macros.h"
+#import "S9String.h"
+#import "S9Client.h"
 #import "S9MemoryCache.h"
 #import "S9Image.h"
 
@@ -74,13 +78,69 @@ UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale)
 	return result;
 }
 
-UIImage * UIImageWithName(NSString * name)
+static CGFloat CGImageSourceGetFrameDuration(CGImageSourceRef source, NSUInteger index)
 {
-	if (!name) {
-		S9Log(@"image name cannot be nil");
-		return nil;
+	float duration = 0.1f;
+	
+	CFDictionaryRef framePropertiesRef = CGImageSourceCopyPropertiesAtIndex(source, index, nil);
+	NSDictionary * frameProperties = (__bridge NSDictionary *)framePropertiesRef;
+	NSDictionary * gifProperties = frameProperties[(NSString *)kCGImagePropertyGIFDictionary];
+	
+	NSNumber * delayTime = gifProperties[(NSString *)kCGImagePropertyGIFUnclampedDelayTime];
+	if (delayTime) {
+		duration = [delayTime floatValue];
+	} else {
+		delayTime = gifProperties[(NSString *)kCGImagePropertyGIFDelayTime];
+		if (delayTime) {
+			duration = [delayTime floatValue];
+		}
+	}
+	CFRelease(framePropertiesRef);
+	
+	// Many annoying ads specify a 0 duration to make an image flash as quickly as possible.
+	// We follow Firefox's behavior and use a duration of 100 ms for any frames that specify
+	// a duration of <= 10 ms. See <rdar://problem/7689300> and <http://webkit.org/b/36082>
+	// for more information.
+	return duration < 0.011f ? 0.100f : duration;
+}
+
+UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
+{
+	CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+	size_t count = CGImageSourceGetCount(source);
+	if (count <= 1) {
+		CFRelease(source);
+		return [UIImage imageWithData:data scale:scale];
 	}
 	
+	NSMutableArray * array = [[NSMutableArray alloc] initWithCapacity:count];
+	NSTimeInterval duration = 0.0f;
+	
+	UIImage * image;
+	CGImageRef imageRef;
+	for (size_t index = 0; index < count; ++index) {
+		duration += CGImageSourceGetFrameDuration(source, index);
+		
+		imageRef = CGImageSourceCreateImageAtIndex(source, index, NULL);
+		image = [[UIImage alloc] initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
+		[array addObject:image];
+		[image release];
+		CGImageRelease(imageRef);
+	}
+	CFRelease(source);
+	
+	if (duration <= 0.0f) {
+		duration = count / 12.0f;
+	}
+	
+	image = [UIImage animatedImageWithImages:array duration:duration];
+	[array release];
+	
+	return image;
+}
+
+UIImage * UIImageWithName(NSString * name)
+{
 	// 1. check memory cache
 	S9MemoryCache * cache = [S9MemoryCache getInstance];
 	UIImage * image = [cache objectForKey:name];
@@ -92,17 +152,39 @@ UIImage * UIImageWithName(NSString * name)
 	// 2. create new image
 	if ([name rangeOfString:@"/"].location == NSNotFound) {
 		// get image from main bundle
-		image = [UIImage imageNamed:name];
+		NSString * ext = [[name pathExtension] lowercaseString];
+		if ([ext isEqualToString:@"gif"]) {
+			NSString * path = [[S9Client getInstance] applicationDirectory];
+			path = [path stringByAppendingPathComponent:name];
+			NSData * data = [[NSData alloc] initWithContentsOfFile:path];
+			image = UIImageWithGIFData(data, [name scale]);
+			[data release];
+		} else {
+			image = [UIImage imageNamed:name];
+		}
 	} else if ([name rangeOfString:@"://"].location == NSNotFound || [name hasPrefix:@"file://"]) {
 		// get image from local file
-		image = [UIImage imageWithContentsOfFile:name];
+		NSString * ext = [[name pathExtension] lowercaseString];
+		if ([ext isEqualToString:@"gif"]) {
+			NSData * data = [[NSData alloc] initWithContentsOfFile:name];
+			image = UIImageWithGIFData(data, [name scale]);
+			[data release];
+		} else {
+			image = [UIImage imageWithContentsOfFile:name];
+		}
 	} else {
 		// get image with data from remote server
 		NSURL * url = [[NSURL alloc] initWithString:name];
 		if (url) {
 			NSData * data = [[NSData alloc] initWithContentsOfURL:url];
 			if (data) {
-				image = [UIImage imageWithData:data];
+#ifdef __IPHONE_6_0
+				CGFloat systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
+				if (systemVersion >= 6.0f)
+					image = [UIImage imageWithData:data scale:[name scale]];
+				else
+#endif
+					image = [UIImage imageWithData:data];
 				[data release];
 			}
 			[url release];
