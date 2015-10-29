@@ -185,6 +185,11 @@ CGFloat UIImageScaleFromName(NSString * filename)
 		data = UIImagePNGRepresentation(self);
 	} else if (type == UIImageFileTypeJPEG) {
 		data = UIImageJPEGRepresentation(self, 1.0f);
+	} else if (type == UIImageFileTypeGIF) {
+		data = UIImageGIFRepresentation(self);
+	//} else if (type == UIImageFileTypeBMP) {
+		// TODO: get BMP data
+		//data = UIImageBMPRepresentation(self);
 	} else {
 		NSAssert(false, @"unsupportd image format: %@", path);
 		return NO;

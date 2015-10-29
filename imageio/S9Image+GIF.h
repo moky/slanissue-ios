@@ -12,3 +12,8 @@
  *  create an animated image with GIF data
  */
 UIKIT_EXTERN UIImage * UIImageWithGIFData(NSData * data, CGFloat scale);
+
+/**
+ *  create GIF data with animated image (image.images, image.duration)
+ */
+UIKIT_EXTERN NSData * UIImageGIFRepresentation(UIImage * image);

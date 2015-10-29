@@ -16,35 +16,39 @@
 
 CGSize CGSizeAspectFit(CGSize fromSize, CGSize toSize)
 {
-	if (fromSize.width > 0.0f && fromSize.height > 0.0f) {
-		CGFloat dw = toSize.width / fromSize.width;
-		CGFloat dh = toSize.height / fromSize.height;
-		if (dw < dh) {
-			return CGSizeMake(toSize.width, fromSize.height * dw);
-		} else if (dw > dh) {
-			return CGSizeMake(fromSize.width * dh, toSize.height);
-		} else {
-			return toSize;
-		}
-	} else {
+	if (fromSize.width <= 0.0f || fromSize.height <= 0.0f) {
+		// error
 		return fromSize;
+	}
+	
+	CGFloat dw = toSize.width / fromSize.width;
+	CGFloat dh = toSize.height / fromSize.height;
+	// use the smaller factor to fit the frame
+	if (dw < dh) {
+		return CGSizeMake(toSize.width, fromSize.height * dw);
+	} else if (dw > dh) {
+		return CGSizeMake(fromSize.width * dh, toSize.height);
+	} else {
+		return toSize;
 	}
 }
 
 CGSize CGSizeAspectFill(CGSize fromSize, CGSize toSize)
 {
-	if (fromSize.width > 0.0f && fromSize.height > 0.0f) {
-		CGFloat dw = toSize.width / fromSize.width;
-		CGFloat dh = toSize.height / fromSize.height;
-		if (dw > dh) {
-			return CGSizeMake(toSize.width, fromSize.height * dw);
-		} else if (dw < dh) {
-			return CGSizeMake(fromSize.width * dh, toSize.height);
-		} else {
-			return toSize;
-		}
-	} else {
+	if (fromSize.width <= 0.0f || fromSize.height <= 0.0f) {
+		// error
 		return fromSize;
+	}
+	
+	CGFloat dw = toSize.width / fromSize.width;
+	CGFloat dh = toSize.height / fromSize.height;
+	// use the bigger factor to fill the frame
+	if (dw > dh) {
+		return CGSizeMake(toSize.width, fromSize.height * dw);
+	} else if (dw < dh) {
+		return CGSizeMake(fromSize.width * dh, toSize.height);
+	} else {
+		return toSize;
 	}
 }
 
