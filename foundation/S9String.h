@@ -41,3 +41,13 @@ typedef NSString NSText;
 - (NSString *) calculate;
 
 @end
+
+//--------------------------------------------------------------- CoreFoundation
+#define CFStringCreateWithNSString(nsString)                                   \
+        CFStringCreateWithCString(NULL,                                        \
+                [(nsString) UTF8String],                                       \
+                kCFStringEncodingUTF8)                                         \
+                                          /* EOF 'CFStringCreateWithNSString' */
+
+#define CFStringRetain(ref)              do { if (ref) CFRetain(ref); } while(0)
+#define CFStringRelease(ref)            do { if (ref) CFRelease(ref); } while(0)

@@ -35,3 +35,16 @@
             [(dict) setObject:(object) forKey:(key)];                          \
         }                                                                      \
                                          /* EOF 'S9DictionarySetObjectForKey' */
+
+//--------------------------------------------------------------- CoreFoundation
+#define CFDictionaryCreateWithKeysAndValues(keys, values)                      \
+        CFDictionaryCreate(kCFAllocatorDefault,                                \
+                (const void **)(keys),                                         \
+                (const void **)(values),                                       \
+                sizeof(keys) / sizeof((keys)[0]),                              \
+                &kCFTypeDictionaryKeyCallBacks,                                \
+                &kCFTypeDictionaryValueCallBacks);                             \
+                                 /* EOF 'CFDictionaryCreateWithKeysAndValues' */
+
+#define CFDictionaryRetain(ref)          do { if (ref) CFRetain(ref); } while(0)
+#define CFDictionaryRelease(ref)        do { if (ref) CFRelease(ref); } while(0)

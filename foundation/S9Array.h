@@ -73,3 +73,7 @@
             [(array) removeObject:(object)];                                   \
         }                                                                      \
                                                  /* EOF 'S9ArrayRemoveObject' */
+
+//--------------------------------------------------------------- CoreFoundation
+#define CFArrayRetain(ref)               do { if (ref) CFRetain(ref); } while(0)
+#define CFArrayRelease(ref)             do { if (ref) CFRelease(ref); } while(0)

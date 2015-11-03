@@ -68,6 +68,7 @@
 //
 #import "S9Object.h"
 #import "S9Data.h"
+#import "S9Number.h"
 #import "S9String.h"
 #import "S9Array.h"
 #import "S9Dictionary.h"

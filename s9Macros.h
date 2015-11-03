@@ -45,23 +45,8 @@
 #define S9_SWITCH_END               } while(0);
 
 //--------------------------------------------------------------- CoreFoundation
-#define CFRetainSafe(ref)  if (ref) CFRetain(ref)
-#define CFReleaseSafe(ref) if (ref) CFRelease(ref)
-
-#define CFStringCreateWithNSString(nsString)                                   \
-        CFStringCreateWithCString(NULL,                                        \
-                [(nsString) UTF8String],                                       \
-                kCFStringEncodingUTF8)                                         \
-                                          /* EOF 'CFStringCreateWithNSString' */
-
-#define CFDictionaryCreateWithKeysAndValues(keys, values)                      \
-        CFDictionaryCreate(kCFAllocatorDefault,                                \
-                (const void **)(keys),                                         \
-                (const void **)(values),                                       \
-                sizeof(keys) / sizeof((keys)[0]),                              \
-                &kCFTypeDictionaryKeyCallBacks,                                \
-                &kCFTypeDictionaryValueCallBacks);                             \
-                                 /* EOF 'CFDictionaryCreateWithKeysAndValues' */
+#define CFRetainSafe(ref)                do { if (ref) CFRetain(ref); } while(0)
+#define CFReleaseSafe(ref)              do { if (ref) CFRelease(ref); } while(0)
 
 //--------------------------------------------------------------------- CoreText
 #define CTLineGetBounds(line)                                                  \

@@ -9,7 +9,9 @@
 #import <ImageIO/ImageIO.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
+#import "S9Number.h"
 #import "S9Array.h"
+#import "S9Dictionary.h"
 #import "S9Client.h"
 #import "S9Image+GIF.h"
 
@@ -34,19 +36,17 @@ CG_INLINE BOOL CGImageIsGIFData(NSData * imageData)
 
 CG_INLINE CGFloat CGImageSourceGetFrameDuration(CGImageSourceRef source, NSUInteger index)
 {
-	float duration = 0.100f;
+	CGFloat duration = 0.100f;
 	
 	CFDictionaryRef framePropertiesRef = CGImageSourceCopyPropertiesAtIndex(source, index, nil);
-	NSDictionary * frameProperties = (__bridge NSDictionary *)framePropertiesRef;
-	NSDictionary * gifProperties = frameProperties[(__bridge NSString *)kCGImagePropertyGIFDictionary];
-	
-	NSNumber * delayTime = gifProperties[(__bridge NSString *)kCGImagePropertyGIFUnclampedDelayTime];
-	if (delayTime) {
-		duration = [delayTime floatValue];
+	CFDictionaryRef gifPropertiesRef = CFDictionaryGetValue(framePropertiesRef, kCGImagePropertyGIFDictionary);
+	CFNumberRef delayTimeRef = CFDictionaryGetValue(gifPropertiesRef, kCGImagePropertyGIFUnclampedDelayTime);
+	if (delayTimeRef) {
+		CFNumberGetValue(delayTimeRef, kCFNumberFloatType, &duration);
 	} else {
-		delayTime = gifProperties[(__bridge NSString *)kCGImagePropertyGIFDelayTime];
-		if (delayTime) {
-			duration = [delayTime floatValue];
+		delayTimeRef = CFDictionaryGetValue(gifPropertiesRef, kCGImagePropertyGIFDelayTime);
+		if (delayTimeRef) {
+			CFNumberGetValue(delayTimeRef, kCFNumberFloatType, &duration);
 		}
 	}
 	CFRelease(framePropertiesRef);
@@ -56,6 +56,50 @@ CG_INLINE CGFloat CGImageSourceGetFrameDuration(CGImageSourceRef source, NSUInte
 	// a duration of <= 10 ms. See <rdar://problem/7689300> and <http://webkit.org/b/36082>
 	// for more information.
 	return duration < 0.011f ? 0.100f : duration;
+}
+
+CG_INLINE void CGImageInitDestination(CGImageDestinationRef destination)
+{
+	CFNumberRef  loopCount = CFNumberCreateWithInteger(0); // loop forever
+	CFBooleanRef hasGlobalColorMap = kCFBooleanTrue;
+	CFStringRef  colorModel = kCGImagePropertyColorModelRGB;
+	CFBooleanRef hasAlpha = kCFBooleanTrue;
+	CFNumberRef  depth = CFNumberCreateWithInteger(8);
+	
+	// create gif properties
+	const void * gifKeys[] = {
+		kCGImagePropertyGIFLoopCount,
+		kCGImagePropertyGIFHasGlobalColorMap,
+		kCGImagePropertyColorModel,
+		kCGImagePropertyHasAlpha,
+		kCGImagePropertyDepth,
+	};
+	const void * gifValues[] = {
+		loopCount,
+		hasGlobalColorMap,
+		colorModel,
+		hasAlpha,
+		depth,
+	};
+	CFDictionaryRef gifProperties = CFDictionaryCreateWithKeysAndValues(gifKeys, gifValues);
+	
+	// create file properties
+	const void * keys[] = {
+		kCGImagePropertyGIFDictionary,
+	};
+	const void * values[] = {
+		gifProperties,
+	};
+	CFDictionaryRef fileProperties = CFDictionaryCreateWithKeysAndValues(keys, values);
+	
+	// set destination properties
+	CGImageDestinationSetProperties(destination, fileProperties);
+	
+	// cleanup
+	CFRelease(fileProperties);
+	CFRelease(gifProperties);
+	CFRelease(depth);
+	CFRelease(loopCount);
 }
 
 UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
@@ -95,7 +139,7 @@ UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
 	}
 	CFRelease(source);
 	
-	if (duration <= 0.011f) {
+	if (duration < 0.011f) {
 		duration = frameCount / 12.0f;
 	}
 	
@@ -116,48 +160,47 @@ NSData * UIImageGIFRepresentation(UIImage * image)
 		frames = [NSArray arrayWithObject:image];
 		frameCount = 1;
 		duration = 60.0f;
-	} else if (frameCount == 1) {
-		duration = 60.0f;
 	} else if (duration < 0.011f) {
 		duration = frameCount / 12.0f;
 	}
 	
-	NSMutableData * data = [NSMutableData data];
+	NSMutableData * data = [[NSMutableData alloc] initWithLength:1024];
 	
-	// 1. create image destination
+	// 1. create & initialize image destination
 	CGImageDestinationRef destination;
 	destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)data,
 												   kUTTypeGIF,
 												   frameCount,
 												   NULL);
+	CGImageInitDestination(destination);
 	
-	// 2. set file properties
-	NSDictionary * fileProperties;
-	fileProperties = @{
-					   (__bridge id)kCGImagePropertyGIFDictionary: @{
-							   (__bridge id)kCGImagePropertyGIFLoopCount: @(0), // loop forever
-							   (__bridge id)kCGImagePropertyGIFHasGlobalColorMap: @(YES),
-							   (__bridge id)kCGImagePropertyColorModel: (__bridge id)kCGImagePropertyColorModelRGB,
-							   (__bridge id)kCGImagePropertyHasAlpha: @(YES),
-							   (__bridge id)kCGImagePropertyDepth: @(8),
-							   },
-					   };
-	CGImageDestinationSetProperties(destination, (__bridge CFDictionaryRef)fileProperties);
+	// 2. prepare frame properties
+	CFNumberRef     delayTime       = CFNumberCreateWithFloat(duration / frameCount);
+	const void *    gifKeys[]       = { kCGImagePropertyGIFDelayTime };
+	const void *    gifValues[]     = { delayTime };
+	CFDictionaryRef gifProperties   = CFDictionaryCreateWithKeysAndValues(gifKeys, gifValues);
+	const void *    frameKeys[]     = { kCGImagePropertyGIFDictionary };
+	const void *    frameValues[]   = { gifProperties };
+	CFDictionaryRef frameProperties = CFDictionaryCreateWithKeysAndValues(frameKeys, frameValues);
 	
 	// 3. add each frame
-	NSDictionary * frameProperties;
-	frameProperties = @{
-						(__bridge id)kCGImagePropertyGIFDictionary: @{
-								(__bridge id)kCGImagePropertyGIFDelayTime: @(duration / frameCount),
-								},
-						};
 	S9_FOR_EACH(frames, image) {
-		CGImageDestinationAddImage(destination, image.CGImage, (__bridge CFDictionaryRef)frameProperties);
+		CGImageDestinationAddImage(destination, image.CGImage, frameProperties);
 	}
 	
 	// 4. finalize
 	BOOL success = CGImageDestinationFinalize(destination);
+	
+	// 5. cleanup
+	CFRelease(frameProperties);
+	CFRelease(gifProperties);
+	CFRelease(delayTime);
 	CFRelease(destination);
 	
-	return success ? data : nil;
+	if (success) {
+		return [data autorelease];
+	} else {
+		[data release];
+		return nil;
+	}
 }
