@@ -102,7 +102,7 @@ CG_INLINE void CGImageInitDestination(CGImageDestinationRef destination)
 	CFRelease(loopCount);
 }
 
-UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
+UIImage * UIImageWithGIFData(NSData * data, CGFloat screenScale)
 {
 	if (!CGImageIsGIFData(data)) {
 		return nil;
@@ -119,7 +119,7 @@ UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
 			return [UIImage imageWithData:data];
 		else
 #endif
-			return [UIImage imageWithData:data scale:scale];
+			return [UIImage imageWithData:data scale:screenScale];
 	}
 	
 	// 2. get each frames
@@ -132,7 +132,9 @@ UIImage * UIImageWithGIFData(NSData * data, CGFloat scale)
 		duration += CGImageSourceGetFrameDuration(source, index);
 		
 		imageRef = CGImageSourceCreateImageAtIndex(source, index, NULL);
-		image = [[UIImage alloc] initWithCGImage:imageRef scale:scale orientation:UIImageOrientationUp];
+		image = [[UIImage alloc] initWithCGImage:imageRef
+										   scale:screenScale
+									 orientation:UIImageOrientationUp];
 		[mArray addObject:image];
 		[image release];
 		CGImageRelease(imageRef);

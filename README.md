@@ -3,9 +3,8 @@
 
 ![Slanissue][slanissue.jpg]
 
----
 
-## 1. Kits
+## 1. Patches
 
 ### 1.1. Foundation
 
@@ -35,7 +34,6 @@
 3. Snapshot for UIView
 4. ...
 
----
 
 ## 2. Extensions
 
@@ -48,6 +46,16 @@
 
 ### 2.2. Scroll Refresh View
 
+Four directions, five states supported.
+
+| State Type   | Description                                             |
+|--------------|---------------------------------------------------------|
+| Default      | hidden                                                  |
+| Visible      | pull to visible but cannot refresh yet                  |
+| Will Refresh | dragging distance enough to refresh, but still dragging |
+| Refreshing   | refreshing after drag end                               |
+| Terminated   | no more data                                            |
+
 ### 2.3. Others
 
 1. Swipe TableView Cell
@@ -57,7 +65,6 @@
 5. QRCode Image
 6. ...
 
----
 
 ## 3. Utils
 
@@ -107,7 +114,12 @@ will be call with the old state, after that,
 `fsm_machine_enter_state` will be call with the new state.
 This mechanism can let you do something in the two opportune moments.
 
-### 3.3. 'MOF' file format
+### 3.3. *MOF* data file format
+
+**Memory Object File** format,
+which allows you to save a dictionary object to a binary file,
+it's faster to load a tiny binary file and parse it,
+rather than an XML file.
 
 > Save an NSDictionary object to '.mof' file
 
@@ -165,7 +177,7 @@ After loaded them in your app, use `S9LocalizedString` to translate.
 
 ### 3.7. Scheduler & Actions
 
-**Actions**:
+*Actions*:
 
 1. CallFunc
 2. CallBlock
