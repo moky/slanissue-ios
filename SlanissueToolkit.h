@@ -64,6 +64,13 @@
 #import "MOFTransformer.h"
 
 //
+//  XML
+//
+#import "S9XMLElement.h"
+#import "S9XMLDocument.h"
+#import "S9XMLPath.h"
+
+//
 //  Foundation
 //
 #import "S9Object.h"

@@ -91,7 +91,24 @@ Four directions, five states supported.
 	// destroy the array
 	ds_array_destroy(array);
 
-### 3.2. Finite State Machine
+### 3.2. XML
+
+	NSString * file = @"aaaa.xml"; // saved in somewhere
+	S9XMLDocument * doc = [[S9XMLDocument alloc] initWithContentsOfPath:file];
+	
+	// get the 1st child of root
+	S9XMLElement * element = [doc childAtIndex:0];
+	
+	// get all grandson named "member" under the 2rd child named "meeting"
+	NSArray * members = [element elementsWithPath:@"meeting[1]/member"];
+	
+	S9_FOR_EACH(members, element) {
+		S9Log(@"name: %@, text: [%@]", element.name, element.text);
+	}
+	
+	[doc release];
+
+### 3.3. Finite State Machine
 
 **Finite State Machine**, which has finitely several states in it,
 only one of the states will be set as the current state in any time.
@@ -114,7 +131,7 @@ will be call with the old state, after that,
 `fsm_machine_enter_state` will be call with the new state.
 This mechanism can let you do something in the two opportune moments.
 
-### 3.3. *MOF* data file format
+### 3.4. *MOF* data file format
 
 **Memory Object File** format,
 which allows you to save a dictionary object to a binary file,
@@ -152,7 +169,7 @@ or just call
 
 	NSDictionary * dict = MOFLoad(file)
 
-### 3.4. Translator
+### 3.5. Translator
 
 You can download language packs from remote, and save them in the caches directory with 'xxx.lproj' sub-directories.
 
@@ -165,7 +182,7 @@ After loaded them in your app, use `S9LocalizedString` to translate.
 	// translate 'key' to a string
 	NSString * string = S9LocalizedString(@"key", @"comment");
 
-### 3.5. Math
+### 3.6. Math
 
 > The Four Arithmetic Operations
 
@@ -173,9 +190,9 @@ After loaded them in your app, use `S9LocalizedString` to translate.
 	CGFloat result = CGFloatFromString(string);
 	SCLog(@"%@ = %f", string, result);
 
-### 3.6. Memory Cache
+### 3.7. Memory Cache
 
-### 3.7. Scheduler & Actions
+### 3.8. Scheduler & Actions
 
 *Actions*:
 
