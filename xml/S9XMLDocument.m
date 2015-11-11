@@ -7,6 +7,7 @@
 //
 
 #import "S9Data.h"
+#import "S9String.h"
 #import "S9XMLDocument.h"
 
 @interface S9XMLDocument () {
@@ -31,7 +32,7 @@
 	self = [super initWithName:name];
 	if (self) {
 		[_stack release];
-		_stack = [[NSMutableArray alloc] initWithCapacity:32];
+		_stack = nil;
 	}
 	return self;
 }
@@ -83,11 +84,17 @@
 - (void) parserDidStartDocument:(NSXMLParser *)parser
 {
 	NSAssert([_stack count] == 0, @"stack not clean");
+	[self cleanup];
+	
+	[_stack release];
+	_stack = [[NSMutableArray alloc] initWithCapacity:32];
 }
 
 - (void) parserDidEndDocument:(NSXMLParser *)parser
 {
 	NSAssert([_stack count] == 0, @"stack not clean");
+	[_stack release];
+	_stack = nil;
 }
 
 - (void) parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict
@@ -116,7 +123,10 @@
 {
 	NSAssert([_stack count] > 0, @"current element not found");
 	S9XMLElement * element = [_stack lastObject];
-	element.text = string;
+	string = [string trim];
+	if ([string length] > 0) {
+		element.text = string;
+	}
 }
 
 - (void) parser:(NSXMLParser *)parser foundCDATA:(NSData *)CDATABlock

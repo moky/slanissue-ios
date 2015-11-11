@@ -53,4 +53,8 @@
 // append child element
 - (void) addChild:(S9XMLElement *)element;
 
+// clear name, text, attributes,
+// remove parent and all children.
+- (void) cleanup;
+
 @end

@@ -25,15 +25,7 @@
 
 - (void) dealloc
 {
-	self.name = nil;
-	self.text = nil;
-	
-	self.parent = nil;
-	
-	[_attributes release];
-	
-	[self removeAllChildren];
-	[_children release];
+	[self cleanup];
 	
 	[super dealloc];
 }
@@ -48,16 +40,9 @@
 {
 	self = [super init];
 	if (self) {
+		[self cleanup];
+		
 		self.name = name;
-		self.text = nil;
-		
-		self.parent = nil;
-		
-		[_attributes release];
-		_attributes = nil;
-		
-		[_children release];
-		_children = nil;
 	}
 	return self;
 }
@@ -177,6 +162,19 @@
 	
 	[_children release];
 	_children = nil;
+}
+
+- (void) cleanup
+{
+	self.name = nil;
+	self.text = nil;
+	
+	self.parent = nil;
+	
+	[_attributes release];
+	_attributes = nil;
+	
+	[self removeAllChildren];
 }
 
 @end
