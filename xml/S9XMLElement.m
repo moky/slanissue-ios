@@ -67,7 +67,7 @@
 	return _text ? _text : [super description];
 }
 
-- (NSString *) attribute:(NSString *)key
+- (NSString *) attributeForKey:(NSString *)key
 {
 	NSAssert(key, @"attribute key cannot be nil");
 	NSAssert(_attributes, @"no attribute found");

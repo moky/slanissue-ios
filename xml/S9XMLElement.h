@@ -16,7 +16,7 @@
 - (instancetype) initWithName:(NSString *)name NS_DESIGNATED_INITIALIZER;
 
 // get attribute by key
-- (NSString *) attribute:(NSString *)key;
+- (NSString *) attributeForKey:(NSString *)key;
 
 // get all attributes
 - (NSDictionary *) attributes;
