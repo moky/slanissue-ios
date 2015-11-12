@@ -59,7 +59,6 @@ static NSString * standardLanguageName(NSString * language)
 	return language;
 }
 
-
 #pragma mark -
 
 #define S9TranslatorDefaultLanguage @"en"
