@@ -112,4 +112,10 @@
 	[_maskLabel setTextAlignment:textAlignment];
 }
 
+- (void) layoutSubviews
+{
+	[super layoutSubviews];
+	_maskLayer.frame = self.bounds;
+}
+
 @end
