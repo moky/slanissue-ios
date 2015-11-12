@@ -14,20 +14,45 @@
 #import "S9StringsFile.h"
 #import "S9Translator.h"
 
-NSString * const NSStringTranslatorLanguageEnglish = @"en";
+NSString * const NSStringTranslatorLanguageEnglish            = @"en";
 
-NSString * const NSStringTranslatorLanguageChineseSimplified = @"zh-Hans";
+NSString * const NSStringTranslatorLanguageChineseSimplified  = @"zh-Hans";
 NSString * const NSStringTranslatorLanguageChineseTraditional = @"zh-Hant";
 
-NSString * const NSStringTranslatorLanguageChinese = @"zh-CN";
-NSString * const NSStringTranslatorLanguageChineseTaiwan = @"zh-TW";
-NSString * const NSStringTranslatorLanguageChineseHongkong = @"zh-HK";
+NSString * const NSStringTranslatorLanguageChinese            = @"zh-CN";
+NSString * const NSStringTranslatorLanguageChineseTaiwan      = @"zh-TW";
+NSString * const NSStringTranslatorLanguageChineseHongkong    = @"zh-HK";
 
-NSString * const NSStringTranslatorLanguageFrench = @"fr";
-NSString * const NSStringTranslatorLanguageGerman = @"de";
-NSString * const NSStringTranslatorLanguageJapanese = @"ja";
-
-//...
+NSString * const NSStringTranslatorLanguageFrench             = @"fr";
+NSString * const NSStringTranslatorLanguageGerman             = @"de";
+NSString * const NSStringTranslatorLanguageJapanese           = @"ja";
+NSString * const NSStringTranslatorLanguageDutch              = @"nl";
+NSString * const NSStringTranslatorLanguageItalian            = @"it";
+NSString * const NSStringTranslatorLanguageSpanish            = @"es";
+NSString * const NSStringTranslatorLanguagePortuguese         = @"pt";
+// @"pt-PT"
+NSString * const NSStringTranslatorLanguageDanish             = @"da";
+NSString * const NSStringTranslatorLanguageFinnish            = @"fi";
+NSString * const NSStringTranslatorLanguageNorwegian          = @"nb";
+NSString * const NSStringTranslatorLanguageSwedish            = @"sv";
+NSString * const NSStringTranslatorLanguageKorean             = @"ko";
+NSString * const NSStringTranslatorLanguageRussian            = @"ru";
+NSString * const NSStringTranslatorLanguagePolish             = @"pl";
+NSString * const NSStringTranslatorLanguageTurkish            = @"tr";
+NSString * const NSStringTranslatorLanguageUkrainian          = @"uk";
+NSString * const NSStringTranslatorLanguageArabic             = @"ar";
+// @"hr"
+NSString * const NSStringTranslatorLanguageCzech              = @"cs";
+NSString * const NSStringTranslatorLanguageGreek              = @"el";
+NSString * const NSStringTranslatorLanguageHebrew             = @"he";
+NSString * const NSStringTranslatorLanguageRomanian           = @"ro";
+NSString * const NSStringTranslatorLanguageSlovak             = @"sk";
+NSString * const NSStringTranslatorLanguageThai               = @"th";
+NSString * const NSStringTranslatorLanguageIndonesian         = @"id";
+NSString * const NSStringTranslatorLanguageMalay              = @"ms";
+// @"ca"
+NSString * const NSStringTranslatorLanguageHungarian          = @"hu";
+NSString * const NSStringTranslatorLanguageVietnamese         = @"vi";
 
 // correct some language strings
 static NSString * standardLanguageName(NSString * language)
