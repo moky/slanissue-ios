@@ -7,11 +7,60 @@
 //
 
 #import "s9Macros.h"
+#import "S9Client.h"
 #import "S9Object.h"
 #import "S9Array.h"
 #import "S9Dictionary.h"
 #import "S9StringsFile.h"
 #import "S9Translator.h"
+
+NSString * const NSStringTranslatorLanguageEnglish = @"en";
+
+NSString * const NSStringTranslatorLanguageChineseSimplified = @"zh-Hans";
+NSString * const NSStringTranslatorLanguageChineseTraditional = @"zh-Hant";
+
+NSString * const NSStringTranslatorLanguageChinese = @"zh-CN";
+NSString * const NSStringTranslatorLanguageChineseTaiwan = @"zh-TW";
+NSString * const NSStringTranslatorLanguageChineseHongkong = @"zh-HK";
+
+NSString * const NSStringTranslatorLanguageFrench = @"fr";
+NSString * const NSStringTranslatorLanguageGerman = @"de";
+NSString * const NSStringTranslatorLanguageJapanese = @"ja";
+
+//...
+
+// correct some language strings
+static NSString * standardLanguageName(NSString * language)
+{
+	CGFloat systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
+	if (systemVersion >= 9.0f) {
+		
+		if ([language hasPrefix:NSStringTranslatorLanguageChinese]) {
+			// "zh-CN" => "zh-Hans"
+			return NSStringTranslatorLanguageChineseSimplified;
+		} else if ([language hasPrefix:NSStringTranslatorLanguageChineseSimplified]) {
+			// "zh-Hans-CN" => "zh-Hans"
+			return NSStringTranslatorLanguageChineseSimplified;
+		}
+		
+		if ([language hasPrefix:NSStringTranslatorLanguageChineseTaiwan]) {
+			// "zh-TW" => "zh-Hant"
+			return NSStringTranslatorLanguageChineseTraditional;
+		} else if ([language hasPrefix:NSStringTranslatorLanguageChineseHongkong]) {
+			// "zh-HK" => "zh-Hant"
+			return NSStringTranslatorLanguageChineseTraditional;
+		} else if ([language hasPrefix:NSStringTranslatorLanguageChineseTraditional]) {
+			// "zh-Hant-TW" => "zh-Hant"
+			// "zh-Hant-HK" => "zh-Hant"
+			return NSStringTranslatorLanguageChineseTraditional;
+		}
+		
+	}
+	return language;
+}
+
+
+#pragma mark -
 
 #define S9TranslatorDefaultLanguage @"en"
 //#define S9TranslatorDefaultTable    @"Localizable"
@@ -48,8 +97,12 @@
 {
 	self = [super init];
 	if (self) {
-		NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
-		NSArray * languages = [ud objectForKey:@"AppleLanguages"];
+		NSArray * languages = [NSLocale preferredLanguages];
+		if ([languages count] == 0) {
+			NSUserDefaults * ud = [NSUserDefaults standardUserDefaults];
+			languages = [ud objectForKey:@"AppleLanguages"];
+			NSAssert(languages, @"failed to get languages");
+		}
 		self.currentLanguage = [languages firstObject];
 		
 		_isDirty = NO;
@@ -64,6 +117,8 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 
 - (void) setCurrentLanguage:(NSString *)currentLanguage
 {
+	currentLanguage = standardLanguageName(currentLanguage);
+	
 	if (![_currentLanguage isEqualToString:currentLanguage]) {
 		[currentLanguage retain];
 		[_currentLanguage release];

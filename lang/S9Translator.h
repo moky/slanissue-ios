@@ -29,6 +29,52 @@
 
 @end
 
+#pragma mark - Languages
+
+FOUNDATION_EXPORT NSString * const NSStringTranslatorLanguageEnglish; // @"en"
+// @"en-GB"
+
+FOUNDATION_EXPORT NSString * const NSStringTranslatorLanguageChineseSimplified; // @"zh-Hans"
+FOUNDATION_EXPORT NSString * const NSStringTranslatorLanguageChineseTraditional; // @"zh-Hant"
+
+// @"zh-CN"
+// @"zh-TW"
+// @"zh-HK"
+// @"zh-MO"
+
+FOUNDATION_EXPORT NSString * const NSStringTranslatorLanguageFrench; // @"fr"
+FOUNDATION_EXPORT NSString * const NSStringTranslatorLanguageGerman; // @"de"
+FOUNDATION_EXPORT NSString * const NSStringTranslatorLanguageJapanese; // @"ja"
+// @"nl"
+// @"it"
+// @"es"
+// @"pt"
+// @"pt-PT"
+// @"da"
+// @"fi"
+// @"nb"
+// @"sv"
+// @"ko"
+// @"ru"
+// @"pl"
+// @"tr"
+// @"uk"
+// @"ar"
+// @"hr"
+// @"cs"
+// @"el"
+// @"he"
+// @"ro"
+// @"sk"
+// @"th"
+// @"id"
+// @"ms"
+// @"ca"
+// @"hu"
+// @"vi"
+
+#pragma mark -
+
 #define S9SharedTranslator()                          [S9Translator getInstance]
 
 #define S9TranslatorSetCurrentLanguage(lang)                                   \
