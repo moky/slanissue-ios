@@ -63,7 +63,8 @@ Four directions, five states supported.
 3. Particle View
 4. Waterfall View
 5. QRCode Image
-6. ...
+6. Karaoke Label
+7. ...
 
 
 ## 3. Utils
@@ -188,7 +189,7 @@ After loaded them in your app, use `S9LocalizedString` to translate.
 
 	NSString * string = @"(2 + 2) * 2 - 2 / 2";
 	CGFloat result = CGFloatFromString(string);
-	SCLog(@"%@ = %f", string, result);
+	S9Log(@"%@ = %f", string, result);
 
 ### 3.7. Memory Cache
 
