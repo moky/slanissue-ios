@@ -13,3 +13,10 @@
 @property(nonatomic, readwrite) CGFloat progress; // 0.0 - 1.0
 
 @end
+
+@interface UIKaraokeLabel (Animate)
+
+- (void) runWithDuration:(NSTimeInterval)duration; // run once
+- (void) runWithDuration:(NSTimeInterval)duration repeatCount:(NSUInteger)count;
+
+@end
