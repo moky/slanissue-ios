@@ -58,13 +58,14 @@ Four directions, five states supported.
 
 ### 2.3. Others
 
-1. Swipe TableView Cell
+1. Swipe Table View Cell
 2. Segmented Button / ScrollView
-3. Particle View
-4. Waterfall View
-5. QRCode Image
+3. Waterfall View
+4. Particle View
+5. Blur View
 6. Karaoke Label
-7. ...
+7. QRCode Image
+8. ...
 
 
 ## 3. Utils
