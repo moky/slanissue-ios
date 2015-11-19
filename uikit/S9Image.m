@@ -197,6 +197,23 @@ CGFloat UIImageScaleFromName(NSString * filename)
 	return [data writeToFile:path atomically:useAuxiliaryFile];
 }
 
+- (UIImage *) imageWithSize:(CGSize)size
+{
+	UIGraphicsBeginImageContext(size);
+	[self drawInRect:CGRectMake(0.0f, 0.0f, size.width, size.height)];
+	UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
+	UIGraphicsEndImageContext();
+	return image;
+}
+
+- (UIImage *) imageWithRect:(CGRect)rect
+{
+	CGImageRef imageRef = CGImageCreateWithImageInRect(self.CGImage, rect);
+	UIImage * image = [UIImage imageWithCGImage:imageRef];
+	CGImageRelease(imageRef);
+	return image;
+}
+
 - (UIImage *) imageWithImagesAndRects:(UIImage *)image1, ... NS_REQUIRES_NIL_TERMINATION
 {
 	UIImage * image = self;

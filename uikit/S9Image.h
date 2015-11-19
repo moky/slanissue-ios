@@ -58,6 +58,16 @@ UIKIT_EXTERN CGFloat UIImageScaleFromName(NSString * filename);
 - (BOOL) writeToFile:(NSString *)path atomically:(BOOL)useAuxiliaryFile;
 
 /**
+ *  scale image to new size
+ */
+- (UIImage *) imageWithSize:(CGSize)size;
+
+/**
+ *  crop image with rect
+ */
+- (UIImage *) imageWithRect:(CGRect)rect;
+
+/**
  *  create a new image with self as canvas, and draw the each images on it in rects
  *
  *  @return autoreleased UIImage, won't modify self
