@@ -32,6 +32,8 @@
 	if (self) {
 		[_mask release];
 		_mask = nil;
+		
+		_style = -1;
 	}
 	return self;
 }
@@ -43,6 +45,8 @@
 	if (self) {
 		[_mask release];
 		_mask = nil;
+		
+		_style = -1;
 	}
 	return self;
 }
@@ -115,6 +119,12 @@
 {
 	[super setBounds:bounds];
 	_mask.frame = bounds;
+}
+
+- (void) layoutSubviews
+{
+	[self bringSubviewToFront:_mask];
+	[super layoutSubviews];
 }
 
 @end
