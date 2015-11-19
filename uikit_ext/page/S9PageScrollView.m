@@ -87,6 +87,7 @@ UIPageScrollViewDirection UIPageScrollViewDirectionFromString(NSString * string)
 	return self;
 }
 
+// default initializer
 - (instancetype) initWithFrame:(CGRect)frame
 {
 	self = [super initWithFrame:frame];
