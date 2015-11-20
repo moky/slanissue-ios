@@ -58,6 +58,11 @@ UIKIT_EXTERN CGFloat UIImageScaleFromName(NSString * filename);
 - (BOOL) writeToFile:(NSString *)path atomically:(BOOL)useAuxiliaryFile;
 
 /**
+ *  convert to gray image
+ */
+- (UIImage *) grayImage;
+
+/**
  *  scale image to new size
  */
 - (UIImage *) imageWithSize:(CGSize)size;

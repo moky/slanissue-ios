@@ -197,6 +197,41 @@ CGFloat UIImageScaleFromName(NSString * filename)
 	return [data writeToFile:path atomically:useAuxiliaryFile];
 }
 
+- (UIImage *) grayImage
+{
+	CGSize size = self.size;
+	CGImageRef imageRef = self.CGImage;
+	
+	void * data = NULL;
+	size_t width = size.width > 0.0f ? size.width : CGImageGetWidth(imageRef);
+	size_t height = size.height > 0.0f ? size.height : CGImageGetHeight(imageRef);
+	size_t bitsPerComponent = CGImageGetBitsPerComponent(imageRef);
+	size_t bytesPerRow = 0;//CGImageGetBytesPerRow(imageRef);
+	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+	CGBitmapInfo bitmapInfo = CGImageGetBitmapInfo(imageRef);
+	
+	// 1. create context
+	CGContextRef context = CGBitmapContextCreate(data, width, height,
+												 bitsPerComponent, bytesPerRow,
+												 colorSpace, bitmapInfo);
+	NSAssert(context, @"no enough memory");
+	
+	// 2. draw it
+	CGRect rect = CGRectMake(0.0f, 0.0f, size.width, size.height);
+	CGContextDrawImage(context, rect, imageRef);
+	
+	// 3. create gray image
+	imageRef = CGBitmapContextCreateImage(context);
+	UIImage * grayImage = [UIImage imageWithCGImage:imageRef];
+	
+	// 4. clean up
+	CGImageRelease(imageRef);
+	CGContextRelease(context);
+	CGColorSpaceRelease(colorSpace);
+	
+	return grayImage;
+}
+
 - (UIImage *) imageWithSize:(CGSize)size
 {
 	UIGraphicsBeginImageContext(size);

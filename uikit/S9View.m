@@ -50,8 +50,13 @@
 - (UIImage *) snapshot
 {
 	CGRect rect = self.bounds;
-	UIGraphicsBeginImageContext(rect.size);
-	[self drawViewHierarchyInRect:rect afterScreenUpdates:YES];
+	UIGraphicsBeginImageContextWithOptions(rect.size, NO, [UIScreen mainScreen].scale);
+#ifdef __IPHONE_7_0
+	if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)])
+		[self drawViewHierarchyInRect:rect afterScreenUpdates:NO];
+	else
+#endif
+		[self.layer renderInContext:UIGraphicsGetCurrentContext()];
 	UIImage * image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
 	return image;
