@@ -24,6 +24,9 @@ typedef NSString NSText;
 
 - (NSString *) MD5String;
 
+// convert chinese string to pinyin
+- (NSString *) pinyin;
+
 - (NSString *) trim;
 - (NSString *) trim:(NSString *)chars;
 

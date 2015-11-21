@@ -38,6 +38,19 @@
 	return [string autorelease];
 }
 
+- (NSString *) pinyin
+{
+	NSMutableString * mString = [NSMutableString stringWithString:self];
+	
+	// convert to pinyin string ( with diacritical mark )
+	CFStringTransform((CFMutableStringRef)mString, NULL, kCFStringTransformMandarinLatin, NO);
+	
+	// strip diacritics
+	CFStringTransform((CFMutableStringRef)mString, NULL, kCFStringTransformStripDiacritics, NO);
+	
+	return mString;
+}
+
 - (NSString *) trim
 {
 	NSCharacterSet * charset = [NSCharacterSet whitespaceAndNewlineCharacterSet];
