@@ -10,6 +10,57 @@
 
 @implementation NSDate (SlanissueToolkit)
 
+- (NSUInteger) year
+{
+	NSCalendar * cal = [NSCalendar currentCalendar];
+	NSDateComponents * dc = [cal components:NSCalendarUnitYear fromDate:self];
+	return [dc year];
+}
+
+- (NSUInteger) month
+{
+	NSCalendar * cal = [NSCalendar currentCalendar];
+	NSDateComponents * dc = [cal components:NSCalendarUnitMonth fromDate:self];
+	return [dc month];
+}
+
+- (NSUInteger) day
+{
+	NSCalendar * cal = [NSCalendar currentCalendar];
+	NSDateComponents * dc = [cal components:NSCalendarUnitDay fromDate:self];
+	return [dc day];
+}
+
+- (NSUInteger) hour
+{
+	NSCalendar * cal = [NSCalendar currentCalendar];
+	NSDateComponents * dc = [cal components:NSCalendarUnitHour fromDate:self];
+	return [dc hour];
+}
+
+- (NSUInteger) minute
+{
+	NSCalendar * cal = [NSCalendar currentCalendar];
+	NSDateComponents * dc = [cal components:NSCalendarUnitMinute fromDate:self];
+	return [dc minute];
+}
+
+- (NSUInteger) second
+{
+	NSCalendar * cal = [NSCalendar currentCalendar];
+	NSDateComponents * dc = [cal components:NSCalendarUnitSecond fromDate:self];
+	return [dc second];
+}
+
+- (NSUInteger) weekday
+{
+	NSCalendar * cal = [NSCalendar currentCalendar];
+	NSDateComponents * dc = [cal components:NSCalendarUnitWeekday fromDate:self];
+	return [dc weekday] - 1;
+}
+
+#pragma mark Formated String
+
 - (NSString *) stringWithFormat:(NSString *)format
 {
 	NSDateFormatter * dateFormatter = [[NSDateFormatter alloc] init];
