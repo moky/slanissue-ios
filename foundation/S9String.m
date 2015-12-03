@@ -84,21 +84,41 @@
 	NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
 	
 	NSString * string = self;
-	NSRange range1, range2;
 	
+	// replacing self directory
+	string = [string stringByReplacingOccurrencesOfString:@"/./" withString:@"/"];
+	
+	// supporting '...', '....', etc
+	string = [string stringByReplacingOccurrencesOfString:@"/.../" withString:@"/../../"];
+	string = [string stringByReplacingOccurrencesOfString:@"/..../" withString:@"/../../../"];
+	// .....
+	
+	NSRange range1, range2;
+	NSString * str1;
+	NSString * str2;
+	unichar ch;
+	
+	// replacing parent directory
 	while ((range1 = [string rangeOfString:@"/../"]).location != NSNotFound) {
-		if (range1.location < 1 || [string characterAtIndex:range1.location - 1] == '/') {
-			S9Log(@"error: %@", string);
+		if (range1.location < 1) {
+			NSAssert(@"error: %@", string);
 			break;
 		}
+		ch = [string characterAtIndex:(range1.location - 1)];
+		if (ch  == '/' || ch == '.') {
+			NSAssert(@"error: %@", string);
+			break;
+		}
+		
 		range2 = [string rangeOfString:@"/"
 							   options:NSBackwardsSearch
 								 range:NSMakeRange(0, range1.location)];
 		if (range2.location == NSNotFound) {
 			range2.location = -1;
 		}
-		NSString * str1 = [string substringWithRange:NSMakeRange(0, range2.location + 1)];
-		NSString * str2 = [string substringFromIndex:range1.location + 4];
+		
+		str1 = [string substringWithRange:NSMakeRange(0, range2.location + 1)];
+		str2 = [string substringFromIndex:(range1.location + 4)];
 		string = [str1 stringByAppendingString:str2];
 	}
 	
