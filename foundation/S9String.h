@@ -34,12 +34,6 @@ typedef NSString NSText;
 - (NSString *) escape;
 - (NSString *) unescape;
 
-// "/path/to/../something" => "/path/something"
-- (NSString *) simplifyPath;
-
-// get filename
-- (NSString *) filename;
-
 //  "{{1+2, 3-4}, {5*6, 7/8}}" => "{{3,-1},{30,0.875}}"
 - (NSString *) calculate;
 
