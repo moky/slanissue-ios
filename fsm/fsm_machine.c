@@ -77,7 +77,7 @@ void fsm_machine_change_state(fsm_machine * m, const char * name)
 		return;
 	}
 	
-	fsm_chain_node * node = fsm_chain_at(m->states, index);
+	fsm_chain_node * node = fsm_chain_at(m->states, m->current);
 	const fsm_state * o = fsm_chain_get(node);
 	if (o && m->exit) m->exit(m, o); // exit the old state
 	
