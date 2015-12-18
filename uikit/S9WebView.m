@@ -11,6 +11,8 @@
 #import "S9Data.h"
 #import "S9WebView.h"
 
+#if !TARGET_OS_TV
+
 @implementation UIWebView (SlanissueToolkit)
 
 - (NSString *) title
@@ -51,3 +53,5 @@
 }
 
 @end
+
+#endif

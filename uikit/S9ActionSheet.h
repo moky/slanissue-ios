@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_TV
+
 @interface UIActionSheet (SlanissueToolkit)
 
 // show in 'sharedApplication.keyWindow.rootViewController.view'
 - (void) show;
 
 @end
+
+#endif

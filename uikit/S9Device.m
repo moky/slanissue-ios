@@ -54,6 +54,8 @@ static NSString * _uuid(void)
 
 - (BOOL) rotateForSupportedInterfaceOrientationsOfViewController:(UIViewController *)viewController
 {
+#if !TARGET_OS_TV
+	
 	NSUInteger supportedInterfaceOrientations = [viewController supportedInterfaceOrientations];
 	UIDeviceOrientation currentOrientation = [self orientation];
 	if (supportedInterfaceOrientations & (1 << currentOrientation)) {
@@ -68,6 +70,8 @@ static NSString * _uuid(void)
 	if ([self respondsToSelector:@selector(setOrientation:)]) {
 		[self performSelector:@selector(setOrientation:) withObject:(id)orientation];
 	}
+	
+#endif
 	
 	return YES;
 }

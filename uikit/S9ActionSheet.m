@@ -8,6 +8,8 @@
 
 #import "S9ActionSheet.h"
 
+#if !TARGET_OS_TV
+
 @implementation UIActionSheet (SlanissueToolkit)
 
 - (void) show
@@ -20,3 +22,5 @@
 }
 
 @end
+
+#endif

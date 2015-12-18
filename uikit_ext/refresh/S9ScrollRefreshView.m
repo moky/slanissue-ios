@@ -185,7 +185,7 @@
 		UIView * trayView = [self trayView];
 		CGRect frame = trayView.bounds;
 		
-		_loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+		_loadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
 		[trayView addSubview:_loadingIndicator];
 		
 		if (self.direction == UIScrollRefreshControlDirectionTop || self.direction == UIScrollRefreshControlDirectionBottom) {

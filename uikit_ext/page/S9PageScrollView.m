@@ -104,7 +104,9 @@ UIPageScrollViewDirection UIPageScrollViewDirectionFromString(NSString * string)
 		// create an empty scroll view
 		_scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
 		// default properties
+#if !TARGET_OS_TV
 		_scrollView.pagingEnabled = YES;
+#endif
 		_scrollView.directionalLockEnabled = YES;
 		_scrollView.showsHorizontalScrollIndicator = NO;
 		_scrollView.showsVerticalScrollIndicator = NO;

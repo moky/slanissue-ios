@@ -9,6 +9,7 @@
 #import <CommonCrypto/CommonDigest.h>
 
 #import "s9Macros.h"
+#import "S9Client.h"
 #import "S9Object.h"
 #import "S9String.h"
 
@@ -66,7 +67,15 @@
 - (NSString *) escape
 {
 	NSString * string = self;
-	string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
+	float systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
+	if (systemVersion < 7.0f)
+		string = [string stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	else
+#endif
+		string = [string stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+	
 	string = [string stringByReplacingOccurrencesOfString:@" " withString:@"+"];
 	return string;
 }
@@ -75,7 +84,15 @@
 {
 	NSString * string = self;
 	string = [string stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-	string = [string stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	
+#if __IPHONE_OS_VERSION_MIN_REQUIRED < __IPHONE_7_0
+	float systemVersion = [[[S9Client getInstance] systemVersion] floatValue];
+	if (systemVersion < 7.0f)
+		string = [string stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+	else
+#endif
+		string = [string stringByRemovingPercentEncoding];
+	
 	return string;
 }
 

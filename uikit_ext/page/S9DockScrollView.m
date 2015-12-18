@@ -106,7 +106,7 @@
 			//[subview rollWithRotation:-rotate]; // rotating around axis Y
 			
 			// 2. scale
-			scale = expf(-fabsf(distance)) * SCALE_RANGE + SCALE_MIN;
+			scale = expf(-fabs(distance)) * SCALE_RANGE + SCALE_MIN;
 			[subview scaleWithScale:scale];
 			
 			// 3. position
@@ -129,7 +129,7 @@
 			//[subview pitchWithRotation:rotate]; // rotating around axis X
 			
 			// 2. scale
-			scale = expf(-fabsf(distance)) * SCALE_RANGE + SCALE_MIN;
+			scale = expf(-fabs(distance)) * SCALE_RANGE + SCALE_MIN;
 			[subview scaleWithScale:scale];
 			
 			// 3. position

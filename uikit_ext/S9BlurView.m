@@ -71,6 +71,9 @@
 			_mask = vev;
 		} else
 #endif // EOF '__IPHONE_8_0'
+			
+#if !TARGET_OS_TV
+			
 		if (systemVersion >= 7.0f) {
 			// add tool bar
 			UIToolbar * tb = [[UIToolbar alloc] initWithFrame:self.bounds];
@@ -84,6 +87,9 @@
 			[_mask release];
 			_mask = tb;
 		} else
+			
+#endif
+			
 #endif // EOF '__IPHONE_7_0'
 		{
 			// use half-translucent background color instead the effect

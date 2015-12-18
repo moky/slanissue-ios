@@ -79,12 +79,20 @@
 	self = [super init];
 	if (self) {
 		UIScreen * screen = [UIScreen mainScreen];
+#if !TARGET_OS_TV
 		UIApplication * app = [UIApplication sharedApplication];
+#endif
 		
 		_screenSize = screen.bounds.size;
 		_screenScale = [screen respondsToSelector:@selector(scale)] ? screen.scale : 1.0f;
+		
+#if TARGET_OS_TV
+		_windowSize = screen.bounds.size;
+		_statusBarHeight = 0.0f;
+#else
 		_windowSize = screen.applicationFrame.size;
 		_statusBarHeight = app.statusBarFrame.size.height;
+#endif
 		
 		self.hardware = nil;
 		self.deviceIdentifier = nil;

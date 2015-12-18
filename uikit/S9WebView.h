@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_TV
+
 @interface UIWebView (SlanissueToolkit)
 
 @property(nonatomic, readonly) NSString * title;
@@ -19,3 +21,5 @@
 + (NSString *) inject:(NSString *)jsFile webview:(UIWebView *)wv;
 
 @end
+
+#endif
