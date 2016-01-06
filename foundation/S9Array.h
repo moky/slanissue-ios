@@ -46,7 +46,7 @@
 
 #define S9ArrayAddObject(array, object)                                        \
         if (object) {                                                          \
-            [(array) addObject:(object)]                                       \
+            [(array) addObject:(object)];                                      \
         }                                                                      \
                                                     /* EOF 'S9ArrayAddObject' */
 
