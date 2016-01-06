@@ -8,8 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-#if !TARGET_OS_TV
-
+//__TVOS_PROHIBITED
 @interface UIWebView (SlanissueToolkit)
 
 @property(nonatomic, readonly) NSString * title;
@@ -21,5 +20,3 @@
 + (NSString *) inject:(NSString *)jsFile webview:(UIWebView *)wv;
 
 @end
-
-#endif

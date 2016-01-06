@@ -49,7 +49,7 @@
     {                                                                          \
         @synchronized(self) {                                                  \
             if (!s_singleton_instance) {                                       \
-                [self new]; /* alloc & init */                                 \
+                s_singleton_instance = [self new]; /* alloc & init */          \
             }                                                                  \
         }                                                                      \
         return s_singleton_instance;                                           \

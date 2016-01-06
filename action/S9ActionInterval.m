@@ -238,8 +238,7 @@
 
 - (S9ActionInterval *) reverse
 {
-	return [[[self class] alloc] initWithAction:[_innerAction reverse]
-										  times:_times];
+	return [[self class] actionWithAction:[_innerAction reverse] times:_times];
 }
 
 @end

@@ -15,8 +15,8 @@
 - (void) setObject:(id)anObject forKey:(id<NSCopying>)aKey;
 - (id) objectForKey:(id)aKey;
 
-- (id) retainObjectForKey:(id<NSCopying>)aKey; // reference ++
-- (void) releaseObjectForKey:(id<NSCopying>)aKey; // reference --
+//- (id) retainObjectForKey:(id<NSCopying>)aKey; // reference ++
+//- (void) releaseObjectForKey:(id<NSCopying>)aKey; // reference --
 
 - (void) removeObjectForKey:(id)aKey;
 

@@ -49,7 +49,7 @@
 
 - (instancetype) initWithContentsOfFile:(NSString *)file
 {
-	NSURL * url = [NSURL fileURLWithPath:file isDirectory:NO];
+	NSURL * url = [[NSURL alloc] initFileURLWithPath:file isDirectory:NO];
 	self = [self initWithContentsOfURL:url];
 	[url release];
 	return self;

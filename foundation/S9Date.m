@@ -73,9 +73,8 @@
 
 - (NSString *) humanReadableString
 {
-	NSDate * now = [[NSDate alloc] init];
+	NSDate * now = [[[NSDate alloc] init] autorelease];
 	NSTimeInterval ti = [now timeIntervalSinceDate:self];
-	[now release];
 	
 	// now -> 15 seconds
 	if (ti < 16) {

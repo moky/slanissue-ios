@@ -63,24 +63,24 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 	}
 }
 
-- (id) retainObjectForKey:(id<NSCopying>)aKey
-{
-	NSAssert(aKey, @"key cannot be nil");
-	@synchronized(self) {
-		id object = [_dataPool objectForKey:aKey];
-		[object retain];
-		return object;
-	}
-}
-
-- (void) releaseObjectForKey:(id<NSCopying>)aKey
-{
-	NSAssert(aKey, @"key cannot be nil");
-	@synchronized(self) {
-		id object = [_dataPool objectForKey:aKey];
-		[object release];
-	}
-}
+//- (id) retainObjectForKey:(id<NSCopying>)aKey
+//{
+//	NSAssert(aKey, @"key cannot be nil");
+//	@synchronized(self) {
+//		id object = [_dataPool objectForKey:aKey];
+//		[object retain];
+//		return object;
+//	}
+//}
+//
+//- (void) releaseObjectForKey:(id<NSCopying>)aKey
+//{
+//	NSAssert(aKey, @"key cannot be nil");
+//	@synchronized(self) {
+//		id object = [_dataPool objectForKey:aKey];
+//		[object release];
+//	}
+//}
 
 - (void) removeObjectForKey:(id)aKey
 {

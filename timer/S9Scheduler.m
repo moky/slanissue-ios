@@ -177,7 +177,7 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (void) unscheduleAllCustomSelectorsForTarget:(id)target
 {
 	@synchronized(_timers) {
-		NSMutableArray * mArray = [NSMutableArray arrayWithCapacity:8];
+		NSMutableArray * mArray = [[NSMutableArray alloc] initWithCapacity:8];
 		
 		S9Timer * timer;
 		S9_FOR_EACH(_timers, timer) {

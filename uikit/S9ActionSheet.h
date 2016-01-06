@@ -8,13 +8,10 @@
 
 #import <UIKit/UIKit.h>
 
-#if !TARGET_OS_TV
-
+//__TVOS_PROHIBITED
 @interface UIActionSheet (SlanissueToolkit)
 
 // show in 'sharedApplication.keyWindow.rootViewController.view'
 - (void) show;
 
 @end
-
-#endif
