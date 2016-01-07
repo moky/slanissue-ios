@@ -8,6 +8,8 @@
 
 #import "S9Layer.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation CALayer (SlanissueToolkit)
 
 - (CALayer *) parent
@@ -26,3 +28,5 @@
 }
 
 @end
+
+#endif

@@ -9,6 +9,8 @@
 #import "S9Client.h"
 #import "S9BlurView.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UIBlurView () {
 	
 	UIView * _mask;
@@ -134,3 +136,5 @@
 }
 
 @end
+
+#endif

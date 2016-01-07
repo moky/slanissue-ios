@@ -18,10 +18,12 @@ CG_EXTERN CGImageRef CGImageCreateCopyWithImageInRect(CGImageRef imageRef, CGRec
  */
 //CG_EXTERN CGContextRef CGBitmapContextCreateWithCGImage(CGImageRef imageRef, CGSize size);
 
+#if !TARGET_OS_WATCH
 /**
  *  create a non-interpolation scaled UIImage from CIImage, with size & scale
  */
 UIKIT_EXTERN UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale);
+#endif
 
 /**
  *  load image, with memory cache

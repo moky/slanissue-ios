@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 //__TVOS_PROHIBITED
 @interface UIWebView (SlanissueToolkit)
 
@@ -20,3 +22,5 @@
 + (NSString *) inject:(NSString *)jsFile webview:(UIWebView *)wv;
 
 @end
+
+#endif

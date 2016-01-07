@@ -6,6 +6,10 @@
 //  Copyright (c) 2015 Slanissue.com. All rights reserved.
 //
 
+#include <TargetConditionals.h>
+
+#if !TARGET_OS_WATCH
+
 #import <QuartzCore/QuartzCore.h>
 
 @interface CALayer (SlanissueToolkit)
@@ -20,3 +24,5 @@
 - (NSArray *) siblings;
 
 @end
+
+#endif

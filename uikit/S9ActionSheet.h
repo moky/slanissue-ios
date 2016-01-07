@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 //__TVOS_PROHIBITED
 @interface UIActionSheet (SlanissueToolkit)
 
@@ -15,3 +17,5 @@
 - (void) show;
 
 @end
+
+#endif

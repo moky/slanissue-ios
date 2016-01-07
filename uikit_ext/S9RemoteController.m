@@ -9,6 +9,8 @@
 #import "s9Macros.h"
 #import "S9RemoteController.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIRemoteController
 
 @synthesize status = _status;
@@ -168,3 +170,5 @@
 }
 
 @end
+
+#endif

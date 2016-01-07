@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSUInteger, UISegmentedScrollViewControlPosition) {
 	UISegmentedScrollViewControlPositionTop,
 	UISegmentedScrollViewControlPositionBottom,
@@ -30,3 +32,5 @@ typedef NS_ENUM(NSUInteger, UISegmentedScrollViewControlPosition) {
 - (void) scrollViewDidScroll:(UIScrollView *)scrollView;
 
 @end
+
+#endif

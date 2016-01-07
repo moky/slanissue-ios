@@ -8,6 +8,8 @@
 
 #import "S9ScrollRefreshControlState.h"
 
+#if !TARGET_OS_WATCH
+
 NSString * const kUIScrollRefreshControlStateNameDefault     = @"default";
 NSString * const kUIScrollRefreshControlStateNameVisible     = @"visible";
 NSString * const kUIScrollRefreshControlStateNameWillRefresh = @"will_refresh";
@@ -51,3 +53,5 @@ NSString * const kUIScrollRefreshControlStateNameTerminated  = @"data_end";
 }
 
 @end
+
+#endif

@@ -8,6 +8,8 @@
 
 #import "S9ViewController.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIViewController (SlanissueToolkit)
 
 - (CGRect) frame
@@ -41,3 +43,5 @@
 }
 
 @end
+
+#endif

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UIKaraokeLabel : UILabel
 
 @property(nonatomic, readwrite) CGFloat progress; // 0.0 - 1.0
@@ -20,3 +22,5 @@
 - (void) runWithDuration:(NSTimeInterval)duration repeatCount:(NSUInteger)count;
 
 @end
+
+#endif

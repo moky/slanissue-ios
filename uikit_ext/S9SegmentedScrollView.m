@@ -9,6 +9,8 @@
 #import "S9Array.h"
 #import "S9SegmentedScrollView.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UISegmentedScrollView ()
 
 @property(nonatomic, assign) UIScrollView * currentScrollView;
@@ -326,3 +328,5 @@
 }
 
 @end
+
+#endif

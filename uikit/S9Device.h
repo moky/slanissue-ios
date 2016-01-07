@@ -19,6 +19,8 @@
         })                                                                     \
                                                                 /* EOF 'UUID' */
 
+#if !TARGET_OS_WATCH
+
 @interface UIDevice (SlanissueToolkit)
 
 // get hw.machine
@@ -32,3 +34,5 @@
 - (BOOL) rotateForSupportedInterfaceOrientationsOfViewController:(UIViewController *)viewController;
 
 @end
+
+#endif

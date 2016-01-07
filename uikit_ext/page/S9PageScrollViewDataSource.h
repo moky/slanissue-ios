@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @class UIPageScrollView;
 
 @protocol UIPageScrollViewDataSource <NSObject>
@@ -26,3 +28,5 @@
 - (UIView *) pageScrollView:(UIPageScrollView *)pageScrollView viewAfterView:(UIView *)view;
 
 @end
+
+#endif

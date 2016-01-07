@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSInteger, UIRemoteControllerStatus) {
 	UIRemoteControllerStatusStopped,
 	UIRemoteControllerStatusPlaying,
@@ -64,3 +66,5 @@ typedef NS_ENUM(NSInteger, UIRemoteControllerStatus) {
 - (void) applicationDidEnterBackground:(UIApplication *)application;
 
 @end
+
+#endif

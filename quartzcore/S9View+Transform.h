@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UIView (Transform2D)
 
 // scale
@@ -32,3 +34,5 @@
 - (void) yawWithRotation:(CGFloat)radians;
 
 @end
+
+#endif

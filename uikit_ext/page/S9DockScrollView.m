@@ -11,6 +11,8 @@
 #import "S9View+Reflection.h"
 #import "S9DockScrollView.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIDockScrollView
 
 @synthesize reflectionEnabled = _reflectionEnabled;
@@ -151,3 +153,5 @@
 }
 
 @end
+
+#endif

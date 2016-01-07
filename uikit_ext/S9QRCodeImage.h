@@ -8,10 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
 /**
  *  create a QRCode image with text
  */
 CG_EXTERN CIImage * CIImageWithQRCode(NSString * text) NS_AVAILABLE_IOS(6_0);
+#endif
 
 /**
  *  create a QRCode image with text, and {size, size}

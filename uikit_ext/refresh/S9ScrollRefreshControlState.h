@@ -10,6 +10,8 @@
 
 #import "FSMState.h"
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSUInteger, UIScrollRefreshControlStateType) {
 	UIScrollRefreshControlStateDefault,     // default state is hidden
 	UIScrollRefreshControlStateVisible,     // pull to visible but cannot refresh yet
@@ -34,3 +36,5 @@ UIKIT_EXTERN NSString * const kUIScrollRefreshControlStateNameVisible;
 UIKIT_EXTERN NSString * const kUIScrollRefreshControlStateNameWillRefresh;
 UIKIT_EXTERN NSString * const kUIScrollRefreshControlStateNameRefreshing;
 UIKIT_EXTERN NSString * const kUIScrollRefreshControlStateNameTerminated;
+
+#endif

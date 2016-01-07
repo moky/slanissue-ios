@@ -9,6 +9,8 @@
 #import "S9WaterfallView+Layout.h"
 #import "S9WaterfallView.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIWaterfallView
 
 @synthesize direction = _direction;
@@ -105,3 +107,5 @@
 }
 
 @end
+
+#endif

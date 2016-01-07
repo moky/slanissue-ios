@@ -8,6 +8,8 @@
 
 #import "S9WaterfallView.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UIWaterfallView (Layout)
 
 + (CGSize) layoutSubviewsInView:(UIView *)view;
@@ -78,3 +80,5 @@
         UIWaterfallViewJoiningPointCompareBlock(p1->x > p2->x, p1->x == p2->x, \
                                                 p1->y > p2->y, p1->y == p2->y) \
                   /* EOF 'UIWaterfallViewJoiningPointCompareBlockRightBottom' */
+
+#endif

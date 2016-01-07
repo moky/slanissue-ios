@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSUInteger, UIWaterfallViewDirection) {
 	UIWaterfallViewDirectionTopLeft,     // TOP first, and then LEFT (place each subview as TOP as possible)
 	UIWaterfallViewDirectionTopRight,    // TOP first, and then RIGHT
@@ -73,3 +75,5 @@ typedef NS_OPTIONS(NSUInteger, UIWaterfallViewDirectionMask) {
 - (void) didResizeWaterfallView:(UIWaterfallView *)waterfallView;
 
 @end
+
+#endif

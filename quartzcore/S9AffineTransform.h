@@ -6,7 +6,13 @@
 //  Copyright (c) 2014 Slanissue.com. All rights reserved.
 //
 
+#include <TargetConditionals.h>
+
+#if !TARGET_OS_WATCH
+
 #import <QuartzCore/QuartzCore.h>
 
 CA_EXTERN CATransform3D CATransform3DMakePerspective(CGPoint center, CGFloat disZ);
 CA_EXTERN CATransform3D CATransform3DPerspect(const CATransform3D t, CGPoint center, CGFloat disZ);
+
+#endif

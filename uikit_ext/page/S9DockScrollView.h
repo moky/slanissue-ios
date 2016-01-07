@@ -8,6 +8,8 @@
 
 #import "S9PageScrollView.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UIDockScrollView : UIPageScrollView
 
 @property(nonatomic, readwrite) BOOL reflectionEnabled; // default is YES
@@ -17,3 +19,5 @@
 - (void) performEffectOnScrollView:(UIScrollView *)scrollView;
 
 @end
+
+#endif

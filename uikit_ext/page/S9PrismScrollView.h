@@ -8,6 +8,10 @@
 
 #import "S9PageScrollView.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UIPrismScrollView : UIPageScrollView
 
 @end
+
+#endif

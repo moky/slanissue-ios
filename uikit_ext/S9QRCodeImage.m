@@ -10,6 +10,7 @@
 #import "S9Image.h"
 #import "S9QRCodeImage.h"
 
+#if !TARGET_OS_WATCH
 CIImage * CIImageWithQRCode(NSString * text)
 {
 	NSData * data = [text dataUsingEncoding:NSUTF8StringEncoding];
@@ -18,12 +19,17 @@ CIImage * CIImageWithQRCode(NSString * text)
 	[filter setValue:data forKey:@"inputMessage"];
 	return filter.outputImage;
 }
+#endif
 
 UIImage * UIImageWithQRCode(NSString * text, CGFloat size)
 {
+#if !TARGET_OS_WATCH
 	CGFloat screenScale = [[S9Client getInstance] screenScale];
 	CIImage * image = CIImageWithQRCode(text);
 	return UIImageWithCIImage(image, CGSizeMake(size, size), screenScale);
+#else
+	return nil;
+#endif
 }
 
 @implementation UIImage (QRCode)

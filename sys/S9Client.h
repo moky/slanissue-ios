@@ -24,6 +24,7 @@
 
 // app bundle
 @property(nonatomic, readonly) NSString * name;
+@property(nonatomic, readonly) NSString * displayName;
 @property(nonatomic, readonly) NSString * version;
 
 // DOS

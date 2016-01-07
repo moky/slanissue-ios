@@ -8,6 +8,8 @@
 
 #import "S9ScrollRefreshControl.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UIScrollRefreshView : UIScrollRefreshControl
 
 @property(nonatomic, retain) NSString * visibleText;       // 'Pull to refresh'
@@ -26,3 +28,5 @@
 @property(nonatomic, retain) UILabel * timeLabel;
 
 @end
+
+#endif

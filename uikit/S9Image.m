@@ -47,6 +47,7 @@ CGContextRef CGBitmapContextCreateWithCGImage(CGImageRef imageRef, CGSize size)
 	return ctx;
 }
 
+#if !TARGET_OS_WATCH
 UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale)
 {
 	size = CGSizeMake(size.width * scale, size.height * scale);
@@ -76,6 +77,7 @@ UIImage * UIImageWithCIImage(CIImage * image, CGSize size, CGFloat scale)
 	CGImageRelease(imageRef);
 	return result;
 }
+#endif
 
 UIImage * UIImageWithName(NSString * name)
 {

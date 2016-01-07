@@ -8,6 +8,8 @@
 
 #import "S9KaraokeLabel.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UIKaraokeLabel () {
 	
 	UILabel * _frontLabel;
@@ -243,3 +245,5 @@
 }
 
 @end
+
+#endif

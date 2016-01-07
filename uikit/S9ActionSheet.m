@@ -8,8 +8,11 @@
 
 #import "S9ActionSheet.h"
 
+#if !TARGET_OS_WATCH
 #if !TARGET_OS_TV
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 @implementation UIActionSheet (SlanissueToolkit)
 
 - (void) show
@@ -22,5 +25,7 @@
 }
 
 @end
+#pragma clang diagnostic pop
 
+#endif
 #endif

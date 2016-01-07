@@ -8,6 +8,8 @@
 
 #import "FSMMachine.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UIScrollRefreshControlStateMachine : FSMMachine
 
 // the size of refresh control, minimum size to show all subviews
@@ -23,3 +25,5 @@
 @property(nonatomic, readwrite, getter=isTerminated) BOOL terminated;
 
 @end
+
+#endif

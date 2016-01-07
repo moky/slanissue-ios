@@ -11,6 +11,8 @@
 #import "s9Macros.h"
 #import "S9Device.h"
 
+#if !TARGET_OS_WATCH
+
 static NSString * _machine(void)
 {
 	size_t size;
@@ -77,3 +79,5 @@ static NSString * _uuid(void)
 }
 
 @end
+
+#endif

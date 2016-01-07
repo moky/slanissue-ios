@@ -6,10 +6,12 @@
 //  Copyright (c) 2014 Slanissue.com. All rights reserved.
 //
 
-#import <QuartzCore/QuartzCore.h>
-
 #import "S9Array.h"
 #import "S9View+Reflection.h"
+
+#if !TARGET_OS_WATCH
+
+#import <QuartzCore/QuartzCore.h>
 
 #define S9_VIEW_REFLECTION_LAYER_NAME          @"reflection"
 
@@ -104,3 +106,5 @@
 }
 
 @end
+
+#endif

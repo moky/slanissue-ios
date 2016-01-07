@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UIControl (SlanissueToolkit)
 
 /**
@@ -16,3 +18,5 @@
 - (void) performControlEvent:(UIControlEvents)controlEvent;
 
 @end
+
+#endif

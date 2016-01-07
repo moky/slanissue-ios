@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UIViewController (SlanissueToolkit)
 
 // frame/bounds/center of self.view
@@ -25,3 +27,5 @@
 - (NSArray *) siblings;
 
 @end
+
+#endif

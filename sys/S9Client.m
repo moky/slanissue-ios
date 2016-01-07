@@ -22,6 +22,7 @@
 
 // app bundle
 @property(nonatomic, retain) NSString * name;
+@property(nonatomic, retain) NSString * displayName;
 @property(nonatomic, retain) NSString * version;
 
 // DOS
@@ -46,6 +47,7 @@
 @synthesize systemVersion = _systemVersion;
 
 @synthesize name = _name;
+@synthesize displayName = _displayName;
 @synthesize version = _version;
 
 // DOS
@@ -63,6 +65,7 @@
 	[_systemVersion release];
 	
 	[_name release];
+	[_displayName release];
 	[_version release];
 	
 	// DOS
@@ -78,20 +81,21 @@
 {
 	self = [super init];
 	if (self) {
+#if !TARGET_OS_WATCH
 		UIScreen * screen = [UIScreen mainScreen];
-#if !TARGET_OS_TV
-		UIApplication * app = [UIApplication sharedApplication];
-#endif
 		
 		_screenSize = screen.bounds.size;
 		_screenScale = [screen respondsToSelector:@selector(scale)] ? screen.scale : 1.0f;
 		
-#if TARGET_OS_TV
 		_windowSize = screen.bounds.size;
+		
+#if TARGET_OS_TV
 		_statusBarHeight = 0.0f;
 #else
-		_windowSize = screen.applicationFrame.size;
+		//_windowSize = screen.applicationFrame.size;
+		UIApplication * app = [UIApplication sharedApplication];
 		_statusBarHeight = app.statusBarFrame.size.height;
+#endif
 #endif
 		
 		self.hardware = nil;
@@ -101,6 +105,7 @@
 		self.systemVersion = nil;
 		
 		self.name = nil;
+		self.displayName = nil;
 		self.version = nil;
 		
 		// DOS
@@ -120,7 +125,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) hardware
 {
 	if (!_hardware) {
+#if !TARGET_OS_WATCH
 		self.hardware = [[UIDevice currentDevice] machine];
+#endif
 	}
 	return _hardware;
 }
@@ -128,7 +135,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) deviceIdentifier
 {
 	if (!_deviceIdentifier) {
+#if !TARGET_OS_WATCH
 		self.deviceIdentifier = [[UIDevice currentDevice] UUIDString];
+#endif
 	}
 	return _deviceIdentifier;
 }
@@ -136,7 +145,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) deviceModel
 {
 	if (!_deviceModel) {
+#if !TARGET_OS_WATCH
 		self.deviceModel = [[UIDevice currentDevice] model];
+#endif
 	}
 	return _deviceModel;
 }
@@ -144,7 +155,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) systemName
 {
 	if (!_systemName) {
+#if !TARGET_OS_WATCH
 		self.systemName = [[UIDevice currentDevice] systemName];
+#endif
 	}
 	return _systemName;
 }
@@ -152,7 +165,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) systemVersion
 {
 	if (!_systemVersion) {
+#if !TARGET_OS_WATCH
 		self.systemVersion = [[UIDevice currentDevice] systemVersion];
+#endif
 	}
 	return _systemVersion;
 }
@@ -163,6 +178,14 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 		self.name = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
 	}
 	return _name;
+}
+
+- (NSString *) displayName
+{
+	if (!_displayName) {
+		self.displayName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"];
+	}
+	return _displayName;
 }
 
 - (NSString *) version

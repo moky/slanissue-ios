@@ -11,6 +11,8 @@
 #import "S9Image.h"
 #import "S9View.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIView (SlanissueToolkit)
 
 - (UIViewController *) controller
@@ -73,3 +75,5 @@
 }
 
 @end
+
+#endif

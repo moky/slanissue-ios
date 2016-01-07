@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UIView (Reflection)
 
 // check whether the view has already shown its reflection
@@ -24,3 +26,5 @@
 - (void) showReflectionWithOpacity:(CGFloat)opacity startPoint:(CGFloat)start endPoint:(CGFloat)end;
 
 @end
+
+#endif

@@ -10,6 +10,8 @@
 #import "S9ScrollRefreshControlState.h"
 #import "S9ScrollRefreshView.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIScrollRefreshView (State)
 
 - (void) machine:(FSMMachine *)machine enterState:(FSMState *)state
@@ -182,3 +184,5 @@
 }
 
 @end
+
+#endif

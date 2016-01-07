@@ -9,6 +9,8 @@
 #import "s9Macros.h"
 #import "S9PrismScrollView.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIPrismScrollView
 
 // if new subview comes, make a wrapper for it, and perform prism effect
@@ -137,3 +139,5 @@
 }
 
 @end
+
+#endif

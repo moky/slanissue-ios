@@ -54,23 +54,27 @@ CGSize CGSizeAspectFill(CGSize fromSize, CGSize toSize)
 
 CGRect CGRectGetFrameFromNode(id node)
 {
+#if !TARGET_OS_WATCH
 	if ([node isKindOfClass:[UIView class]] ||
 		[node isKindOfClass:[UIViewController class]] ||
 		[node isKindOfClass:[CALayer class]]) {
 		return [node frame];
 	}
+#endif
 	S9Log(@"unsupported node: %@", node);
 	return CGRectZero;
 }
 
 CGRect CGRectGetBoundsFromParentOfNode(id node)
 {
+#if !TARGET_OS_WATCH
 	if ([node isKindOfClass:[UIView class]] ||
 		[node isKindOfClass:[UIViewController class]] ||
 		[node isKindOfClass:[CALayer class]]) {
 		id parent = [node parent];
 		return parent ? [parent bounds] : [[UIScreen mainScreen] bounds];
 	}
+#endif
 	S9Log(@"unsupported node: %@", node);
 	return CGRectZero;
 }

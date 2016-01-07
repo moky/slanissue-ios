@@ -8,6 +8,8 @@
 
 #import "S9SwipeTableViewCell.h"
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSInteger, UITableViewCellIndentationStatus) {
 	UITableViewCellIndentationNone,
 	UITableViewCellIndentationLeft,
@@ -125,3 +127,5 @@ typedef NS_ENUM(NSInteger, UITableViewCellIndentationStatus) {
 }
 
 @end
+
+#endif

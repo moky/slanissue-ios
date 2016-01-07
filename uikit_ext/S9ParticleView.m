@@ -8,6 +8,8 @@
 
 #import "S9ParticleView.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIParticleView
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -51,3 +53,5 @@
 }
 
 @end
+
+#endif

@@ -8,9 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UISwipeTableViewCell : UITableViewCell
 
 @property(nonatomic, readwrite) CGFloat indentationLeft; // default is 0.0, means no indent
 @property(nonatomic, readwrite) CGFloat indentationRight; // default is 0.0, means no indent
 
 @end
+
+#endif

@@ -9,6 +9,8 @@
 #import "S9AffineTransform.h"
 #import "S9View+Transform.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIView (Transform2D)
 
 - (void) scaleWithScale:(CGFloat)scale
@@ -66,3 +68,5 @@
 }
 
 @end
+
+#endif

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSInteger, UIBlurViewStyle) {
 	UIBlurViewStyleExtraLight = UIBlurEffectStyleExtraLight,
 	UIBlurViewStyleLight      = UIBlurEffectStyleLight,
@@ -19,3 +21,5 @@ typedef NS_ENUM(NSInteger, UIBlurViewStyle) {
 @property(nonatomic, readwrite) UIBlurViewStyle style;
 
 @end
+
+#endif

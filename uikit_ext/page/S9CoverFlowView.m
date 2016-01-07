@@ -10,6 +10,8 @@
 #import "S9View+Transform.h"
 #import "S9CoverFlowView.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UICoverFlowView
 
 - (void) performEffectOnScrollView:(UIScrollView *)scrollView
@@ -91,3 +93,5 @@
 }
 
 @end
+
+#endif

@@ -11,6 +11,8 @@
 #import "S9Geometry.h"
 #import "S9WaterfallView+Layout.h"
 
+#if !TARGET_OS_WATCH
+
 NS_INLINE void add_first_joining_point(ds_array * pointPool,
 									   UIWaterfallViewDirection direction,
 									   CGFloat spaceHorizontal, CGFloat spaceVertical,
@@ -458,3 +460,5 @@ NS_INLINE void expand_waterfall_view(UIWaterfallView * view,
 }
 
 @end
+
+#endif

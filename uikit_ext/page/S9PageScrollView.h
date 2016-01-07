@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSInteger, UIPageScrollViewDirection) {
 	UIPageScrollViewDirectionVertical,
 	UIPageScrollViewDirectionHorizontal,
 };
-
-UIKIT_EXTERN UIPageScrollViewDirection UIPageScrollViewDirectionFromString(NSString * string);
 
 @protocol UIPageScrollViewDataSource;
 
@@ -42,3 +42,5 @@ UIKIT_EXTERN UIPageScrollViewDirection UIPageScrollViewDirectionFromString(NSStr
 - (UIView *) showSubviewAtIndex:(NSUInteger)index; // return the new view shown at index
 
 @end
+
+#endif

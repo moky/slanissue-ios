@@ -8,6 +8,8 @@
 
 #import "S9AffineTransform.h"
 
+#if !TARGET_OS_WATCH
+
 CATransform3D CATransform3DMakePerspective(CGPoint center, CGFloat disZ)
 {
 	CATransform3D transToCenter = CATransform3DMakeTranslation(-center.x, -center.y, 0.0f);
@@ -21,3 +23,5 @@ CATransform3D CATransform3DPerspect(const CATransform3D t, CGPoint center, CGFlo
 {
 	return CATransform3DConcat(t, CATransform3DMakePerspective(center, disZ));
 }
+
+#endif

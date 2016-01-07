@@ -10,6 +10,8 @@
 
 #import "FSMMachine.h"
 
+#if !TARGET_OS_WATCH
+
 typedef NS_ENUM(NSUInteger, UIScrollRefreshControlDirection) {
 	UIScrollRefreshControlDirectionTop,
 	UIScrollRefreshControlDirectionBottom,
@@ -33,3 +35,5 @@ typedef NS_ENUM(NSUInteger, UIScrollRefreshControlDirection) {
 - (void) reloadData:(UIScrollView *)scrollView;
 
 @end
+
+#endif

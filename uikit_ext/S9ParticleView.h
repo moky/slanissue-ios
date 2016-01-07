@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @class CAEmitterLayer;
 
 @interface UIParticleView : UIView
@@ -16,3 +18,5 @@
 @property(nonatomic, readwrite) CGPoint emitterPosition;
 
 @end
+
+#endif

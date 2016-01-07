@@ -10,20 +10,7 @@
 #import "S9PageScrollViewDataSource.h"
 #import "S9PageScrollView.h"
 
-//typedef NS_ENUM(NSInteger, SCPageScrollViewScrollDirection) {
-//	UIPageScrollViewDirectionVertical,
-//	UIPageScrollViewDirectionHorizontal,
-//};
-UIPageScrollViewDirection UIPageScrollViewDirectionFromString(NSString * string)
-{
-	S9_SWITCH_BEGIN(string)
-		S9_SWITCH_CASE(string, @"Vertical")
-			return UIPageScrollViewDirectionVertical;
-		S9_SWITCH_DEFAULT
-	S9_SWITCH_END
-	
-	return UIPageScrollViewDirectionHorizontal;
-}
+#if !TARGET_OS_WATCH
 
 @interface UIPageScrollView ()
 
@@ -297,3 +284,5 @@ UIPageScrollViewDirection UIPageScrollViewDirectionFromString(NSString * string)
 }
 
 @end
+
+#endif

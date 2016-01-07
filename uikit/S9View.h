@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UIView (SlanissueToolkit)
 
 // _viewDelegate
@@ -32,3 +34,5 @@
 - (UIImage *) snapshot:(NSString *)filename;
 
 @end
+
+#endif

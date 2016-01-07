@@ -10,6 +10,8 @@
 #import "S9ScrollRefreshControlState.h"
 #import "S9ScrollRefreshControlStateMachine.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIScrollRefreshControlStateMachine
 
 @synthesize controlDimension = _controlDimension;
@@ -203,3 +205,5 @@
 }
 
 @end
+
+#endif

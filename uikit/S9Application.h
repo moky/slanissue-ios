@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 @interface UIApplication (SlanissueToolkit)
 
 /**
@@ -21,3 +23,5 @@
 - (void) endBackgroundTask;
 
 @end
+
+#endif

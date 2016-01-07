@@ -10,6 +10,8 @@
 #import "S9Control.h"
 #import "S9SegmentedButton.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UISegmentedButton
 
 @synthesize selectedSegmentIndex = _selectedSegmentIndex;
@@ -229,3 +231,5 @@
 }
 
 @end
+
+#endif

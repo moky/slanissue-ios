@@ -8,6 +8,10 @@
 
 #import "S9DockScrollView.h"
 
+#if !TARGET_OS_WATCH
+
 @interface UICoverFlowView : UIDockScrollView
 
 @end
+
+#endif

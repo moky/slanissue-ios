@@ -9,6 +9,8 @@
 #import "S9Array.h"
 #import "S9ScrollRefreshView.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIScrollRefreshView
 
 @synthesize visibleText = _visibleText;
@@ -304,3 +306,5 @@
 }
 
 @end
+
+#endif

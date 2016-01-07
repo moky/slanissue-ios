@@ -8,6 +8,8 @@
 
 #import "S9Application.h"
 
+#if !TARGET_OS_WATCH
+
 static UIBackgroundTaskIdentifier _bgTask = NSUIntegerMax;
 
 static void replace_background_task(UIApplication * app, UIBackgroundTaskIdentifier newTaskId)
@@ -45,3 +47,5 @@ static void replace_background_task(UIApplication * app, UIBackgroundTaskIdentif
 }
 
 @end
+
+#endif

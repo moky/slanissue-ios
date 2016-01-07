@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+#if !TARGET_OS_WATCH
+
 enum {
 	UISegmentedButtonNoSegment = -1   // segment index for no selected segment
 };
@@ -43,3 +45,5 @@ typedef NS_ENUM(NSUInteger, UISegmentedButtonAutoLayoutDirection) {
 @property(nonatomic, readwrite) UISegmentedButtonAutoLayoutDirection direction; // default is None
 
 @end
+
+#endif

@@ -9,6 +9,8 @@
 #import "S9Array.h"
 #import "S9Control.h"
 
+#if !TARGET_OS_WATCH
+
 @implementation UIControl (SlanissueToolkit)
 
 - (void) performControlEvent:(UIControlEvents)controlEvent
@@ -29,3 +31,5 @@
 }
 
 @end
+
+#endif
