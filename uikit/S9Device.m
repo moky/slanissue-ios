@@ -11,8 +11,6 @@
 #import "s9Macros.h"
 #import "S9Device.h"
 
-#if !TARGET_OS_WATCH
-
 static NSString * _machine(void)
 {
 	size_t size;
@@ -37,6 +35,24 @@ static NSString * _uuid(void)
 	}
 	return string;
 }
+
+#if TARGET_OS_WATCH
+
+@implementation WKInterfaceDevice (SlanissueToolkit)
+
+- (NSString *) machine
+{
+	return _machine();
+}
+
+- (NSString *) UUIDString
+{
+	return _uuid();
+}
+
+@end
+
+#else
 
 @implementation UIDevice (SlanissueToolkit)
 

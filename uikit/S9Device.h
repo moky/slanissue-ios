@@ -19,7 +19,21 @@
         })                                                                     \
                                                                 /* EOF 'UUID' */
 
-#if !TARGET_OS_WATCH
+#if TARGET_OS_WATCH
+
+#import <WatchKit/WatchKit.h>
+
+@interface WKInterfaceDevice (SlanissueToolkit)
+
+// get hw.machine
+- (NSString *) machine;
+
+// a UUID that may be used to uniquely identify the device, same across apps from a single vendor.
+- (NSString *) UUIDString;
+
+@end
+
+#else
 
 @interface UIDevice (SlanissueToolkit)
 

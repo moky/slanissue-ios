@@ -81,7 +81,16 @@
 {
 	self = [super init];
 	if (self) {
-#if !TARGET_OS_WATCH
+#if TARGET_OS_WATCH
+		WKInterfaceDevice * iWatch = [WKInterfaceDevice currentDevice];
+		
+		_screenSize = iWatch.screenBounds.size;
+		_screenScale = iWatch.screenScale;
+		
+		_windowSize = iWatch.screenBounds.size;
+		
+		_statusBarHeight = 0.0f;
+#else
 		UIScreen * screen = [UIScreen mainScreen];
 		
 		_screenSize = screen.bounds.size;
@@ -89,13 +98,13 @@
 		
 		_windowSize = screen.bounds.size;
 		
-#if TARGET_OS_TV
+#	if TARGET_OS_TV
 		_statusBarHeight = 0.0f;
-#else
+#	else
 		//_windowSize = screen.applicationFrame.size;
 		UIApplication * app = [UIApplication sharedApplication];
 		_statusBarHeight = app.statusBarFrame.size.height;
-#endif
+#	endif
 #endif
 		
 		self.hardware = nil;
@@ -125,7 +134,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) hardware
 {
 	if (!_hardware) {
-#if !TARGET_OS_WATCH
+#if TARGET_OS_WATCH
+		self.hardware = [[WKInterfaceDevice currentDevice] machine];
+#else
 		self.hardware = [[UIDevice currentDevice] machine];
 #endif
 	}
@@ -135,7 +146,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) deviceIdentifier
 {
 	if (!_deviceIdentifier) {
-#if !TARGET_OS_WATCH
+#if TARGET_OS_WATCH
+		self.deviceIdentifier = [[WKInterfaceDevice currentDevice] UUIDString];
+#else
 		self.deviceIdentifier = [[UIDevice currentDevice] UUIDString];
 #endif
 	}
@@ -145,7 +158,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) deviceModel
 {
 	if (!_deviceModel) {
-#if !TARGET_OS_WATCH
+#if TARGET_OS_WATCH
+		self.deviceModel = [[WKInterfaceDevice currentDevice] model];
+#else
 		self.deviceModel = [[UIDevice currentDevice] model];
 #endif
 	}
@@ -155,7 +170,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) systemName
 {
 	if (!_systemName) {
-#if !TARGET_OS_WATCH
+#if TARGET_OS_WATCH
+		self.systemName = [[WKInterfaceDevice currentDevice] systemName];
+#else
 		self.systemName = [[UIDevice currentDevice] systemName];
 #endif
 	}
@@ -165,7 +182,9 @@ S9_IMPLEMENT_SINGLETON_FUNCTIONS(getInstance)
 - (NSString *) systemVersion
 {
 	if (!_systemVersion) {
-#if !TARGET_OS_WATCH
+#if TARGET_OS_WATCH
+		self.systemVersion = [[WKInterfaceDevice currentDevice] systemVersion];
+#else
 		self.systemVersion = [[UIDevice currentDevice] systemVersion];
 #endif
 	}
